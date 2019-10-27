@@ -1,26 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
+import logo from './assets/thegame.jpeg';
 import './App.css';
+import Stats from './Stats/Stats';
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    /* const game = initGame();
+    console.log(game);
+    const endGame = playFullGame(game, simpleTactic);
+    console.log(endGame);
+    console.log('Won : ', endGame.won ? true : !endGame.lost);
+    console.log('Remaining cards : ', getRemainingCards(endGame));
+    console.log('Turns : ', endGame.time); */
+
+    return (
+        <div className="App">
+            <header className="App-header">
+                <img src={logo} className="App-logo" alt="logo" />
+                <p>
+                    The game
+                </p>
+            </header>
+            <Stats />
+        </div>
+    );
 }
 
 export default App;

@@ -8,7 +8,7 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 8vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,4 +19,32 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+.Stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.Stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: flex-start;
+}
+
+.Form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 30%;
+  margin: auto;
+}
+
+.NbPlayers {
+display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
