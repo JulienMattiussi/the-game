@@ -149,6 +149,7 @@ const Game = () => {
                     goesDownOne={game.goesDownOne}
                     goesDownTwo={game.goesDownTwo}
                     remainingCards={game.cards.length}
+                    vetos={game.vetos}
                     lost={game.lost}
                     won={game.won}
                 />

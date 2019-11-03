@@ -8,7 +8,7 @@ const Player = ({ id, cards, isTurn }) => {
     return (
         <div className="Player">
             <div className="Cards">
-                {cards && cards.sort((ca, cb) => ca - cb).map((card, index) =>
+                {cards && cards.map((card, index) =>
                     <div key={index} className={`Card${index}`}>
                         <Card value={card} />
                     </div>)}

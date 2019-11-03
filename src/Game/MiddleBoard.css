@@ -57,6 +57,31 @@
     bottom: 0;
 }
 
+.Veto {
+    position: absolute;
+    padding-top: 4px;
+    height: 26px;
+    width: 30px;
+    border-radius: 15px;
+}
+
+.VetogoesDownOne {
+    right: 0;
+}
+
+.VetogoesDownTwo {
+    right: 0;
+    bottom: 0;
+}
+
+.VetogoesUpOne {
+
+}
+
+.VetogoesUpTwo {
+    bottom: 0;
+}
+
 .Lost {
   margin: auto;
   font-weight: bolder;

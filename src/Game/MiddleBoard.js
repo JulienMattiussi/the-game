@@ -11,6 +11,7 @@ const MiddleBoard = ({
     goesDownOne,
     goesDownTwo,
     remainingCards,
+    vetos = [],
     lost,
     won,
 }) => {
@@ -31,6 +32,9 @@ const MiddleBoard = ({
                     <RemainingCard value={remainingCards} />
                 </div>
             </div>
+            {vetos.map(veto => {
+                return <span key={veto.player} className={`Veto Selected${veto.player} Veto${veto.position}`}>🔒</span>
+            })}
             {lost && <div className="Lost">PERDU ...</div>}
             {won && <div className="Won">GAGNE !!!!</div>}
         </div >

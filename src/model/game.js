@@ -34,6 +34,7 @@ export const initGame = (nbPlayers = 4) => {
     for (let i = 0; i < NB_CARDS_IN_HAND; i++) {
         for (let player = 0; player < nbPlayers; player++) {
             players[player].push(cards[0]);
+            players[player].sort((ca, cb) => ca - cb);
             cards.shift();
         }
     }
@@ -60,17 +61,23 @@ export const loadGame = (
         goesDownTwo: [100],
     },
     turn = 0,
-) => ({
-    goesUpOne: middle.goesUpOne,
-    goesUpTwo: middle.goesUpTwo,
-    goesDownOne: middle.goesDownOne,
-    goesDownTwo: middle.goesDownTwo,
-    turn,
-    vetos: [],
-    players: [...players],
-    cards: [...cards],
-    history: [],
-})
+) => {
+    const sortedPlayers = [...players];
+    for (let player = 0; player < sortedPlayers.length; player++) {
+        players[player].sort((ca, cb) => ca - cb);
+    }
+    return ({
+        goesUpOne: middle.goesUpOne,
+        goesUpTwo: middle.goesUpTwo,
+        goesDownOne: middle.goesDownOne,
+        goesDownTwo: middle.goesDownTwo,
+        turn,
+        vetos: [],
+        players: sortedPlayers,
+        cards: [...cards],
+        history: [],
+    })
+}
 
 export const cloneGame = game => {
     const players = [...game.players];
@@ -100,7 +107,8 @@ export const move = (game, card, pile) => {
     newGame[pile].unshift(card);
 
     if (newGame.cards.length) {
-        newGame.players[newGame.turn].push(newGame.cards[0]);
+        newGame.players[newGame.turn].push(newGame.cards[0])
+        newGame.players[newGame.turn].sort((ca, cb) => ca - cb);
         newGame.cards.shift();
     }
 
@@ -113,7 +121,8 @@ export const reload = (game) => {
     const newGame = cloneGame(game);
     for (let i = newGame.players[newGame.turn].length; i < NB_CARDS_IN_HAND; i++) {
         if (newGame.cards.length) {
-            newGame.players[newGame.turn].push(newGame.cards[0]);
+            newGame.players[newGame.turn].push(newGame.cards[0])
+            newGame.players[newGame.turn].sort((ca, cb) => ca - cb);
             newGame.cards.shift();
         }
         else {
