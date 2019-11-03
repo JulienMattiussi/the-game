@@ -43,6 +43,7 @@ export const initGame = (nbPlayers = 4) => {
         goesDownOne: [100],
         goesDownTwo: [100],
         turn: 0,
+        vetos: [],
         players,
         cards,
     }
@@ -60,6 +61,7 @@ export const cloneGame = game => {
         players: players.map(player => [...player]),
         cards: [...game.cards],
         lost: game.lost,
+        vetos: game.vetos,
         won: game.won,
     }
 
@@ -78,6 +80,8 @@ export const move = (game, card, pile) => {
         newGame.players[newGame.turn].push(newGame.cards[0]);
         newGame.cards.shift();
     }
+
+    newGame.vetos = game.vetos.filter(veto => veto.player !== game.turn);
 
     return newGame;
 }
@@ -102,8 +106,8 @@ export const changeTurn = (game) => {
     return { ...cloneGame(game), turn }
 }
 
-export const playATurn = (game, tactic) => {
-    const newGame = tactic(game);
+export const playATurn = (game, tactic, useVeto = false) => {
+    const newGame = tactic(game, useVeto);
     return changeTurn(reload(newGame));
 }
 
@@ -121,12 +125,12 @@ export const isGameWon = game => {
 export const getRemainingCards = game =>
     game.players.reduce((total, player) => total + player.length, 0) + game.cards.length;
 
-export const playFullGame = (game, tactic) => {
+export const playFullGame = (game, tactic, useVeto = false) => {
     let newGame = game;
     let security = 0;
     while (true) {
         security++;
-        newGame = playATurn(newGame, tactic)
+        newGame = playATurn(newGame, tactic, useVeto)
         if (newGame.lost) {
             break;
         }
@@ -144,7 +148,8 @@ export const playFullGame = (game, tactic) => {
 }
 
 
-export const playManyGames = (tactic, useBetterStarter = false, numberOfPlayers = 4, numberOfGames = 1000) => {
+export const playManyGames = (tactic, options = { useBetterStarter: false, useVeto: false }, numberOfPlayers = 4, numberOfGames = 1000) => {
+    const { useBetterStarter, useVeto } = options;
     const stats = {
         numberOfPlayers,
         numberOfGames,
@@ -178,7 +183,7 @@ export const playManyGames = (tactic, useBetterStarter = false, numberOfPlayers 
         if (useBetterStarter) {
             game = setBetterStarter(game);
         }
-        const endGame = playFullGame(game, tactic);
+        const endGame = playFullGame(game, tactic, useVeto);
         const remaining = getRemainingCards(endGame);
 
         stats.total.won += endGame.won ? 1 : 0;

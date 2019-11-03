@@ -36,6 +36,7 @@ const Stats = () => {
     const [nbPlayers, setNbPlayers] = useState({ 3: true, 4: true, 5: true });
     const [nbGames, setNbGames] = useState(1000);
     const [useBetterStarter, setUseBetterStarter] = useState(false);
+    const [useVeto, setUseVeto] = useState(false);
     const [stats, setStats] = useState(
         Object.keys(nbPlayers).reduce((all, number) => ({
             ...all,
@@ -47,13 +48,17 @@ const Stats = () => {
         }), {}));
     const [loading, setLoading] = useState(false);
 
-    const computeStat = (tactic, games) => {
+    const computeStat = (tactic, numberOfGames) => {
         setLoading(true);
         const stats = {};
         Object.keys(nbPlayers).map(
             number => {
                 if (nbPlayers[number]) {
-                    stats[number] = playManyGames(tactics[tactic], useBetterStarter, +number, games);
+                    stats[number] = playManyGames(
+                        tactics[tactic],
+                        { useBetterStarter, useVeto },
+                        +number,
+                        numberOfGames);
                     if (log) logStats(stats[number]);
                 }
                 return null;
@@ -77,6 +82,10 @@ const Stats = () => {
 
     const changeUseBetterStarter = () => {
         setUseBetterStarter(!useBetterStarter);
+    }
+
+    const changeUseVeto = () => {
+        setUseVeto(!useVeto);
     }
 
     const changeNbPlayers = (number) => {
@@ -127,6 +136,10 @@ const Stats = () => {
                 <label>
                     <input type="checkbox" checked={useBetterStarter} onChange={changeUseBetterStarter} />
                     Optimiser le démarrage
+                </label>
+                <label>
+                    <input type="checkbox" checked={useVeto} onChange={changeUseVeto} />
+                    Annoncer les veto
                 </label>
                 <label>
                     Nombre de jeux
