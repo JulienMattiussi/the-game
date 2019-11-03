@@ -1,9 +1,14 @@
-.MiddleBoard {
+.Middle {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     position: relative;
     top: 240px;
     margin: auto;
+}
+
+.MiddleBoard {
+    display: flex;
+    flex-direction: row;
 }
 
 .Pile {
@@ -50,4 +55,18 @@
 .Player4 {
     position: absolute;
     bottom: 0;
+}
+
+.Lost {
+  margin: auto;
+  font-weight: bolder;
+  font-size: 50px;
+  color: red;
+}
+
+.Won {
+  margin: auto;
+  font-weight: bolder;
+  font-size: 50px;
+  color:aqua;
 }

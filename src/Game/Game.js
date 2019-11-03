@@ -21,10 +21,11 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-const History = ({ list }) => {
+const History = ({ list, end }) => {
     const turns = list.filter(item => item.type === 'move').length;
     return <div className="History">
         <strong>HISTORIQUE ({turns} tours)</strong>
+        <strong>{end === 'lost' ? 'PERDU ...' : end === 'won' ? 'GAGNE !!!' : ''}</strong>
         {list && list.map((event, index) => {
             const player = <strong className={`PlayerHistory${event.player}`}>Joueur {event.player}</strong>
             const value = <strong>{event.value}</strong>
@@ -132,15 +133,15 @@ const Game = () => {
                     Annoncer les veto quand la carte suivante est disponible
                 </label>
                 <div className="Actions">
-                    <button onClick={() => playOne()}>Jouer une action</button>
-                    <button onClick={() => playToEnd()}>Jouer et finir</button>
+                    <button onClick={() => playOne()} disabled={game.lost || game.won}>Jouer une action</button>
+                    <button onClick={() => playToEnd()} disabled={game.lost || game.won}>Jouer et finir</button>
                     <button onClick={() => restart()}>Relancer</button>
                 </div>
                 <Link to="/">Back to stats</Link>
 
 
             </div>
-            <History list={game.history} />
+            <History list={game.history} end={game.lost ? 'lost' : game.won ? 'won' : false} />
             <div className="Board">
                 <MiddleBoard
                     goesUpOne={game.goesUpOne}
@@ -148,6 +149,8 @@ const Game = () => {
                     goesDownOne={game.goesDownOne}
                     goesDownTwo={game.goesDownTwo}
                     remainingCards={game.cards.length}
+                    lost={game.lost}
+                    won={game.won}
                 />
                 {game && game.players.map((player, index) => {
                     return (

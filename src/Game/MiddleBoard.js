@@ -10,22 +10,29 @@ const MiddleBoard = ({
     goesUpTwo,
     goesDownOne,
     goesDownTwo,
-    remainingCards }) => {
+    remainingCards,
+    lost,
+    won,
+}) => {
     return (
-        <div className="MiddleBoard">
-            <div className="Pile">
-                <div className="LeftHint">PILE MONTANTE</div>
-                <Card value={goesUpOne[0]} />
-                <Card value={goesUpTwo[0]} />
+        <div className="Middle">
+            <div className="MiddleBoard">
+                <div className="Pile">
+                    <div className="LeftHint">PILE MONTANTE</div>
+                    <Card value={goesUpOne[0]} />
+                    <Card value={goesUpTwo[0]} />
+                </div>
+                <div className="Pile">
+                    <div className="RightHint">PILE DESCENDANTE</div>
+                    <Card value={goesDownOne[0]} />
+                    <Card value={goesDownTwo[0]} />
+                </div>
+                <div className="RemainingCard">
+                    <RemainingCard value={remainingCards} />
+                </div>
             </div>
-            <div className="Pile">
-                <div className="RightHint">PILE DESCENDANTE</div>
-                <Card value={goesDownOne[0]} />
-                <Card value={goesDownTwo[0]} />
-            </div>
-            <div className="RemainingCard">
-                <RemainingCard value={remainingCards} />
-            </div>
+            {lost && <div className="Lost">PERDU ...</div>}
+            {won && <div className="Won">GAGNE !!!!</div>}
         </div >
     )
 }
