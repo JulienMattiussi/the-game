@@ -14,7 +14,12 @@ const Card = ({ value }) => {
                     {value}
                 </span>
             </div>
-            <span className="CardMiddle">
+            <span className={`CardMiddle${
+                value === 1 ?
+                    ' StartOne' :
+                    value === 100 ?
+                        ' Start100' :
+                        ''}`}>
                 {value}
             </span>
             <div className="CardBottom">

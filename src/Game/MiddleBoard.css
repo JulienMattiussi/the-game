@@ -1,0 +1,47 @@
+.MiddleBoard {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    top: 240px;
+    margin: auto;
+}
+
+.Pile {
+
+    padding: 10px;
+}
+
+.LeftHint {
+    font-weight: bolder;
+    position: absolute;
+    transform: rotate(-90deg);
+    left: -40px;
+    color: cornflowerblue;
+    top: 50%;
+}
+
+.RightHint {
+    font-weight: bolder;
+    position: absolute;
+    transform: rotate(90deg);
+    right: -52px;
+    color:lightsalmon;
+    top: 50%;
+}
+
+.Player2 {
+    position: absolute;
+    top: 40%;
+    right: 0;
+}
+
+.Player3 {
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 260px);
+}
+
+.Player4 {
+    position: absolute;
+    bottom: 0;
+}

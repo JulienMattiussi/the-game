@@ -47,8 +47,18 @@ export const initGame = (nbPlayers = 4) => {
         players,
         cards,
     }
-
 }
+
+export const loadGame = (cards, players) => ({
+    goesUpOne: [1],
+    goesUpTwo: [1],
+    goesDownOne: [100],
+    goesDownTwo: [100],
+    turn: 0,
+    vetos: [],
+    players: [...players],
+    cards: [...cards],
+})
 
 export const cloneGame = game => {
     const players = [...game.players];

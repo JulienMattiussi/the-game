@@ -5,11 +5,12 @@ import {
 } from "react-router-dom";
 import './Game.css';
 import {
+    loadGame,
     playATurn,
 } from '../model/game';
 import { tactics } from '../model/player';
-import Card from './Card';
 import Player from './Player';
+import MiddleBoard from './MiddleBoard';
 
 
 function useQuery() {
@@ -28,6 +29,7 @@ const Game = () => {
     const [useBetterStarter, setUseBetterStarter] = useState(options['useBetterStarter']);
     const [useVeto1, setUseVeto1] = useState(options['useVeto1']);
     const [useVeto10, setUseVeto10] = useState(options['useVeto10']);
+    const [game, setGame] = useState(loadGame(cards, players));
     const [loading, setLoading] = useState(false);
 
 
@@ -37,17 +39,10 @@ const Game = () => {
     console.log(useVeto1);
     console.log(useVeto10);
 
-    const computeStat = (tactic, numberOfGames) => {
+    const play = () => {
         setLoading(true);
-        const stats = {};
-        Object.keys(nbPlayers).map(
-            number => {
-                if (nbPlayers[number]) {
-                    stats[number] = {};
-                }
-                return null;
-            }
-        );
+        const newGame = playATurn(game, tactics[tactic], options);
+        setGame(newGame);
         setLoading(false);
     }
 
@@ -69,7 +64,7 @@ const Game = () => {
 
 
     return (
-        <div>
+        <div className="Page">
             <div className="Form">
                 <label>
                     Tactique
@@ -91,16 +86,22 @@ const Game = () => {
                     <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
                     Annoncer les veto quand la carte suivante est disponible
                 </label>
-                <button onClick={() => computeStat(tactic)}>Play</button>
+                <button onClick={() => play()}>Play</button>
                 <Link to="/">Back to stats</Link>
 
 
             </div>
             <div className="Board">
-                {players.map((player, index) => {
+                <MiddleBoard
+                    goesUpOne={game.goesUpOne}
+                    goesUpTwo={game.goesUpTwo}
+                    goesDownOne={game.goesDownOne}
+                    goesDownTwo={game.goesDownTwo}
+                />
+                {game && game.players.map((player, index) => {
                     return (
                         <div className={`Player${index}`}>
-                            <Player id={index} cards={player} isTurn={index === 1} />
+                            <Player id={index} cards={player} isTurn={index === game.turn} />
                         </div>
                     )
                 })}
