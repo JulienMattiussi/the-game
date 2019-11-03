@@ -11,11 +11,17 @@
     padding: 10px;
 }
 
+.RemainingCard {
+    position: absolute;
+    right: -130px;
+    bottom: calc(50% - 80px);
+}
+
 .LeftHint {
     font-weight: bolder;
     position: absolute;
     transform: rotate(-90deg);
-    left: -40px;
+    left: -70px;
     color: cornflowerblue;
     top: 50%;
 }
@@ -24,7 +30,7 @@
     font-weight: bolder;
     position: absolute;
     transform: rotate(90deg);
-    right: -52px;
+    right: -82px;
     color:lightsalmon;
     top: 50%;
 }

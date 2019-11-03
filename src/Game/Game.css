@@ -19,7 +19,7 @@ body {
   border-radius: 0 0 4px 0;
 }
 
-.AllActions {
+.History {
   position: absolute;
   top: 0;
   right: 0;
@@ -31,6 +31,36 @@ body {
   height: 200px;
   max-height: 200px;
   white-space: pre-wrap;
+  display:flex;
+  flex-direction: column;
+}
+
+.PlayerHistory0 {
+  color: blue;
+}
+
+.PlayerHistory1 {
+  color: lime;
+}
+
+.PlayerHistory2 {
+  color: red;
+}
+
+.PlayerHistory3 {
+  color:yellow;
+}
+
+.PlayerHistory4 {
+  color:purple;
+}
+
+.LeftHistory {
+    color: cornflowerblue;
+}
+
+.RightHistory {
+    color:lightsalmon;
 }
 
 .Player0 {
@@ -67,4 +97,12 @@ body {
     position: absolute;
     bottom: 0;
     right: 10%
+}
+
+.Actions {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: calc(100% - 30px);
 }

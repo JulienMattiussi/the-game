@@ -5,8 +5,12 @@ import {
 } from "react-router-dom";
 import './Game.css';
 import {
+    goesUpOne,
+    goesUpTwo,
+    goesDownOne,
     loadGame,
     playATurn,
+    playFullGame,
 } from '../model/game';
 import { tactics } from '../model/player';
 import Player from './Player';
@@ -15,6 +19,40 @@ import MiddleBoard from './MiddleBoard';
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
+}
+
+const History = ({ list }) => {
+    return <div className="History">
+        <strong>HISTORIQUE</strong>
+        {list && list.map((event, index) => {
+            const player = <strong className={`PlayerHistory${event.player}`}>Joueur {event.player}</strong>
+            const value = <strong>{event.value}</strong>
+            const positionPartSense = event.position === goesUpOne ||
+                event.position === goesUpTwo ?
+                <strong className="LeftHistory">PILE MONTANTE</strong> :
+                <strong className="RightHistory">PILE DESCENDANTE</strong>
+
+            const positionPartNumber = event.position === goesUpOne ||
+                event.position === goesDownOne ?
+                <strong>1</strong> :
+                <strong>2</strong>
+
+            switch (event.type) {
+                case 'move':
+                    return (
+                        <span key={index}>
+                            {player} joue ( {value} ) en {positionPartSense} {positionPartNumber}
+                        </span>);
+                case 'veto':
+                    return <span key={index}>
+                        {player} demande un <strong>VETO</strong> en {positionPartSense} {positionPartNumber}
+                    </span>
+                default:
+                    return null;
+            }
+        })
+        }
+    </div>
 }
 
 const Game = () => {
@@ -43,7 +81,7 @@ const Game = () => {
 
     const playToEnd = () => {
         setLoading(true);
-        const newGame = playATurn(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10 });
+        const newGame = playFullGame(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10 });
         setGame(newGame);
         setLoading(false);
     }
@@ -101,21 +139,18 @@ const Game = () => {
 
 
             </div>
-            <div className="AllActions">
-                <strong>HISTORIQUE</strong>
-                <br />
-                {game && game.history && game.history.join('\n')}
-            </div>
+            <History list={game.history} />
             <div className="Board">
                 <MiddleBoard
                     goesUpOne={game.goesUpOne}
                     goesUpTwo={game.goesUpTwo}
                     goesDownOne={game.goesDownOne}
                     goesDownTwo={game.goesDownTwo}
+                    remainingCards={game.cards.length}
                 />
                 {game && game.players.map((player, index) => {
                     return (
-                        <div className={`Player${index}${index === 3 ? `For${game.players.length}` : ''}`}>
+                        <div key={index} className={`Player${index}${index === 3 ? `For${game.players.length}` : ''}`}>
                             <Player id={index} cards={player} isTurn={index === game.turn} />
                         </div>
                     )

@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-    Link
-} from "react-router-dom";
 
 const playGame = (cards, players, tactic, options) => {
     window.location.href = `/game?cards=${

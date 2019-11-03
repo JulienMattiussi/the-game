@@ -1,8 +1,4 @@
 import {
-    goesUpOne,
-    goesUpTwo,
-    goesDownOne,
-    goesDownTwo,
     cloneGame,
     move,
     getValidPositions,
@@ -93,7 +89,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                 const tenReducingCards = getTenReducingCards(newGame, player);
                 if (tenReducingCards.cards.length) {
                     newGame.vetos.push({ player, position: tenReducingCards.positions[0][0] })
-                    newGame.history.unshift(`Joueur ${player} demande un véto en ${tenReducingCards.positions[0][0]}`);
+                    newGame.history.unshift({ player, type: 'veto', position: tenReducingCards.positions[0][0] });
                 }
             }
         }
@@ -106,7 +102,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                     getFlattenValidCards(getValidCards(newGame, player)));
                 if (bestCard && bestCard.value === 1) {
                     newGame.vetos.push({ player, position: bestCard.position })
-                    newGame.history.unshift(`Joueur ${player} demande un véto en ${bestCard.position}`);
+                    newGame.history.unshift({ player, type: 'veto', position: bestCard.position });
                 }
             }
         }
@@ -124,7 +120,7 @@ export const simpleTactic = (
         return { ...game, lost: true };
     }
     let turn1 = move(game, card1.card, card1.position);
-    turn1.history.unshift(`Joueur ${turn1.turn} joue ${card1.card} en ${card1.position}`);
+    turn1.history.unshift({ player: turn1.turn, type: 'move', value: card1.card, position: card1.position });
     if (useVeto10 || useVeto1) {
         turn1 = setVeto(turn1, useVeto10, useVeto1);
     }
@@ -134,7 +130,7 @@ export const simpleTactic = (
             return { ...turn1, lost: true };
         }
         let turn2 = move(turn1, card2.card, card2.position);
-        turn2.history.unshift(`Joueur ${turn2.turn} joue ${card2.card} en ${card2.position}`);
+        turn2.history.unshift({ player: turn2.turn, type: 'move', value: card2.card, position: card2.position });
         if (useVeto10 || useVeto1) {
             turn2 = setVeto(turn2, useVeto10, useVeto1);
         }

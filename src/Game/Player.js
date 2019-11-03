@@ -9,7 +9,7 @@ const Player = ({ id, cards, isTurn }) => {
         <div className="Player">
             <div className="Cards">
                 {cards && cards.sort((ca, cb) => ca - cb).map((card, index) =>
-                    <div className={`Card${index}`}>
+                    <div key={index} className={`Card${index}`}>
                         <Card value={card} />
                     </div>)}
             </div>
