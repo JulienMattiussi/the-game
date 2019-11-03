@@ -134,7 +134,7 @@ export const playFullGame = (
     tactic,
     options = { useBetterStarter: false, useVeto10: false, useVeto1: false }
 ) => {
-    let newGame = game;
+    let newGame = cloneGame(game);
     let security = 0;
     while (true) {
         security++;
@@ -195,6 +195,8 @@ export const playManyGames = (
         if (options.useBetterStarter) {
             game = setBetterStarter(game);
         }
+        const cards = [...game.cards];
+        const players = [...game.players];
         const endGame = playFullGame(game, tactic, options);
         const remaining = getRemainingCards(endGame);
 
@@ -212,6 +214,8 @@ export const playManyGames = (
                 remaining,
                 time: endGame.time,
                 game: endGame,
+                cards,
+                players,
             };
         }
         if (
@@ -223,6 +227,8 @@ export const playManyGames = (
                 remaining,
                 time: endGame.time,
                 game: endGame,
+                cards,
+                players,
             };
         }
     }

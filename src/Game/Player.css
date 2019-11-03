@@ -1,0 +1,58 @@
+.Player {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 640px;
+  height: 260px;
+  /* border: solid black 1px;
+  border-radius: 4px; */
+  padding: 10px;
+}
+
+.Cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: middle;
+  width: 100%;
+}
+
+.Card0 {
+    transform: rotateZ(-30deg) translateY(68px);
+}
+
+.Card1 {
+    transform: rotateZ(-18deg) translateX(6px) translateY(24px);
+}
+
+.Card2 {
+    transform: rotateZ(-6deg);
+}
+
+.Card3 {
+    transform: rotateZ(6deg) translateX(-10px);
+}
+
+.Card4 {
+    transform: rotateZ(18deg) translateX(-16px) translateY(24px);
+}
+
+.Card5 {
+    transform: rotateZ(30deg) translateX(-6px) translateY(68px);
+}
+
+
+.Title {
+  text-align: center;
+  padding-top: 20px;
+  width: 100%;
+  height: 100px;
+}
+
+.Selected {
+
+  border: solid black 1px;
+  border-radius: 4px;
+  background-color: lightgrey;
+}

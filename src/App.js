@@ -1,7 +1,13 @@
 import React from 'react';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+} from "react-router-dom";
 import logo from './assets/thegame.jpeg';
 import './App.css';
 import Stats from './Stats/Stats';
+import Game from './Game/Game';
 
 
 function App() {
@@ -15,13 +21,22 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    The game
-                </p>
-            </header>
-            <Stats />
+            <Router>
+                <Switch>
+                    <Route exact path="/">
+                        <header className="App-header">
+                            <img src={logo} className="App-logo" alt="logo" />
+                            <p>
+                                The game
+                            </p>
+                        </header>
+                        <Stats />
+                    </Route>
+                    <Route path="/game">
+                        <Game />
+                    </Route>
+                </Switch>
+            </Router>
         </div>
     );
 }

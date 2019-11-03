@@ -29,7 +29,7 @@ const logStats = (stats) => {
     console.log('Turns : ', stats.average.time);
 }
 
-const emptyStat = { best: {}, worst: {}, total: {}, average: {} };
+const emptyStat = { best: {}, worst: {}, total: {}, average: {}, tactic: '', options: {} };
 
 const Stats = () => {
     const [tactic, setTactic] = useState('simpleTactic');
@@ -45,6 +45,8 @@ const Stats = () => {
                 ...emptyStat,
                 numberOfPlayers: +number,
                 numberOfGames: nbGames,
+                tactic,
+                options: { useBetterStarter, useVeto10, useVeto1 },
             }
         }), {}));
     const [loading, setLoading] = useState(false);
@@ -55,11 +57,15 @@ const Stats = () => {
         Object.keys(nbPlayers).map(
             number => {
                 if (nbPlayers[number]) {
-                    stats[number] = playManyGames(
-                        tactics[tactic],
-                        { useBetterStarter, useVeto10, useVeto1 },
-                        +number,
-                        numberOfGames);
+                    stats[number] = {
+                        ...playManyGames(
+                            tactics[tactic],
+                            { useBetterStarter, useVeto10, useVeto1 },
+                            +number,
+                            numberOfGames),
+                        tactic,
+                        options: { useBetterStarter, useVeto10, useVeto1 },
+                    };
                     if (log) logStats(stats[number]);
                 }
                 return null;
@@ -77,6 +83,8 @@ const Stats = () => {
                 ...emptyStat,
                 numberOfPlayers: +number,
                 numberOfGames: +event.target.value,
+                tactic,
+                options: { useBetterStarter, useVeto10, useVeto1 },
             }
         }), {}));
     }
@@ -103,6 +111,8 @@ const Stats = () => {
                 ...emptyStat,
                 numberOfPlayers: +number,
                 numberOfGames: nbGames,
+                tactic,
+                options: { useBetterStarter, useVeto10, useVeto1 },
             }
         }), {}));
     }

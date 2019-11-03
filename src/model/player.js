@@ -104,7 +104,6 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                     newGame,
                     getFlattenValidCards(getValidCards(newGame, player)));
                 if (bestCard && bestCard.value === 1) {
-                    console.log(bestCard);
                     newGame.vetos.push({ player, position: bestCard.position })
                 }
             }

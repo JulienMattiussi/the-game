@@ -1,0 +1,43 @@
+.Board {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  padding: 10px;
+}
+
+.Form {
+  position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.Player0 {
+    position: absolute;
+    top: 40%;
+    left: 0;
+}
+
+.Player1 {
+    position: absolute;
+    top: 0;
+    left: calc(50% - 320px);
+}
+
+.Player2 {
+    position: absolute;
+    top: 40%;
+    right: 0;
+}
+
+.Player3 {
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 320px);
+}
+
+.Player4 {
+    position: absolute;
+    bottom: 0;
+}
