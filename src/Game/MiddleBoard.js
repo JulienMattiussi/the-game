@@ -33,7 +33,7 @@ const MiddleBoard = ({
                 </div>
             </div>
             {vetos.map(veto => {
-                return <span key={veto.player} className={`Veto Selected${veto.player} Veto${veto.position}`}>🔒</span>
+                return <span key={veto.player} role="img" aria-label="Verrou" className={`Veto Selected${veto.player} Veto${veto.position}`}>🔒</span>
             })}
             {lost && <div className="Lost">PERDU ...</div>}
             {won && <div className="Won">GAGNE !!!!</div>}
