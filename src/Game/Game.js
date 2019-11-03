@@ -22,8 +22,9 @@ function useQuery() {
 }
 
 const History = ({ list }) => {
+    const turns = list.filter(item => item.type === 'move').length;
     return <div className="History">
-        <strong>HISTORIQUE</strong>
+        <strong>HISTORIQUE ({turns} tours)</strong>
         {list && list.map((event, index) => {
             const player = <strong className={`PlayerHistory${event.player}`}>Joueur {event.player}</strong>
             const value = <strong>{event.value}</strong>
