@@ -46,6 +46,7 @@ export const initGame = (nbPlayers = 4) => {
         vetos: [],
         players,
         cards,
+        history: [],
     }
 }
 
@@ -58,6 +59,7 @@ export const loadGame = (cards, players) => ({
     vetos: [],
     players: [...players],
     cards: [...cards],
+    history: [],
 })
 
 export const cloneGame = game => {
@@ -73,6 +75,7 @@ export const cloneGame = game => {
         lost: game.lost,
         vetos: game.vetos,
         won: game.won,
+        history: game.history,
     }
 
     return newGame;

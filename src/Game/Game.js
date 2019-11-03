@@ -41,7 +41,7 @@ const Game = () => {
 
     const play = () => {
         setLoading(true);
-        const newGame = playATurn(game, tactics[tactic], options);
+        const newGame = playATurn(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10 });
         setGame(newGame);
         setLoading(false);
     }
@@ -90,6 +90,11 @@ const Game = () => {
                 <Link to="/">Back to stats</Link>
 
 
+            </div>
+            <div className="AllActions">
+                <strong>HISTORIQUE</strong>
+                <br />
+                {game && game.history && game.history.join('\n')}
             </div>
             <div className="Board">
                 <MiddleBoard

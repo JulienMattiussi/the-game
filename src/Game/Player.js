@@ -13,7 +13,7 @@ const Player = ({ id, cards, isTurn }) => {
                         <Card value={card} />
                     </div>)}
             </div>
-            <span className={`Title ${isTurn ? 'Selected' : ''}`}>Player {id}</span>
+            <span className={`Title ${isTurn ? 'Selected' : ''}`}>Joueur {id}</span>
         </div>
     )
 }
