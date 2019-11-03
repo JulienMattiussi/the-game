@@ -106,8 +106,12 @@ export const changeTurn = (game) => {
     return { ...cloneGame(game), turn }
 }
 
-export const playATurn = (game, tactic, useVeto = false) => {
-    const newGame = tactic(game, useVeto);
+export const playATurn = (
+    game,
+    tactic,
+    options = { useBetterStarter: false, useVeto10: false, useVeto1: false }
+) => {
+    const newGame = tactic(game, options);
     return changeTurn(reload(newGame));
 }
 
@@ -125,12 +129,16 @@ export const isGameWon = game => {
 export const getRemainingCards = game =>
     game.players.reduce((total, player) => total + player.length, 0) + game.cards.length;
 
-export const playFullGame = (game, tactic, useVeto = false) => {
+export const playFullGame = (
+    game,
+    tactic,
+    options = { useBetterStarter: false, useVeto10: false, useVeto1: false }
+) => {
     let newGame = game;
     let security = 0;
     while (true) {
         security++;
-        newGame = playATurn(newGame, tactic, useVeto)
+        newGame = playATurn(newGame, tactic, options)
         if (newGame.lost) {
             break;
         }
@@ -148,8 +156,12 @@ export const playFullGame = (game, tactic, useVeto = false) => {
 }
 
 
-export const playManyGames = (tactic, options = { useBetterStarter: false, useVeto: false }, numberOfPlayers = 4, numberOfGames = 1000) => {
-    const { useBetterStarter, useVeto } = options;
+export const playManyGames = (
+    tactic,
+    options = { useBetterStarter: false, useVeto10: false, useVeto1: false },
+    numberOfPlayers = 4,
+    numberOfGames = 1000
+) => {
     const stats = {
         numberOfPlayers,
         numberOfGames,
@@ -180,10 +192,10 @@ export const playManyGames = (tactic, options = { useBetterStarter: false, useVe
     }
     for (let i = 0; i < numberOfGames; i++) {
         let game = initGame(numberOfPlayers);
-        if (useBetterStarter) {
+        if (options.useBetterStarter) {
             game = setBetterStarter(game);
         }
-        const endGame = playFullGame(game, tactic, useVeto);
+        const endGame = playFullGame(game, tactic, options);
         const remaining = getRemainingCards(endGame);
 
         stats.total.won += endGame.won ? 1 : 0;

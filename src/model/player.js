@@ -40,14 +40,18 @@ export const getTenReducingCards = (game, player) => game.players[player].reduce
     return list;
 }, { cards: [], positions: [] });
 
-export const getBestCard = (game, validCards) => {
-    const valueArray = validCards.map(card => {
+export const getValuedCards = (game, cards) => {
+    const valueArray = cards.map(card => {
         return { ...card, value: Math.abs(game[card.position][0] - card.card) }
     });
 
     valueArray.sort((itemA, itemB) => itemA.value - itemB.value);
 
-    return valueArray[0];
+    return valueArray;
+}
+
+export const getBestCard = (game, validCards) => {
+    return getValuedCards(game, validCards)[0];
 }
 
 export const chooseCard = (game) => {
@@ -81,27 +85,46 @@ export const setBetterStarter = game => {
     return newGame;
 }
 
-export const setVeto = game => {
+export const setVeto = (game, useVeto10, useVeto1) => {
     const newGame = cloneGame(game);
-    for (let player = 0; player < newGame.players.length; player++) {
-        if (newGame.turn !== player && !newGame.vetos.some(veto => veto.player === player)) {
-            const tenReducingCards = getTenReducingCards(newGame, player);
-            if (tenReducingCards.cards.length) {
-                newGame.vetos.push({ player, position: tenReducingCards.positions[0][0] })
+    if (useVeto10) {
+        for (let player = 0; player < newGame.players.length; player++) {
+            if (newGame.turn !== player && !newGame.vetos.some(veto => veto.player === player)) {
+                const tenReducingCards = getTenReducingCards(newGame, player);
+                if (tenReducingCards.cards.length) {
+                    newGame.vetos.push({ player, position: tenReducingCards.positions[0][0] })
+                }
+            }
+        }
+    }
+    if (useVeto1) {
+        for (let player = 0; player < newGame.players.length; player++) {
+            if (newGame.turn !== player && !newGame.vetos.some(veto => veto.player === player)) {
+                const bestCard = getBestCard(
+                    newGame,
+                    getFlattenValidCards(getValidCards(newGame, player)));
+                if (bestCard && bestCard.value === 1) {
+                    console.log(bestCard);
+                    newGame.vetos.push({ player, position: bestCard.position })
+                }
             }
         }
     }
     return newGame;
 }
 
-export const simpleTactic = (game, useVeto = false) => {
+export const simpleTactic = (
+    game,
+    options = { useBetterStarter: false, useVeto10: false, useVeto1: false }
+) => {
+    const { useVeto10, useVeto1 } = options;
     const card1 = chooseCard(game);
     if (!card1.card) {
         return { ...game, lost: true };
     }
     let turn1 = move(game, card1.card, card1.position);
-    if (useVeto) {
-        turn1 = setVeto(turn1);
+    if (useVeto10 || useVeto1) {
+        turn1 = setVeto(turn1, useVeto10, useVeto1);
     }
     if (game.cards.length) {
         const card2 = chooseCard(turn1);
@@ -109,8 +132,8 @@ export const simpleTactic = (game, useVeto = false) => {
             return { ...turn1, lost: true };
         }
         let turn2 = move(turn1, card2.card, card2.position);
-        if (useVeto) {
-            turn2 = setVeto(turn2);
+        if (useVeto10 || useVeto1) {
+            turn2 = setVeto(turn2, useVeto10, useVeto1);
         }
         return turn2;
     }

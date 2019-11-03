@@ -36,7 +36,8 @@ const Stats = () => {
     const [nbPlayers, setNbPlayers] = useState({ 3: true, 4: true, 5: true });
     const [nbGames, setNbGames] = useState(1000);
     const [useBetterStarter, setUseBetterStarter] = useState(false);
-    const [useVeto, setUseVeto] = useState(false);
+    const [useVeto1, setUseVeto1] = useState(false);
+    const [useVeto10, setUseVeto10] = useState(false);
     const [stats, setStats] = useState(
         Object.keys(nbPlayers).reduce((all, number) => ({
             ...all,
@@ -56,7 +57,7 @@ const Stats = () => {
                 if (nbPlayers[number]) {
                     stats[number] = playManyGames(
                         tactics[tactic],
-                        { useBetterStarter, useVeto },
+                        { useBetterStarter, useVeto10, useVeto1 },
                         +number,
                         numberOfGames);
                     if (log) logStats(stats[number]);
@@ -84,8 +85,12 @@ const Stats = () => {
         setUseBetterStarter(!useBetterStarter);
     }
 
-    const changeUseVeto = () => {
-        setUseVeto(!useVeto);
+    const changeUseVeto10 = () => {
+        setUseVeto10(!useVeto10);
+    }
+
+    const changeUseVeto1 = () => {
+        setUseVeto1(!useVeto1);
     }
 
     const changeNbPlayers = (number) => {
@@ -138,8 +143,12 @@ const Stats = () => {
                     Optimiser le démarrage
                 </label>
                 <label>
-                    <input type="checkbox" checked={useVeto} onChange={changeUseVeto} />
-                    Annoncer les veto
+                    <input type="checkbox" checked={useVeto10} onChange={changeUseVeto10} />
+                    Annoncer les veto quand une reduction de 10 est possible
+                </label>
+                <label>
+                    <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
+                    Annoncer les veto quand la carte suivante est disponible
                 </label>
                 <label>
                     Nombre de jeux
