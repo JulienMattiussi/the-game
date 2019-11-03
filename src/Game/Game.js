@@ -20,30 +20,36 @@ function useQuery() {
 const Game = () => {
     const query = useQuery();
 
-    const cards = JSON.parse(query.get("cards"));
-    const players = JSON.parse(query.get("players"));
     const options = JSON.parse(query.get("options"));
 
+    const cards = JSON.parse(query.get("cards"));
+    const players = JSON.parse(query.get("players"));
+    const middle = query.get("middle") ? JSON.parse(query.get("middle")) : undefined;
+    const turn = query.get("turn") ? +query.get("turn") : undefined;
+
     const [tactic, setTactic] = useState(query.get("tactic"));
-    const nbPlayers = players.length;
     const [useBetterStarter, setUseBetterStarter] = useState(options['useBetterStarter']);
     const [useVeto1, setUseVeto1] = useState(options['useVeto1']);
     const [useVeto10, setUseVeto10] = useState(options['useVeto10']);
-    const [game, setGame] = useState(loadGame(cards, players));
+    const [game, setGame] = useState(loadGame(cards, players, middle, turn));
     const [loading, setLoading] = useState(false);
 
-
-    console.log(tactic);
-    console.log(nbPlayers);
-    console.log(useBetterStarter);
-    console.log(useVeto1);
-    console.log(useVeto10);
-
-    const play = () => {
+    const playOne = () => {
         setLoading(true);
         const newGame = playATurn(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10 });
         setGame(newGame);
         setLoading(false);
+    }
+
+    const playToEnd = () => {
+        setLoading(true);
+        const newGame = playATurn(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10 });
+        setGame(newGame);
+        setLoading(false);
+    }
+
+    const restart = () => {
+        setGame(loadGame(cards, players, middle, turn));
     }
 
     const changeUseBetterStarter = () => {
@@ -86,7 +92,11 @@ const Game = () => {
                     <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
                     Annoncer les veto quand la carte suivante est disponible
                 </label>
-                <button onClick={() => play()}>Play</button>
+                <div className="Actions">
+                    <button onClick={() => playOne()}>Jouer une action</button>
+                    <button onClick={() => playToEnd()}>Jouer et finir</button>
+                    <button onClick={() => restart()}>Relancer</button>
+                </div>
                 <Link to="/">Back to stats</Link>
 
 
@@ -105,7 +115,7 @@ const Game = () => {
                 />
                 {game && game.players.map((player, index) => {
                     return (
-                        <div className={`Player${index}`}>
+                        <div className={`Player${index}${index === 3 ? `For${game.players.length}` : ''}`}>
                             <Player id={index} cards={player} isTurn={index === game.turn} />
                         </div>
                     )

@@ -50,12 +50,22 @@ export const initGame = (nbPlayers = 4) => {
     }
 }
 
-export const loadGame = (cards, players) => ({
-    goesUpOne: [1],
-    goesUpTwo: [1],
-    goesDownOne: [100],
-    goesDownTwo: [100],
-    turn: 0,
+export const loadGame = (
+    cards,
+    players,
+    middle = {
+        goesUpOne: [1],
+        goesUpTwo: [1],
+        goesDownOne: [100],
+        goesDownTwo: [100],
+    },
+    turn = 0,
+) => ({
+    goesUpOne: middle.goesUpOne,
+    goesUpTwo: middle.goesUpTwo,
+    goesDownOne: middle.goesDownOne,
+    goesDownTwo: middle.goesDownTwo,
+    turn,
     vetos: [],
     players: [...players],
     cards: [...cards],

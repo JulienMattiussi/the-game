@@ -51,13 +51,20 @@ body {
     right: 0;
 }
 
-.Player3 {
+.Player3For4 {
     position: absolute;
     bottom: 0;
     left: calc(50% - 260px);
 }
 
+.Player3For5 {
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+}
+
 .Player4 {
     position: absolute;
     bottom: 0;
+    right: 10%
 }
