@@ -1,0 +1,43 @@
+.History {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 0 0 0 4px;
+  overflow-y: scroll;
+  width: 500px;
+  height: 200px;
+  max-height: 200px;
+  white-space: pre-wrap;
+  display:flex;
+  flex-direction: column;
+}
+
+.PlayerHistory0 {
+  color: blue;
+}
+
+.PlayerHistory1 {
+  color: lime;
+}
+
+.PlayerHistory2 {
+  color: red;
+}
+
+.PlayerHistory3 {
+  color:yellow;
+}
+
+.PlayerHistory4 {
+  color:purple;
+}
+
+.LeftHistory {
+    color: cornflowerblue;
+}
+
+.RightHistory {
+    color:lightsalmon;
+}

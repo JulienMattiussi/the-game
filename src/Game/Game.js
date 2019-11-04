@@ -5,57 +5,30 @@ import {
 } from "react-router-dom";
 import './Game.css';
 import {
-    goesUpOne,
-    goesUpTwo,
-    goesDownOne,
     loadGame,
     playATurn,
     playFullGame,
 } from '../model/game';
-import { tactics } from '../model/player';
+import { tactics, setBetterStarter } from '../model/player';
 import Player from './Player';
 import MiddleBoard from './MiddleBoard';
+import History from './History';
 
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-const History = ({ list, end }) => {
-    const turns = list.filter(item => item.type === 'move').length;
-    return <div className="History">
-        <strong>HISTORIQUE ({turns} tours)</strong>
-        <strong>{end === 'lost' ? 'PERDU ...' : end === 'won' ? 'GAGNE !!!' : ''}</strong>
-        {list && list.map((event, index) => {
-            const player = <strong className={`PlayerHistory${event.player}`}>Joueur {event.player}</strong>
-            const value = <strong>{event.value}</strong>
-            const positionPartSense = event.position === goesUpOne ||
-                event.position === goesUpTwo ?
-                <strong className="LeftHistory">PILE MONTANTE</strong> :
-                <strong className="RightHistory">PILE DESCENDANTE</strong>
-
-            const positionPartNumber = event.position === goesUpOne ||
-                event.position === goesDownOne ?
-                <strong>1</strong> :
-                <strong>2</strong>
-
-            switch (event.type) {
-                case 'move':
-                    return (
-                        <span key={index}>
-                            {player} joue ( {value} ) en {positionPartSense} {positionPartNumber}
-                        </span>);
-                case 'veto':
-                    return <span key={index}>
-                        {player} demande un <strong>VETO</strong> en {positionPartSense} {positionPartNumber}
-                    </span>
-                default:
-                    return null;
-            }
-        })
-        }
-    </div>
+const initNewGame = (cards, players, middle, turn, useBetterStarter) => {
+    const newGame = loadGame(cards, players, middle, turn);
+    if (useBetterStarter) {
+        console.log(newGame);
+        return setBetterStarter(newGame);
+    }
+    return newGame;
 }
+
+const isPlayable = (game) => game && !game.lost && !game.won;
 
 const Game = () => {
     const query = useQuery();
@@ -71,7 +44,7 @@ const Game = () => {
     const [useBetterStarter, setUseBetterStarter] = useState(options['useBetterStarter']);
     const [useVeto1, setUseVeto1] = useState(options['useVeto1']);
     const [useVeto10, setUseVeto10] = useState(options['useVeto10']);
-    const [game, setGame] = useState(loadGame(cards, players, middle, turn));
+    const [game, setGame] = useState(initNewGame(cards, players, middle, turn, useBetterStarter));
     const [loading, setLoading] = useState(false);
 
     const playOne = () => {
@@ -89,7 +62,7 @@ const Game = () => {
     }
 
     const restart = () => {
-        setGame(loadGame(cards, players, middle, turn));
+        setGame(initNewGame(cards, players, middle, turn, useBetterStarter));
     }
 
     const changeUseBetterStarter = () => {
@@ -133,8 +106,8 @@ const Game = () => {
                     Annoncer les veto quand la carte suivante est disponible
                 </label>
                 <div className="Actions">
-                    <button onClick={() => playOne()} disabled={game.lost || game.won}>Jouer une action</button>
-                    <button onClick={() => playToEnd()} disabled={game.lost || game.won}>Jouer et finir</button>
+                    <button onClick={() => playOne()} disabled={!isPlayable(game)}>Jouer une action</button>
+                    <button onClick={() => playToEnd()} disabled={!isPlayable(game)}>Jouer et finir</button>
                     <button onClick={() => restart()}>Relancer</button>
                 </div>
                 <Link to="/">Back to stats</Link>

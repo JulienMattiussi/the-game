@@ -164,7 +164,7 @@ export const getRemainingCards = game =>
 export const playFullGame = (
     game,
     tactic,
-    options = { useBetterStarter: false, useVeto10: false, useVeto1: false }
+    options = { useBetterStarter: false, useVeto10: false, useVeto1: false, notPlayer: -1 }
 ) => {
     let newGame = cloneGame(game);
     let security = 0;
@@ -178,7 +178,10 @@ export const playFullGame = (
             newGame.won = true;
             break;
         }
-        if (security >= 2000) {
+        if (options.notPlayer === newGame.turn) {
+            break;
+        }
+        if (security >= 1000) {
             console.log('Bug', newGame);
             break;
         }
