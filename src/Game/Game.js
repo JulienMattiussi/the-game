@@ -49,6 +49,7 @@ const Game = () => {
     const [useVeto10, setUseVeto10] = useState(options.useVeto10);
     const [game, setGame] = useState(initNewGame(cards, players, middle, turn, useBetterStarter));
     const [choosenCard, setChoosenCard] = useState(0);
+    const [turnNumber, setTurnNumber] = useState(0);
     const [loading, setLoading] = useState(false);
 
     const playOne = () => {
@@ -67,6 +68,7 @@ const Game = () => {
 
     const restart = () => {
         setChoosenCard(0);
+        setTurnNumber(0);
         setGame(initNewGame(cards, players, middle, turn, useBetterStarter));
     }
 
@@ -91,7 +93,13 @@ const Game = () => {
     }
 
     const placeCard = (value, position) => {
-        setGame(changeTurn(reload(move(game, value, position))));
+        if (turnNumber === 0 && game.cards.length) {
+            setGame(reload(move(game, value, position)));
+            setTurnNumber(1);
+        } else {
+            setGame(changeTurn(reload(move(game, value, position))));
+            setTurnNumber(0);
+        }
         setChoosenCard(0);
     }
 

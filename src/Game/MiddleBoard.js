@@ -2,6 +2,12 @@ import React from 'react';
 import Card from './Card';
 import RemainingCard from './RemainingCard';
 import './MiddleBoard.css';
+import {
+    goesUpOne as pileGoesUpOne,
+    goesUpTwo as pileGoesUpTwo,
+    goesDownOne as pileGoesDownOne,
+    goesDownTwo as pileGoesDownTwo
+} from '../model/game';
 
 const MiddleBoard = ({
     goesUpOne,
@@ -15,8 +21,27 @@ const MiddleBoard = ({
     lost,
     won,
 }) => {
-    const handlePlaceCard = (position) => {
-        if (placeCard && choosenCard) {
+    const isValid = (position, actualValue) => {
+        if (!choosenCard) {
+            return false;
+        }
+        if (
+            (position === pileGoesUpOne || position === pileGoesUpTwo)
+            && actualValue > choosenCard
+        ) {
+            return false;
+        }
+        if (
+            (position === pileGoesDownOne || position === pileGoesDownTwo)
+            && actualValue < choosenCard
+        ) {
+            return false;
+        }
+        return true;
+    }
+
+    const handlePlaceCard = (position, actualValue) => {
+        if (isValid(position, actualValue)) {
             placeCard(choosenCard, position);
         }
     }
@@ -28,23 +53,23 @@ const MiddleBoard = ({
                     <div className="LeftHint">PILE MONTANTE</div>
                     <Card
                         value={goesUpOne[0]}
-                        clickable={!!choosenCard}
-                        onClick={() => handlePlaceCard('goesUpOne')} />
+                        clickable={isValid(pileGoesUpOne, goesUpOne[0])}
+                        onClick={() => handlePlaceCard(pileGoesUpOne, goesUpOne[0])} />
                     <Card
                         value={goesUpTwo[0]}
-                        clickable={!!choosenCard}
-                        onClick={() => handlePlaceCard('goesUpTwo')} />
+                        clickable={isValid(pileGoesUpTwo, goesUpTwo[0])}
+                        onClick={() => handlePlaceCard(pileGoesUpTwo, goesUpTwo[0])} />
                 </div>
                 <div className="Pile">
                     <div className="RightHint">PILE DESCENDANTE</div>
                     <Card
                         value={goesDownOne[0]}
-                        clickable={!!choosenCard}
-                        onClick={() => handlePlaceCard('goesDownOne')} />
+                        clickable={isValid(pileGoesDownOne, goesDownOne[0])}
+                        onClick={() => handlePlaceCard(pileGoesDownOne, goesDownOne[0])} />
                     <Card
                         value={goesDownTwo[0]}
-                        clickable={!!choosenCard}
-                        onClick={() => handlePlaceCard('goesDownTwo')} />
+                        clickable={isValid(pileGoesDownTwo, goesDownTwo[0])}
+                        onClick={() => handlePlaceCard(pileGoesDownTwo, goesDownTwo[0])} />
                 </div>
                 <div className="RemainingCard">
                     <RemainingCard value={remainingCards} />
