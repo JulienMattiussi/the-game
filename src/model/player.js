@@ -120,7 +120,6 @@ export const simpleTactic = (
         return { ...game, lost: true };
     }
     let turn1 = move(game, card1.card, card1.position);
-    turn1.history.unshift({ player: turn1.turn, type: 'move', value: card1.card, position: card1.position });
     if (useVeto10 || useVeto1) {
         turn1 = setVeto(turn1, useVeto10, useVeto1);
     }
@@ -130,7 +129,6 @@ export const simpleTactic = (
             return { ...turn1, lost: true };
         }
         let turn2 = move(turn1, card2.card, card2.position);
-        turn2.history.unshift({ player: turn2.turn, type: 'move', value: card2.card, position: card2.position });
         if (useVeto10 || useVeto1) {
             turn2 = setVeto(turn2, useVeto10, useVeto1);
         }

@@ -3,9 +3,12 @@ import './Card.css';
 
 
 
-const Card = ({ value }) => {
+const Card = ({ value, clickable, selected, onClick }) => {
     return (
-        <div className="Card">
+        <div
+            className={`Card${clickable ? ' CardClickable' : ''}${selected ? ' CardSelected' : ''}`}
+            onClick={onClick}
+        >
             <div className="CardTop">
                 <span>
                     {value}
@@ -19,7 +22,8 @@ const Card = ({ value }) => {
                     ' StartOne' :
                     value === 100 ?
                         ' Start100' :
-                        ''}`}>
+                        ''
+                } `}>
                 {value}
             </span>
             <div className="CardBottom">

@@ -98,13 +98,13 @@ export const cloneGame = game => {
     return newGame;
 }
 
-export const move = (game, card, pile) => {
+export const move = (game, card, position) => {
     const newGame = cloneGame(game);
     const player = newGame.players[newGame.turn];
     const index = player.findIndex(c => c === card);
     player.splice(index, 1);
 
-    newGame[pile].unshift(card);
+    newGame[position].unshift(card);
 
     if (newGame.cards.length) {
         newGame.players[newGame.turn].push(newGame.cards[0])
@@ -113,6 +113,7 @@ export const move = (game, card, pile) => {
     }
 
     newGame.vetos = game.vetos.filter(veto => veto.player !== game.turn);
+    newGame.history.unshift({ player: newGame.turn, type: 'move', value: card, position: position });
 
     return newGame;
 }

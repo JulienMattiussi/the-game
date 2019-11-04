@@ -10,6 +10,18 @@
   background-color: white;
 }
 
+.CardClickable:hover:not(.CardSelected) {
+  background-color: rgba(200,200,250,0.9);
+  color: rgba(50,50,250,0.9);
+  cursor: pointer;
+}
+
+.CardSelected {
+  background-color: rgba(150,150,200,0.9);
+  color: rgba(0,0,200,0.9);
+  cursor: pointer;
+}
+
 .CardTop, .CardBottom {
   display: flex;
   flex-direction: row;

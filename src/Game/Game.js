@@ -6,6 +6,9 @@ import {
 import './Game.css';
 import {
     loadGame,
+    move,
+    reload,
+    changeTurn,
     playATurn,
     playFullGame,
 } from '../model/game';
@@ -45,6 +48,7 @@ const Game = () => {
     const [useVeto1, setUseVeto1] = useState(options.useVeto1);
     const [useVeto10, setUseVeto10] = useState(options.useVeto10);
     const [game, setGame] = useState(initNewGame(cards, players, middle, turn, useBetterStarter));
+    const [choosenCard, setChoosenCard] = useState(0);
     const [loading, setLoading] = useState(false);
 
     const playOne = () => {
@@ -62,6 +66,7 @@ const Game = () => {
     }
 
     const restart = () => {
+        setChoosenCard(0);
         setGame(initNewGame(cards, players, middle, turn, useBetterStarter));
     }
 
@@ -81,6 +86,14 @@ const Game = () => {
         setTactic(event.target.value);
     }
 
+    const chooseCard = (card) => {
+        setChoosenCard(card);
+    }
+
+    const placeCard = (value, position) => {
+        setGame(changeTurn(reload(move(game, value, position))));
+        setChoosenCard(0);
+    }
 
     return (
         <div className="Page">
@@ -122,6 +135,8 @@ const Game = () => {
                     goesDownOne={game.goesDownOne}
                     goesDownTwo={game.goesDownTwo}
                     remainingCards={game.cards.length}
+                    placeCard={placeCard}
+                    choosenCard={choosenCard}
                     vetos={game.vetos}
                     lost={game.lost}
                     won={game.won}
@@ -134,6 +149,8 @@ const Game = () => {
                                 cards={player}
                                 isTurn={index === game.turn}
                                 onlyPlayer={notPlayer}
+                                choosenCard={choosenCard}
+                                chooseCard={chooseCard}
                             />
                         </div>
                     )
