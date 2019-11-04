@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  width: 520px;
+  width: 487px;
   height: 200px;
   /* border: solid black 1px;
   border-radius: 4px; */
@@ -13,13 +13,11 @@
 .Cards {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: middle;
   width: 100%;
 }
 
 .Card0 {
-    transform: rotateZ(-30deg) translateY(68px);
+    transform: rotateZ(-30deg) translateY(64px);
 }
 
 .Card1 {
@@ -39,7 +37,13 @@
 }
 
 .Card5 {
-    transform: rotateZ(30deg) translateX(-6px) translateY(68px);
+    transform: rotateZ(30deg) translateX(-6px) translateY(64px);
+}
+
+.CardMargin {
+    margin-left: 90px;
+    width: 397px;
+
 }
 
 

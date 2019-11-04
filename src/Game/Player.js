@@ -4,12 +4,16 @@ import './Player.css';
 
 
 
+const cardStyle = (index, length) =>
+    `Card${length > 4 ? index : index + 1}`;
+
 const Player = ({ id, cards, isTurn }) => {
+    const nbCards = cards.length;
     return (
         <div className="Player">
-            <div className="Cards">
+            <div className={`Cards ${nbCards > 4 ? '' : ' CardMargin'}`}>
                 {cards && cards.map((card, index) =>
-                    <div key={index} className={`Card${index}`}>
+                    <div key={index} className={cardStyle(index, nbCards)}>
                         <Card value={card} />
                     </div>)}
             </div>
