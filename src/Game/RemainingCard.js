@@ -10,7 +10,7 @@ const RemainingCard = ({ value }) => {
                 <span className="CardRemainingNumber">
                     {value}
                 </span>
-                Carte{pluralise(value)} restante{pluralise(value)}
+                {value != null && `Carte${pluralise(value)} restante${pluralise(value)}`}
             </span>
         </div>)
 }

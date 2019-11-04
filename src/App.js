@@ -11,14 +11,6 @@ import Game from './Game/Game';
 
 
 function App() {
-    /* const game = initGame();
-    console.log(game);
-    const endGame = playFullGame(game, simpleTactic);
-    console.log(endGame);
-    console.log('Won : ', endGame.won ? true : !endGame.lost);
-    console.log('Remaining cards : ', getRemainingCards(endGame));
-    console.log('Turns : ', endGame.time); */
-
     return (
         <div className="App">
             <Router>

@@ -143,8 +143,12 @@ export const playATurn = (
     tactic,
     options = { useBetterStarter: false, useVeto10: false, useVeto1: false }
 ) => {
-    const newGame = tactic(game, options);
-    return changeTurn(reload(newGame));
+    const newGame = reload(tactic(game, options));
+
+    if (isGameWon(newGame)) {
+        newGame.won = true;
+    }
+    return changeTurn(newGame);
 }
 
 export const isGameWon = game => {
@@ -174,8 +178,7 @@ export const playFullGame = (
         if (newGame.lost) {
             break;
         }
-        if (isGameWon(newGame)) {
-            newGame.won = true;
+        if (newGame.won) {
             break;
         }
         if (options.notPlayer === newGame.turn) {

@@ -22,7 +22,6 @@ function useQuery() {
 const initNewGame = (cards, players, middle, turn, useBetterStarter) => {
     const newGame = loadGame(cards, players, middle, turn);
     if (useBetterStarter) {
-        console.log(newGame);
         return setBetterStarter(newGame);
     }
     return newGame;
@@ -34,6 +33,7 @@ const Game = () => {
     const query = useQuery();
 
     const options = JSON.parse(query.get("options"));
+    const notPlayer = options.notPlayer;
 
     const cards = JSON.parse(query.get("cards"));
     const players = JSON.parse(query.get("players"));
@@ -41,9 +41,9 @@ const Game = () => {
     const turn = query.get("turn") ? +query.get("turn") : undefined;
 
     const [tactic, setTactic] = useState(query.get("tactic"));
-    const [useBetterStarter, setUseBetterStarter] = useState(options['useBetterStarter']);
-    const [useVeto1, setUseVeto1] = useState(options['useVeto1']);
-    const [useVeto10, setUseVeto10] = useState(options['useVeto10']);
+    const [useBetterStarter, setUseBetterStarter] = useState(options.useBetterStarter);
+    const [useVeto1, setUseVeto1] = useState(options.useVeto1);
+    const [useVeto10, setUseVeto10] = useState(options.useVeto10);
     const [game, setGame] = useState(initNewGame(cards, players, middle, turn, useBetterStarter));
     const [loading, setLoading] = useState(false);
 
@@ -56,7 +56,7 @@ const Game = () => {
 
     const playToEnd = () => {
         setLoading(true);
-        const newGame = playFullGame(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10 });
+        const newGame = playFullGame(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10, notPlayer });
         setGame(newGame);
         setLoading(false);
     }
@@ -107,7 +107,7 @@ const Game = () => {
                 </label>
                 <div className="Actions">
                     <button onClick={() => playOne()} disabled={!isPlayable(game)}>Jouer une action</button>
-                    <button onClick={() => playToEnd()} disabled={!isPlayable(game)}>Jouer et finir</button>
+                    <button onClick={() => playToEnd()} disabled={!isPlayable(game) || notPlayer === game.turn}>Jouer et finir</button>
                     <button onClick={() => restart()}>Relancer</button>
                 </div>
                 <Link to="/">Back to stats</Link>
@@ -129,7 +129,12 @@ const Game = () => {
                 {game && game.players.map((player, index) => {
                     return (
                         <div key={index} className={`Player${index}${index === 3 ? `For${game.players.length}` : ''}`}>
-                            <Player id={index} cards={player} isTurn={index === game.turn} />
+                            <Player
+                                id={index}
+                                cards={player}
+                                isTurn={index === game.turn}
+                                onlyPlayer={notPlayer}
+                            />
                         </div>
                     )
                 })}

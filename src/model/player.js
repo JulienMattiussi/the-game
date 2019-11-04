@@ -78,10 +78,6 @@ export const setBetterStarter = game => {
         { ...getBestCard(newGame, getFlattenValidCards(validCards)), player: index }));
     bestCards.sort((itemA, itemB) => itemA.value - itemB.value);
     newGame.turn = bestCards[0].player;
-
-    console.log('setBetterStarter');
-
-    console.log(newGame);
     return newGame;
 }
 
