@@ -192,10 +192,23 @@ export const allBestCardsTactic = (
     return newGame;
 }
 
+export const allBestCardsUntilEmptyTactic = (
+    game,
+    options = { useVeto10: false, useVeto1: false }
+) => {
+    const minimalMoveNumber = getMinimalMoveNumber(game.cards);
+    if (minimalMoveNumber === 2) {
+        return allBestCardsTactic(game, options);
+    } else {
+        return mininumCardsTactic(game, options);
+    }
+}
+
 
 export const tactics = {
     'mininumCards': { label: 'Jouer minimum de cartes', algo: mininumCardsTactic },
     'threeBestCards': { label: "Jouer jusqu'à 3 bonnes cartes", algo: threeBestCardsTactic },
     'allBestCards': { label: 'Jouer toutes les bonnes cartes', algo: allBestCardsTactic },
+    'allBestCardsUntilEmpty': { label: 'Jouer les bonnes cartes puis le minimum', algo: allBestCardsUntilEmptyTactic },
 
 }
