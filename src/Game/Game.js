@@ -6,6 +6,7 @@ import {
 import './Game.css';
 import {
     loadGame,
+    isPlayable,
     move,
     reload,
     changeTurn,
@@ -17,10 +18,8 @@ import Player from './Player';
 import MiddleBoard from './MiddleBoard';
 import History from './History';
 
-
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
+const useQuery = () =>
+    new URLSearchParams(useLocation().search);
 
 const initNewGame = (cards, players, middle, turn, useBetterStarter) => {
     const newGame = loadGame(cards, players, middle, turn);
@@ -29,8 +28,6 @@ const initNewGame = (cards, players, middle, turn, useBetterStarter) => {
     }
     return newGame;
 }
-
-const isPlayable = (game) => game && !game.lost && !game.won;
 
 const Game = () => {
     const query = useQuery();
@@ -54,6 +51,8 @@ const Game = () => {
 
     const playOne = () => {
         setLoading(true);
+        setChoosenCard(0);
+        setTurnNumber(0);
         const newGame = playATurn(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10 });
         setGame(newGame);
         setLoading(false);
@@ -61,6 +60,8 @@ const Game = () => {
 
     const playToEnd = () => {
         setLoading(true);
+        setChoosenCard(0);
+        setTurnNumber(0);
         const newGame = playFullGame(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10, notPlayer });
         setGame(newGame);
         setLoading(false);
@@ -94,10 +95,16 @@ const Game = () => {
 
     const placeCard = (value, position) => {
         if (turnNumber === 0 && game.cards.length) {
-            setGame(reload(move(game, value, position)));
+            setGame(move(game, value, position, { useVeto1, useVeto10 }));
             setTurnNumber(1);
         } else {
-            setGame(changeTurn(reload(move(game, value, position))));
+            setGame(
+                changeTurn(
+                    reload(
+                        move(game, value, position, { useVeto1, useVeto10 })
+                    ),
+                    { useVeto1, useVeto10 })
+            );
             setTurnNumber(0);
         }
         setChoosenCard(0);

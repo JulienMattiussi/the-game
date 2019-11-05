@@ -119,19 +119,13 @@ export const simpleTactic = (
     if (!card1.card) {
         return { ...game, lost: true };
     }
-    let turn1 = move(game, card1.card, card1.position);
-    if (useVeto10 || useVeto1) {
-        turn1 = setVeto(turn1, useVeto10, useVeto1);
-    }
+    let turn1 = move(game, card1.card, card1.position, { useVeto1, useVeto10 });
     if (game.cards.length) {
         const card2 = chooseCard(turn1);
         if (!card2.card) {
             return { ...turn1, lost: true };
         }
-        let turn2 = move(turn1, card2.card, card2.position);
-        if (useVeto10 || useVeto1) {
-            turn2 = setVeto(turn2, useVeto10, useVeto1);
-        }
+        let turn2 = move(turn1, card2.card, card2.position, { useVeto1, useVeto10 });
         return turn2;
     }
     return turn1;

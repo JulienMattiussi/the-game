@@ -1,4 +1,4 @@
-import { setBetterStarter } from './player';
+import { setBetterStarter, setVeto } from './player';
 
 export const NB_CARDS_IN_HAND = 6;
 
@@ -98,7 +98,8 @@ export const cloneGame = game => {
     return newGame;
 }
 
-export const move = (game, card, position) => {
+export const move = (game, card, position, options = {}) => {
+    const { useVeto10, useVeto1 } = options;
     const newGame = cloneGame(game);
     const player = newGame.players[newGame.turn];
     const index = player.findIndex(c => c === card);
@@ -106,19 +107,18 @@ export const move = (game, card, position) => {
 
     newGame[position].unshift(card);
 
-    if (newGame.cards.length) {
-        newGame.players[newGame.turn].push(newGame.cards[0])
-        newGame.players[newGame.turn].sort((ca, cb) => ca - cb);
-        newGame.cards.shift();
-    }
-
     newGame.vetos = game.vetos.filter(veto => veto.player !== game.turn);
+
     newGame.history.unshift({ player: newGame.turn, type: 'move', value: card, position: position });
+
+    if (useVeto10 || useVeto1) {
+        return setVeto(newGame, useVeto10, useVeto1);
+    }
 
     return newGame;
 }
 
-export const reload = (game) => {
+export const reload = (game, options = {}) => {
     const newGame = cloneGame(game);
     for (let i = newGame.players[newGame.turn].length; i < NB_CARDS_IN_HAND; i++) {
         if (newGame.cards.length) {
@@ -130,13 +130,18 @@ export const reload = (game) => {
             break;
         }
     }
-
     return newGame;
 }
 
-export const changeTurn = (game) => {
-    const turn = game.turn === game.players.length - 1 ? 0 : game.turn + 1;
-    return { ...cloneGame(game), turn }
+export const changeTurn = (game, options = {}) => {
+    const { useVeto10, useVeto1 } = options;
+    const newGame = cloneGame(game);
+    newGame.turn = newGame.turn === game.players.length - 1 ? 0 : newGame.turn + 1;
+
+    if (useVeto10 || useVeto1) {
+        return setVeto(newGame, useVeto10, useVeto1);
+    }
+    return newGame;
 }
 
 export const playATurn = (
@@ -149,8 +154,10 @@ export const playATurn = (
     if (isGameWon(newGame)) {
         newGame.won = true;
     }
-    return changeTurn(newGame);
+    return changeTurn(newGame, options);
 }
+
+export const isPlayable = (game) => game && !game.lost && !game.won;
 
 export const isGameWon = game => {
     if (!game.cards.length) {
@@ -278,6 +285,27 @@ export const playManyGames = (
     };
 
     return stats;
+}
+
+export const isCardValid = (card, position, actualValue) => {
+    if (!card) {
+        return false;
+    }
+    if (position === goesUpOne || position === goesUpTwo) {
+        if (actualValue === card + 10) {
+            return true;
+        } else if (actualValue > card) {
+            return false;
+        }
+    }
+    if (position === goesDownOne || position === goesDownTwo) {
+        if (actualValue === card - 10) {
+            return true;
+        } else if (actualValue < card) {
+            return false;
+        }
+    }
+    return true;
 }
 
 export const isTenReducingCard = (game, card) => {

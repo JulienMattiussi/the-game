@@ -6,7 +6,8 @@ import {
     goesUpOne as pileGoesUpOne,
     goesUpTwo as pileGoesUpTwo,
     goesDownOne as pileGoesDownOne,
-    goesDownTwo as pileGoesDownTwo
+    goesDownTwo as pileGoesDownTwo,
+    isCardValid,
 } from '../model/game';
 
 const MiddleBoard = ({
@@ -21,27 +22,8 @@ const MiddleBoard = ({
     lost,
     won,
 }) => {
-    const isValid = (position, actualValue) => {
-        if (!choosenCard) {
-            return false;
-        }
-        if (
-            (position === pileGoesUpOne || position === pileGoesUpTwo)
-            && actualValue > choosenCard
-        ) {
-            return false;
-        }
-        if (
-            (position === pileGoesDownOne || position === pileGoesDownTwo)
-            && actualValue < choosenCard
-        ) {
-            return false;
-        }
-        return true;
-    }
-
     const handlePlaceCard = (position, actualValue) => {
-        if (isValid(position, actualValue)) {
+        if (isCardValid(choosenCard, position, actualValue)) {
             placeCard(choosenCard, position);
         }
     }
@@ -53,22 +35,22 @@ const MiddleBoard = ({
                     <div className="LeftHint">PILE MONTANTE</div>
                     <Card
                         value={goesUpOne[0]}
-                        clickable={isValid(pileGoesUpOne, goesUpOne[0])}
+                        clickable={isCardValid(choosenCard, pileGoesUpOne, goesUpOne[0])}
                         onClick={() => handlePlaceCard(pileGoesUpOne, goesUpOne[0])} />
                     <Card
                         value={goesUpTwo[0]}
-                        clickable={isValid(pileGoesUpTwo, goesUpTwo[0])}
+                        clickable={isCardValid(choosenCard, pileGoesUpTwo, goesUpTwo[0])}
                         onClick={() => handlePlaceCard(pileGoesUpTwo, goesUpTwo[0])} />
                 </div>
                 <div className="Pile">
                     <div className="RightHint">PILE DESCENDANTE</div>
                     <Card
                         value={goesDownOne[0]}
-                        clickable={isValid(pileGoesDownOne, goesDownOne[0])}
+                        clickable={isCardValid(choosenCard, pileGoesDownOne, goesDownOne[0])}
                         onClick={() => handlePlaceCard(pileGoesDownOne, goesDownOne[0])} />
                     <Card
                         value={goesDownTwo[0]}
-                        clickable={isValid(pileGoesDownTwo, goesDownTwo[0])}
+                        clickable={isCardValid(choosenCard, pileGoesDownTwo, goesDownTwo[0])}
                         onClick={() => handlePlaceCard(pileGoesDownTwo, goesDownTwo[0])} />
                 </div>
                 <div className="RemainingCard">
