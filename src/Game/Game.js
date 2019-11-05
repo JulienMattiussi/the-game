@@ -7,6 +7,7 @@ import './Game.css';
 import {
     loadGame,
     isPlayable,
+    getMinimalMoveNumber,
     move,
     reload,
     changeTurn,
@@ -53,7 +54,7 @@ const Game = () => {
         setLoading(true);
         setChoosenCard(0);
         setTurnNumber(0);
-        const newGame = playATurn(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10 });
+        const newGame = playATurn(game, tactics[tactic].algo, { useBetterStarter, useVeto1, useVeto10 });
         setGame(newGame);
         setLoading(false);
     }
@@ -62,7 +63,7 @@ const Game = () => {
         setLoading(true);
         setChoosenCard(0);
         setTurnNumber(0);
-        const newGame = playFullGame(game, tactics[tactic], { useBetterStarter, useVeto1, useVeto10, notPlayer });
+        const newGame = playFullGame(game, tactics[tactic].algo, { useBetterStarter, useVeto1, useVeto10, notPlayer });
         setGame(newGame);
         setLoading(false);
     }
@@ -94,7 +95,8 @@ const Game = () => {
     }
 
     const placeCard = (value, position) => {
-        if (turnNumber === 0 && game.cards.length) {
+        const minimalMoveNumber = getMinimalMoveNumber(game.cards);
+        if (turnNumber === 0 && minimalMoveNumber === 2) {
             setGame(move(game, value, position, { useVeto1, useVeto10 }));
             setTurnNumber(1);
         } else {
@@ -114,10 +116,10 @@ const Game = () => {
         <div className="Page">
             <div className="Form">
                 <label>
-                    Tactique
+                    Tactique&nbsp;
                     <select onChange={changeTactic} >
                         {Object.keys(tactics).map(tactic => (
-                            <option key={tactic} value={tactic} >{tactic}</option>
+                            <option key={tactic} value={tactic} >{tactics[tactic].label}</option>
                         ))}
                     </select>
                 </label>

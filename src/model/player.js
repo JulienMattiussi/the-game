@@ -2,7 +2,9 @@ import {
     cloneGame,
     move,
     getValidPositions,
+    getMinimalMoveNumber,
     isTenReducingCard,
+    NB_CARDS_IN_HAND,
 } from './game';
 
 export const getValidCards = (game, player) => game.players[player].reduce((list, card) => {
@@ -117,22 +119,21 @@ export const setVeto = (game, useVeto10, useVeto1) => {
             }
         }
     }
-    if (newGame.vetos.length > 3)
-        console.log(newGame.vetos);
     return newGame;
 }
 
-export const simpleTactic = (
+export const mininumCardsTactic = (
     game,
-    options = { useBetterStarter: false, useVeto10: false, useVeto1: false }
+    options = { useVeto10: false, useVeto1: false }
 ) => {
     const { useVeto10, useVeto1 } = options;
+    const minimalMoveNumber = getMinimalMoveNumber(game.cards);
     const card1 = chooseCard(game);
     if (!card1.card) {
         return { ...game, lost: true };
     }
     let turn1 = move(game, card1.card, card1.position, { useVeto1, useVeto10 });
-    if (game.cards.length) {
+    if (minimalMoveNumber === 2) {
         const card2 = chooseCard(turn1);
         if (!card2.card) {
             return { ...turn1, lost: true };
@@ -143,7 +144,58 @@ export const simpleTactic = (
     return turn1;
 }
 
+export const threeBestCardsTactic = (
+    game,
+    options = { useVeto10: false, useVeto1: false }
+) => {
+    const { useVeto10, useVeto1 } = options;
+    const minimalMoveNumber = getMinimalMoveNumber(game.cards);
+    let nbPlayed = 0;
+    let newGame = cloneGame(game);
+    while (nbPlayed < 3) {
+        const card = chooseCard(newGame);
+        if (nbPlayed < minimalMoveNumber && !card.card) {
+            return { ...newGame, lost: true };
+        }
+        if (nbPlayed >= minimalMoveNumber) {
+            if (!card.card || (card.value > 1 && card.value !== 10)) {
+                break;
+            }
+        }
+        newGame = move(newGame, card.card, card.position, { useVeto1, useVeto10 });
+        nbPlayed++;
+    }
+    return newGame;
+}
+
+export const allBestCardsTactic = (
+    game,
+    options = { useVeto10: false, useVeto1: false }
+) => {
+    const { useVeto10, useVeto1 } = options;
+    const minimalMoveNumber = getMinimalMoveNumber(game.cards);
+    let nbPlayed = 0;
+    let newGame = cloneGame(game);
+    while (nbPlayed < NB_CARDS_IN_HAND) {
+        const card = chooseCard(newGame);
+        if (nbPlayed < minimalMoveNumber && !card.card) {
+            return { ...newGame, lost: true };
+        }
+        if (nbPlayed >= minimalMoveNumber) {
+            if (!card.card || (card.value > 1 && card.value !== 10)) {
+                break;
+            }
+        }
+        newGame = move(newGame, card.card, card.position, { useVeto1, useVeto10 });
+        nbPlayed++;
+    }
+    return newGame;
+}
+
 
 export const tactics = {
-    'simpleTactic': simpleTactic,
+    'mininumCards': { label: 'Jouer minimum de cartes', algo: mininumCardsTactic },
+    'threeBestCardsTactic': { label: "Jouer jusqu'à 3 bonnes cartes", algo: threeBestCardsTactic },
+    'allBestCards': { label: 'Jouer toutes les bonnes cartes', algo: allBestCardsTactic },
+
 }

@@ -32,12 +32,12 @@ const logStats = (stats) => {
 const emptyStat = { best: {}, worst: {}, total: {}, average: {}, tactic: '', options: {} };
 
 const Stats = () => {
-    const [tactic, setTactic] = useState('simpleTactic');
-    const [nbPlayers, setNbPlayers] = useState({ 3: true, 4: true, 5: true });
-    const [nbGames, setNbGames] = useState(1000);
-    const [useBetterStarter, setUseBetterStarter] = useState(false);
+    const [tactic, setTactic] = useState(Object.keys(tactics)[0]);
+    const [nbPlayers, setNbPlayers] = useState({ 3: false, 4: true, 5: true });
+    const [nbGames, setNbGames] = useState(100);
+    const [useBetterStarter, setUseBetterStarter] = useState(true);
+    const [useVeto10, setUseVeto10] = useState(true);
     const [useVeto1, setUseVeto1] = useState(false);
-    const [useVeto10, setUseVeto10] = useState(false);
     const [stats, setStats] = useState(
         Object.keys(nbPlayers).reduce((all, number) => ({
             ...all,
@@ -59,7 +59,7 @@ const Stats = () => {
                 if (nbPlayers[number]) {
                     stats[number] = {
                         ...playManyGames(
-                            tactics[tactic],
+                            tactics[tactic].algo,
                             { useBetterStarter, useVeto10, useVeto1 },
                             +number,
                             numberOfGames),
@@ -126,10 +126,10 @@ const Stats = () => {
         <div>
             <div className="Form">
                 <label>
-                    Tactique
+                    Tactique&nbsp;
                     <select onChange={changeTactic} >
                         {Object.keys(tactics).map(tactic => (
-                            <option key={tactic} value={tactic} >{tactic}</option>
+                            <option key={tactic} value={tactic} >{tactics[tactic].label}</option>
                         ))}
                     </select>
                 </label>

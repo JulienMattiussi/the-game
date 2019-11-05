@@ -28,7 +28,7 @@ const Stat = ({ stats, loading }) => {
                             stats.best.players,
                             stats.tactic,
                             stats.options,
-                        )}>Replay it</button>}
+                        )}>Rejouer cette partie</button>}
                     <StatElement title="Gagné" value={stats.best.won ? "Oui" : "Non"} />
                     <StatElement title="Cartes restantes" value={stats.best.remaining} />
                     <StatElement title="Tours" value={stats.best.time} />
@@ -41,7 +41,7 @@ const Stat = ({ stats, loading }) => {
                             stats.worst.players,
                             stats.tactic,
                             stats.options,
-                        )}>Replay it</button>}
+                        )}>Rejouer cette partie</button>}
                     <StatElement title="Gagné" value={stats.worst.won ? "Oui" : "Non"} />
                     <StatElement title="Cartes restantes" value={stats.worst.remaining} />
                     <StatElement title="Tours" value={stats.worst.time} />
@@ -49,9 +49,9 @@ const Stat = ({ stats, loading }) => {
                     <br />
                     <StatElement title="TOTAL" />
                     <StatElement title="Gagné" value={stats.total.won} />
-                    <StatElement title="Lost &lt;= 5 restantes" value={stats.total.lost5} />
-                    <StatElement title="Lost &gt;5 à 10 restantes" value={stats.total.lost10} />
-                    <StatElement title="Lost &gt; 10 restantes" value={stats.total.lostMore} />
+                    <StatElement title="Perdu &lt;= 5 restantes" value={stats.total.lost5} />
+                    <StatElement title="Perdu &gt;5 à 10 restantes" value={stats.total.lost10} />
+                    <StatElement title="Perdu &gt; 10 restantes" value={stats.total.lostMore} />
                     <br />
                     <StatElement title="MOYENNE" />
                     <StatElement title="Gagné" value={stats.average.wonPercent} />

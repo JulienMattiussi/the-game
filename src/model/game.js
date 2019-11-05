@@ -132,6 +132,8 @@ export const reload = (game, options = {}) => {
     return newGame;
 }
 
+export const getMinimalMoveNumber = cards => cards.length ? 2 : 1;
+
 export const changeTurn = (game, options = {}) => {
     const { useVeto10, useVeto1 } = options;
     const newGame = cloneGame(game);
