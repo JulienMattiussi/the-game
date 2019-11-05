@@ -195,7 +195,7 @@ export const allBestCardsTactic = (
 
 export const tactics = {
     'mininumCards': { label: 'Jouer minimum de cartes', algo: mininumCardsTactic },
-    'threeBestCardsTactic': { label: "Jouer jusqu'à 3 bonnes cartes", algo: threeBestCardsTactic },
+    'threeBestCards': { label: "Jouer jusqu'à 3 bonnes cartes", algo: threeBestCardsTactic },
     'allBestCards': { label: 'Jouer toutes les bonnes cartes', algo: allBestCardsTactic },
 
 }
