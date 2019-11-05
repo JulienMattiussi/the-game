@@ -83,13 +83,20 @@ export const setBetterStarter = game => {
 
 export const setVeto = (game, useVeto10, useVeto1) => {
     const newGame = cloneGame(game);
+    newGame.vetos = [];
+    if (newGame.won || newGame.lost) {
+        return newGame;
+    }
     if (useVeto10) {
         for (let player = 0; player < newGame.players.length; player++) {
             if (newGame.turn !== player && !newGame.vetos.some(veto => veto.player === player)) {
                 const tenReducingCards = getTenReducingCards(newGame, player);
                 if (tenReducingCards.cards.length) {
-                    newGame.vetos.push({ player, position: tenReducingCards.positions[0][0] })
-                    newGame.history.unshift({ player, type: 'veto', position: tenReducingCards.positions[0][0] });
+                    const newVeto = { player, position: tenReducingCards.positions[0][0] }
+                    newGame.vetos.push(newVeto)
+                    if (!game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
+                        newGame.history.unshift({ player, type: 'veto', position: tenReducingCards.positions[0][0] });
+                    }
                 }
             }
         }
@@ -101,8 +108,11 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                     newGame,
                     getFlattenValidCards(getValidCards(newGame, player)));
                 if (bestCard && bestCard.value === 1) {
-                    newGame.vetos.push({ player, position: bestCard.position })
-                    newGame.history.unshift({ player, type: 'veto', position: bestCard.position });
+                    const newVeto = { player, position: bestCard.position }
+                    newGame.vetos.push(newVeto)
+                    if (!game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
+                        newGame.history.unshift({ player, type: 'veto', position: bestCard.position });
+                    }
                 }
             }
         }

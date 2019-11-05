@@ -107,8 +107,6 @@ export const move = (game, card, position, options = {}) => {
 
     newGame[position].unshift(card);
 
-    newGame.vetos = game.vetos.filter(veto => veto.player !== game.turn);
-
     newGame.history.unshift({ player: newGame.turn, type: 'move', value: card, position: position });
 
     if (useVeto10 || useVeto1) {
