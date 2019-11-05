@@ -116,7 +116,7 @@ const Game = () => {
         <div className="Page">
             <div className="Form">
                 <label>
-                    Tactique&nbsp;
+                    Tactique
                     <select onChange={changeTactic} defaultValue={tactic}>
                         {Object.keys(tactics).map(t => (
                             <option key={t} value={t} >{tactics[t].label}</option>

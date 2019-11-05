@@ -126,7 +126,7 @@ const Stats = () => {
         <div>
             <div className="Form">
                 <label>
-                    Tactique&nbsp;
+                    Tactique
                     <select onChange={changeTactic} >
                         {Object.keys(tactics).map(tactic => (
                             <option key={tactic} value={tactic} >{tactics[tactic].label}</option>
@@ -164,7 +164,7 @@ const Stats = () => {
                     Nombre de jeux
                     <input type="number" value={nbGames} onChange={changeNbGames} />
                 </label>
-                <button onClick={() => computeStat(tactic, nbGames)}>Compute stats</button>
+                <button onClick={() => computeStat(tactic, nbGames)}>Lancer les statistiques</button>
             </div>
             <div className="Stats">
                 {

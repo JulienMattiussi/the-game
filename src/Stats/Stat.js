@@ -56,7 +56,8 @@ const Stat = ({ stats, loading }) => {
                     <StatElement title="MOYENNE" />
                     <StatElement title="Gagné" value={stats.average.wonPercent} />
                     <StatElement title="Cartes restantes" value={stats.average.remaining} />
-                    <StatElement title="Tours" value={stats.average.time} />
+                    <StatElement title="Nombre Tours Gagnants" value={stats.average.timeWon} />
+                    <StatElement title="Nombre Tours Perdants" value={stats.average.timeLost} />
                 </div>
             }
         </div>)

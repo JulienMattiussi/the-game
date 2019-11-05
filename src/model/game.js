@@ -230,12 +230,14 @@ export const playManyGames = (
             lost10: 0,
             lostMore: 0,
             remaining: 0,
-            time: 0,
+            timeWon: 0,
+            timeLost: 0,
         },
         average: {
             wonPercent: '0 %',
             remaining: 0,
-            time: 0,
+            timeWon: 0,
+            timeLost: 0,
         },
     }
     for (let i = 0; i < numberOfGames; i++) {
@@ -254,10 +256,11 @@ export const playManyGames = (
         stats.total.lost10 += !endGame.won && remaining > 5 && remaining <= 10 ? 1 : 0;
         stats.total.lostMore += !endGame.won && remaining > 10 ? 1 : 0;
         stats.total.remaining += remaining;
-        stats.total.time += endGame.time;
-        if (
-            remaining < stats.best.remaining ||
-            (remaining === stats.best.remaining && stats.best.time < endGame.time)
+        stats.total.timeWon += endGame.won ? endGame.time : 0;
+        stats.total.timeLost += endGame.won ? 0 : endGame.time;
+        if ((stats.best.won && endGame.won && endGame.time < stats.best.time)
+            ||
+            remaining < stats.best.remaining
         ) {
             stats.best = {
                 won: endGame.won ? true : !endGame.lost,
@@ -284,8 +287,9 @@ export const playManyGames = (
     }
     stats.average = {
         wonPercent: `${Math.round(stats.total.won / numberOfGames * 10000) / 100} %`,
-        remaining: stats.total.remaining / numberOfGames,
-        time: stats.total.time / numberOfGames,
+        remaining: Math.round(stats.total.remaining / numberOfGames * 100) / 100,
+        timeWon: stats.total.won ? Math.round(stats.total.timeWon / stats.total.won * 100) / 100 : 0,
+        timeLost: Math.round(stats.total.timeLost / (numberOfGames - stats.total.won) * 100) / 100,
     };
 
     return stats;

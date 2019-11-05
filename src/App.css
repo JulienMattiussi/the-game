@@ -43,6 +43,10 @@
   margin: auto;
 }
 
+input[type="number"], select {
+  margin-left: 5px;
+}
+
 .NbPlayers {
 display: flex;
   flex-direction: row;
