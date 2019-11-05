@@ -108,7 +108,7 @@ export const move = (game, card, position, options = {}) => {
 
     newGame[position].unshift(card);
     if (!game.statsMode) {
-        newGame.history.unshift({ player: newGame.turn, type: 'move', value: card, position: position });
+        newGame.history.unshift({ player: newGame.turn, type: 'move', value: card, previous: newGame[position][1], position: position });
     }
     if (useVeto10 || useVeto1) {
         return setVeto(newGame, useVeto10, useVeto1);

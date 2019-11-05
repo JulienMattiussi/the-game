@@ -158,7 +158,7 @@ export const threeBestCardsTactic = (
             return { ...newGame, lost: true };
         }
         if (nbPlayed >= minimalMoveNumber) {
-            if (!card.card || (card.value > 1 && card.value !== 10)) {
+            if (!card.card || (card.value > 1 && !isTenReducingCard(newGame, card.card))) {
                 break;
             }
         }
@@ -182,7 +182,7 @@ export const allBestCardsTactic = (
             return { ...newGame, lost: true };
         }
         if (nbPlayed >= minimalMoveNumber) {
-            if (!card.card || (card.value > 1 && card.value !== 10)) {
+            if (!card.card || (card.value > 1 && !isTenReducingCard(newGame, card.card))) {
                 break;
             }
         }

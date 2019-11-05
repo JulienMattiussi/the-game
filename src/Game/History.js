@@ -14,6 +14,7 @@ const History = ({ list, end }) => {
         {list && list.map((event, index) => {
             const player = <strong className={`PlayerHistory${event.player}`}>Joueur {event.player}</strong>
             const value = <strong>{event.value}</strong>
+            const previous = <strong>{event.previous}</strong>
             const positionPartSense = event.position === goesUpOne ||
                 event.position === goesUpTwo ?
                 <strong className="LeftHistory">PILE MONTANTE</strong> :
@@ -28,7 +29,7 @@ const History = ({ list, end }) => {
                 case 'move':
                     return (
                         <span key={index}>
-                            {player} joue ( {value} ) en {positionPartSense} {positionPartNumber}
+                            {player} joue ( {value} sur {previous} ) en {positionPartSense} {positionPartNumber}
                         </span>);
                 case 'veto':
                     return <span key={index}>
