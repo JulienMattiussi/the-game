@@ -43,7 +43,12 @@
   margin: auto;
 }
 
-input[type="number"], select {
+input[type="number"] {
+  margin-left: 5px;
+  width: 100px;
+}
+
+select {
   margin-left: 5px;
 }
 

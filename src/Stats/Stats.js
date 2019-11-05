@@ -35,6 +35,7 @@ const Stats = () => {
     const [tactic, setTactic] = useState(Object.keys(tactics)[0]);
     const [nbPlayers, setNbPlayers] = useState({ 3: false, 4: true, 5: true });
     const [nbGames, setNbGames] = useState(100);
+    const [minimumGainToForceVeto, setMinimumGainToForceVeto] = useState(100);
     const [useBetterStarter, setUseBetterStarter] = useState(true);
     const [useVeto10, setUseVeto10] = useState(true);
     const [useVeto1, setUseVeto1] = useState(false);
@@ -46,7 +47,7 @@ const Stats = () => {
                 numberOfPlayers: +number,
                 numberOfGames: nbGames,
                 tactic,
-                options: { useBetterStarter, useVeto10, useVeto1 },
+                options: { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
             }
         }), {}));
     const [loading, setLoading] = useState(false);
@@ -60,11 +61,11 @@ const Stats = () => {
                     stats[number] = {
                         ...playManyGames(
                             tactics[tactic].algo,
-                            { useBetterStarter, useVeto10, useVeto1 },
+                            { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
                             +number,
                             numberOfGames),
                         tactic,
-                        options: { useBetterStarter, useVeto10, useVeto1 },
+                        options: { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
                     };
                     if (log) logStats(stats[number]);
                 }
@@ -84,7 +85,7 @@ const Stats = () => {
                 numberOfPlayers: +number,
                 numberOfGames: +event.target.value,
                 tactic,
-                options: { useBetterStarter, useVeto10, useVeto1 },
+                options: { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
             }
         }), {}));
     }
@@ -100,6 +101,9 @@ const Stats = () => {
     const changeUseVeto1 = () => {
         setUseVeto1(!useVeto1);
     }
+    const changeMinimumGainToForceVeto = (event) => {
+        setMinimumGainToForceVeto(+event.target.value);
+    }
 
     const changeNbPlayers = (number) => {
         const players = { ...nbPlayers };
@@ -112,7 +116,7 @@ const Stats = () => {
                 numberOfPlayers: +number,
                 numberOfGames: nbGames,
                 tactic,
-                options: { useBetterStarter, useVeto10, useVeto1 },
+                options: { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
             }
         }), {}));
     }
@@ -159,6 +163,10 @@ const Stats = () => {
                 <label>
                     <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
                     Annoncer les veto quand la carte suivante est disponible
+                </label>
+                <label>
+                    Valeur minimum de gain pour outrepasser un veto
+                    <input type="number" value={minimumGainToForceVeto} onChange={changeMinimumGainToForceVeto} />
                 </label>
                 <label>
                     Nombre de jeux

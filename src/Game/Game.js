@@ -43,6 +43,7 @@ const Game = () => {
 
     const [tactic, setTactic] = useState(query.get("tactic"));
     const [useBetterStarter, setUseBetterStarter] = useState(options.useBetterStarter);
+    const [minimumGainToForceVeto, setMinimumGainToForceVeto] = useState(options.minimumGainToForceVeto || 100);
     const [useVeto1, setUseVeto1] = useState(options.useVeto1);
     const [useVeto10, setUseVeto10] = useState(options.useVeto10);
     const [game, setGame] = useState(initNewGame(cards, players, middle, turn, useBetterStarter));
@@ -54,7 +55,7 @@ const Game = () => {
         setLoading(true);
         setChoosenCard(0);
         setTurnNumber(0);
-        const newGame = playATurn(game, tactics[tactic].algo, { useBetterStarter, useVeto1, useVeto10 });
+        const newGame = playATurn(game, tactics[tactic].algo, { minimumGainToForceVeto, useBetterStarter, useVeto1, useVeto10 });
         setGame(newGame);
         setLoading(false);
     }
@@ -63,7 +64,7 @@ const Game = () => {
         setLoading(true);
         setChoosenCard(0);
         setTurnNumber(0);
-        const newGame = playFullGame(game, tactics[tactic].algo, { useBetterStarter, useVeto1, useVeto10, notPlayer });
+        const newGame = playFullGame(game, tactics[tactic].algo, { minimumGainToForceVeto, useBetterStarter, useVeto1, useVeto10, notPlayer });
         setGame(newGame);
         setLoading(false);
     }
@@ -84,6 +85,10 @@ const Game = () => {
 
     const changeUseVeto1 = () => {
         setUseVeto1(!useVeto1);
+    }
+
+    const changeMinimumGainToForceVeto = (event) => {
+        setMinimumGainToForceVeto(+event.target.value);
     }
 
     const changeTactic = (event) => {
@@ -134,6 +139,10 @@ const Game = () => {
                 <label>
                     <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
                     Annoncer les veto quand la carte suivante est disponible
+                </label>
+                <label>
+                    Valeur minimum de gain pour outrepasser un veto
+                    <input type="number" value={minimumGainToForceVeto} onChange={changeMinimumGainToForceVeto} />
                 </label>
                 <div className="Actions">
                     <button onClick={() => playOne()} disabled={!isPlayable(game)}>Jouer une action</button>
