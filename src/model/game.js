@@ -93,6 +93,7 @@ export const cloneGame = game => {
         vetos: game.vetos,
         won: game.won,
         history: game.history,
+        statsMode: game.statsMode,
     }
 
     return newGame;
@@ -106,9 +107,9 @@ export const move = (game, card, position, options = {}) => {
     player.splice(index, 1);
 
     newGame[position].unshift(card);
-
-    newGame.history.unshift({ player: newGame.turn, type: 'move', value: card, position: position });
-
+    if (!game.statsMode) {
+        newGame.history.unshift({ player: newGame.turn, type: 'move', value: card, position: position });
+    }
     if (useVeto10 || useVeto1) {
         return setVeto(newGame, useVeto10, useVeto1);
     }
@@ -223,6 +224,7 @@ export const playManyGames = (
         },
         total: {
             won: 0,
+            lost5: 0,
             lost10: 0,
             lostMore: 0,
             remaining: 0,
@@ -236,6 +238,7 @@ export const playManyGames = (
     }
     for (let i = 0; i < numberOfGames; i++) {
         let game = initGame(numberOfPlayers);
+        game.statsMode = true;
         if (options.useBetterStarter) {
             game = setBetterStarter(game);
         }
@@ -245,8 +248,9 @@ export const playManyGames = (
         const remaining = getRemainingCards(endGame);
 
         stats.total.won += endGame.won ? 1 : 0;
-        stats.total.lost10 += !endGame.won && stats.total.remaining <= 10 ? 1 : 0;
-        stats.total.lostMore += !endGame.won && stats.total.remaining > 10 ? 1 : 0;
+        stats.total.lost5 += !endGame.won && remaining <= 5 ? 1 : 0;
+        stats.total.lost10 += !endGame.won && remaining > 5 && remaining <= 10 ? 1 : 0;
+        stats.total.lostMore += !endGame.won && remaining > 10 ? 1 : 0;
         stats.total.remaining += remaining;
         stats.total.time += endGame.time;
         if (

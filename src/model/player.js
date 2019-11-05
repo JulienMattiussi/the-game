@@ -94,7 +94,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                 if (tenReducingCards.cards.length) {
                     const newVeto = { player, position: tenReducingCards.positions[0][0] }
                     newGame.vetos.push(newVeto)
-                    if (!game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
+                    if (!game.statsMode && !game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
                         newGame.history.unshift({ player, type: 'veto', position: tenReducingCards.positions[0][0] });
                     }
                 }
@@ -110,13 +110,15 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                 if (bestCard && bestCard.value === 1) {
                     const newVeto = { player, position: bestCard.position }
                     newGame.vetos.push(newVeto)
-                    if (!game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
+                    if (!game.statsMode && !game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
                         newGame.history.unshift({ player, type: 'veto', position: bestCard.position });
                     }
                 }
             }
         }
     }
+    if (newGame.vetos.length > 3)
+        console.log(newGame.vetos);
     return newGame;
 }
 

@@ -19,9 +19,9 @@ const Stat = ({ stats, loading }) => {
             {loading ?
                 <span>LOADING</span> :
                 <div className="Stat">
-                    <StatElement title={`STATS for ${stats.numberOfPlayers} players (${stats.numberOfGames} games)`} />
+                    <StatElement title={`STATS pour ${stats.numberOfPlayers} joueurs (${stats.numberOfGames} parties)`} />
                     <br />
-                    <StatElement title="BEST" />
+                    <StatElement title="LA MEILLEURE" />
                     {stats.best.game && <button onClick={() =>
                         playGame(
                             stats.best.cards,
@@ -29,12 +29,12 @@ const Stat = ({ stats, loading }) => {
                             stats.tactic,
                             stats.options,
                         )}>Replay it</button>}
-                    <StatElement title="Won" value={stats.best.won ? "Yes" : "No"} />
-                    <StatElement title="Remaining cards" value={stats.best.remaining} />
-                    <StatElement title="Turns" value={stats.best.time} />
+                    <StatElement title="Gagné" value={stats.best.won ? "Oui" : "Non"} />
+                    <StatElement title="Cartes restantes" value={stats.best.remaining} />
+                    <StatElement title="Tours" value={stats.best.time} />
                     {/* <span>{stats.best.game}</span> */}
                     <br />
-                    <StatElement title="WORST" />
+                    <StatElement title="LA PIRE" />
                     {stats.worst.game && <button onClick={() =>
                         playGame(
                             stats.worst.cards,
@@ -42,20 +42,21 @@ const Stat = ({ stats, loading }) => {
                             stats.tactic,
                             stats.options,
                         )}>Replay it</button>}
-                    <StatElement title="Won" value={stats.worst.won ? "Yes" : "No"} />
-                    <StatElement title="Remaining cards" value={stats.worst.remaining} />
-                    <StatElement title="Turns" value={stats.worst.time} />
+                    <StatElement title="Gagné" value={stats.worst.won ? "Oui" : "Non"} />
+                    <StatElement title="Cartes restantes" value={stats.worst.remaining} />
+                    <StatElement title="Tours" value={stats.worst.time} />
                     {/* <span>{stats.worst.game}</span> */}
                     <br />
                     <StatElement title="TOTAL" />
-                    <StatElement title="Won" value={stats.total.won} />
-                    <StatElement title="Lost &lt;= 10 remaining" value={stats.total.lost10} />
-                    <StatElement title="Lost &gt; 10 remaining" value={stats.total.lostMore} />
+                    <StatElement title="Gagné" value={stats.total.won} />
+                    <StatElement title="Lost &lt;= 5 restantes" value={stats.total.lost5} />
+                    <StatElement title="Lost &gt;5 à 10 restantes" value={stats.total.lost10} />
+                    <StatElement title="Lost &gt; 10 restantes" value={stats.total.lostMore} />
                     <br />
-                    <StatElement title="AVERAGE" />
-                    <StatElement title="Won" value={stats.average.wonPercent} />
-                    <StatElement title="Remaining cards" value={stats.average.remaining} />
-                    <StatElement title="Turns" value={stats.average.time} />
+                    <StatElement title="MOYENNE" />
+                    <StatElement title="Gagné" value={stats.average.wonPercent} />
+                    <StatElement title="Cartes restantes" value={stats.average.remaining} />
+                    <StatElement title="Tours" value={stats.average.time} />
                 </div>
             }
         </div>)
