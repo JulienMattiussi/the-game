@@ -1,4 +1,5 @@
 import { setBetterStarter, setVeto } from './player';
+import { computeAverage } from '../model/stats';
 
 export const NB_CARDS_IN_HAND = 6;
 
@@ -285,14 +286,8 @@ export const playManyGames = (
             };
         }
     }
-    stats.average = {
-        wonPercent: `${Math.round(stats.total.won / numberOfGames * 10000) / 100} %`,
-        remaining: Math.round(stats.total.remaining / numberOfGames * 100) / 100,
-        timeWon: stats.total.won ? Math.round(stats.total.timeWon / stats.total.won * 100) / 100 : 0,
-        timeLost: Math.round(stats.total.timeLost / (numberOfGames - stats.total.won) * 100) / 100,
-    };
 
-    return stats;
+    return computeAverage(stats, numberOfGames);
 }
 
 export const isCardValid = (card, position, actualValue) => {

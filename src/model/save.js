@@ -11,7 +11,7 @@ const keyToOption = optionKey => {
     return keysObject[optionKey];
 }
 
-const getKeyForStat = ({ numberOfPlayers, tactic, options }) => {
+export const getKeyForStat = ({ numberOfPlayers, tactic, options }) => {
     const allCaracteristics = Object.keys(options);
     let trueCaracteristics = allCaracteristics.filter(carac => options[carac]);
     trueCaracteristics.sort();

@@ -16,6 +16,18 @@
   width: 100%;
 }
 
+.Stat-zone-global {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px;
+  margin: 10px;
+  background-color: rgba(55, 125, 255, 0.7);
+  border-radius: 4px;
+  width: 100%;
+}
+
 .Stat-title {
     font-weight: bolder;
     width: 100%;

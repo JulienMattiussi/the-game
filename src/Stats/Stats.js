@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import './Stats.css';
 import {
     playManyGames,
 } from '../model/game';
 import { tactics } from '../model/player';
-import { saveStats, getStat } from '../model/save';
+import { computeAverage } from '../model/stats';
+import { saveStats, getStat, getKeyForStat } from '../model/save';
 import FormCriteria from '../Forms/FormCriteria';
 import Stat from './Stat';
 
@@ -33,7 +34,6 @@ const Stats = () => {
 
     const computeStat = (tactic, numberOfGames) => {
         setLoading(true);
-        getStat("toto");
         const stats = {};
         Object.keys(nbPlayers).map(
             number => {
@@ -130,7 +130,13 @@ const Stats = () => {
                 {
                     Object.keys(nbPlayers).map(key => {
                         if (nbPlayers[key]) {
-                            return (<Stat key={key} stats={stats[key]} loading={loading} />)
+                            const emptyStat = getStat(getKeyForStat(stats[key]));
+                            const globalStat = computeAverage(emptyStat, emptyStat.numberOfGames);
+                            return (
+                                <Fragment>
+                                    <Stat key={key} stats={stats[key]} loading={loading} />
+                                    <Stat key={`${key}Global`} global={true} stats={globalStat} loading={loading} />
+                                </Fragment>)
                         }
                         return null;
                     })
