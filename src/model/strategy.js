@@ -29,9 +29,10 @@ export const computeStrategies = () => {
             const tx = stat.total.won / stat.numberOfGames * 100;
             let strategy = playersStrategies[getNbPlayersFromKey(statKey)];
             if (tx > strategy.bestStrategy.tx) {
-                strategy.bestStrategy = { tx, tactic: stat.tactic, options: { ...stat.options } }
-            } else if (tx < strategy.worstStrategy.tx) {
-                strategy.worstStrategy = { tx, tactic: stat.tactic, options: { ...stat.options } }
+                strategy.bestStrategy = { tx, numberOfGames: stat.numberOfGames, tactic: stat.tactic, options: { ...stat.options } }
+            }
+            if (tx < strategy.worstStrategy.tx) {
+                strategy.worstStrategy = { tx, numberOfGames: stat.numberOfGames, tactic: stat.tactic, options: { ...stat.options } }
             }
         }
 

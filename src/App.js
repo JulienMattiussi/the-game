@@ -29,6 +29,12 @@ function App() {
                         <Game />
                     </Route>
                     <Route path="/strategies">
+                        <header className="App-header">
+                            <img src={logo} className="App-logo" alt="logo" />
+                            <p>
+                                The game
+                            </p>
+                        </header>
                         <Strategies />
                     </Route>
                 </Switch>
