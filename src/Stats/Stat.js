@@ -16,22 +16,20 @@ const StatElement = ({ title, value }) =>
 const StatTitle = ({ title }) =>
     (<span className="Stat-title">{title}</span>)
 
-const StatBigTitle = ({ title }) =>
-    (<span className="Stat-big-title">{title}</span>)
-
-
+const StatBigTitle = ({ title, global }) =>
+    (<span className={global ? 'Stat-big-title-global' : 'Stat-big-title'}>{title}</span>)
 
 const Stat = ({ stats, global, loading }) => {
     const title = global ?
-        `Cumul pour ces critères (${stats.numberOfGames} parties)` :
-        `STATS pour ${stats.numberOfPlayers} joueurs (${stats.numberOfGames} parties)`;
+        `Cumul pour ${stats.numberOfGames} parties` :
+        `Pour ${stats.numberOfPlayers} joueurs (${stats.numberOfGames} parties)`;
 
     return (
         <div>
             {loading ?
                 <span>LOADING</span> :
                 <div className="Stat">
-                    <StatBigTitle title={title} />
+                    <StatBigTitle title={title} global={global} />
                     <div className={global ? 'Stat-zone-global' : 'Stat-zone'}>
                         <StatTitle title="LA MEILLEURE" />
                         <div className="Actions">

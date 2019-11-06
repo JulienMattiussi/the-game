@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import './Stats.css';
 import {
     playManyGames,
@@ -102,7 +102,7 @@ const Stats = () => {
                     setUseVeto1={setUseVeto1}
                 />
                 <div className="Form-statistics">
-                    <div className="NbPlayers">
+                    <div className="Stats-nb-players">
                         {
                             Object.keys(nbPlayers).map(key => {
                                 return (
@@ -133,10 +133,10 @@ const Stats = () => {
                             const emptyStat = getStat(getKeyForStat(stats[key]));
                             const globalStat = computeAverage(emptyStat, emptyStat ? emptyStat.numberOfGames : 0);
                             return (
-                                <Fragment>
-                                    <Stat key={key} stats={stats[key]} loading={loading} />
-                                    <Stat key={`${key}Global`} global={true} stats={globalStat} loading={loading} />
-                                </Fragment>)
+                                <div key={key} className="Stat-container">
+                                    <Stat stats={stats[key]} loading={loading} />
+                                    <Stat global={true} stats={globalStat} loading={loading} />
+                                </div>)
                         }
                         return null;
                     })

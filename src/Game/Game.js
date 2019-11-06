@@ -118,7 +118,7 @@ const Game = () => {
                         <button onClick={() => playToEnd()} disabled={!isPlayable(game) || notPlayer === game.turn}>Jouer et finir</button>
                         <button onClick={() => restart()}>Relancer</button>
                     </div>
-                    <Link to="/">Back to stats</Link>
+                    <Link to="/">Retour aux statistiques</Link>
                 </div>
             </div>
             <History list={game.history} end={game.lost ? 'lost' : game.won ? 'won' : false} />
