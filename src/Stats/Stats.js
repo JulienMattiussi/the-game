@@ -131,7 +131,7 @@ const Stats = () => {
                     Object.keys(nbPlayers).map(key => {
                         if (nbPlayers[key]) {
                             const emptyStat = getStat(getKeyForStat(stats[key]));
-                            const globalStat = computeAverage(emptyStat, emptyStat.numberOfGames);
+                            const globalStat = computeAverage(emptyStat, emptyStat ? emptyStat.numberOfGames : 0);
                             return (
                                 <Fragment>
                                     <Stat key={key} stats={stats[key]} loading={loading} />

@@ -1,5 +1,5 @@
 import { setBetterStarter, setVeto } from './player';
-import { computeAverage } from '../model/stats';
+import { computeAverage, getEmptyStat } from '../model/stats';
 
 export const NB_CARDS_IN_HAND = 6;
 
@@ -210,37 +210,7 @@ export const playManyGames = (
     numberOfPlayers = 4,
     numberOfGames = 1000
 ) => {
-    const stats = {
-        numberOfPlayers,
-        numberOfGames,
-        best: {
-            won: false,
-            remaining: 100,
-            time: 2000,
-            game: {},
-        },
-        worst: {
-            won: true,
-            remaining: 0,
-            time: 0,
-            game: {},
-        },
-        total: {
-            won: 0,
-            lost5: 0,
-            lost10: 0,
-            lostMore: 0,
-            remaining: 0,
-            timeWon: 0,
-            timeLost: 0,
-        },
-        average: {
-            wonPercent: '0 %',
-            remaining: 0,
-            timeWon: 0,
-            timeLost: 0,
-        },
-    }
+    const stats = getEmptyStat(numberOfPlayers, numberOfGames);
     for (let i = 0; i < numberOfGames; i++) {
         let game = initGame(numberOfPlayers);
         game.statsMode = true;
