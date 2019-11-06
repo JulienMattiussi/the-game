@@ -1,0 +1,11 @@
+.Stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.NbPlayers {
+display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

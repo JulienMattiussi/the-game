@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import './Stats.css';
 import {
     playManyGames,
 } from '../model/game';
 import { tactics } from '../model/player';
+import { saveStats } from '../model/save';
 import FormCriteria from '../Forms/FormCriteria';
 import Stat from './Stat';
 
@@ -48,6 +50,7 @@ const Stats = () => {
                 return null;
             }
         );
+        saveStats(stats);
         setStats(stats);
         setLoading(false);
     }

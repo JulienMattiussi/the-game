@@ -134,6 +134,7 @@ const Game = () => {
                     vetos={game.vetos}
                     lost={game.lost}
                     won={game.won}
+                    loading={loading}
                 />
                 {game && game.players.map((player, index) => {
                     return (

@@ -21,19 +21,6 @@
   color: #09d3ac;
 }
 
-.Stats {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.Stat {
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
-  align-items: flex-start;
-}
-
 .Form {
   display: flex;
   flex-direction: column;
@@ -55,7 +42,6 @@
   width: 100%;
 }
 
-
 .Form-statistics, .Form-game {
   display: flex;
   flex-direction: column;
@@ -75,15 +61,9 @@
 
 input[type="number"] {
   margin-left: 5px;
-  width: 100px;
+  width: 80px;
 }
 
 select {
   margin-left: 5px;
-}
-
-.NbPlayers {
-display: flex;
-  flex-direction: row;
-  justify-content: space-between;
 }
