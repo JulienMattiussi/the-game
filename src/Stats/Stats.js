@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Stats.css';
+import { Link } from "react-router-dom";
 import {
     playManyGames,
 } from '../model/game';
@@ -124,6 +125,7 @@ const Stats = () => {
                     <div className="Actions">
                         <button onClick={() => computeStat(tactic, nbGames)}>Lancer les statistiques</button>
                     </div>
+                    <Link to="/strategies">Voir les stratégies</Link>
                 </div>
             </div>
             <div className="Stats">

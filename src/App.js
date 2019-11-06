@@ -7,6 +7,7 @@ import {
 import logo from './assets/thegame.jpeg';
 import './App.css';
 import Stats from './Stats/Stats';
+import Strategies from './Strategies/Strategies';
 import Game from './Game/Game';
 
 
@@ -26,6 +27,9 @@ function App() {
                     </Route>
                     <Route path="/game">
                         <Game />
+                    </Route>
+                    <Route path="/strategies">
+                        <Strategies />
                     </Route>
                 </Switch>
             </Router>
