@@ -15,6 +15,7 @@ import {
     playFullGame,
 } from '../model/game';
 import { tactics, setBetterStarter } from '../model/player';
+import FormCriteria from '../Forms/FormCriteria';
 import Player from './Player';
 import MiddleBoard from './MiddleBoard';
 import History from './History';
@@ -75,26 +76,6 @@ const Game = () => {
         setGame(initNewGame(cards, players, middle, turn, useBetterStarter));
     }
 
-    const changeUseBetterStarter = () => {
-        setUseBetterStarter(!useBetterStarter);
-    }
-
-    const changeUseVeto10 = () => {
-        setUseVeto10(!useVeto10);
-    }
-
-    const changeUseVeto1 = () => {
-        setUseVeto1(!useVeto1);
-    }
-
-    const changeMinimumGainToForceVeto = (event) => {
-        setMinimumGainToForceVeto(+event.target.value);
-    }
-
-    const changeTactic = (event) => {
-        setTactic(event.target.value);
-    }
-
     const chooseCard = (card) => {
         setChoosenCard(card);
     }
@@ -120,38 +101,25 @@ const Game = () => {
     return (
         <div className="Page">
             <div className="Form">
-                <label>
-                    Tactique
-                    <select onChange={changeTactic} defaultValue={tactic}>
-                        {Object.keys(tactics).map(t => (
-                            <option key={t} value={t} >{tactics[t].label}</option>
-                        ))}
-                    </select>
-                </label>
-                <label>
-                    <input type="checkbox" checked={useBetterStarter} onChange={changeUseBetterStarter} />
-                    Optimiser le démarrage
-                </label>
-                <label>
-                    <input type="checkbox" checked={useVeto10} onChange={changeUseVeto10} />
-                    Annoncer les veto quand une reduction de 10 est possible
-                </label>
-                <label>
-                    <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
-                    Annoncer les veto quand la carte suivante est disponible
-                </label>
-                <label>
-                    Valeur minimum de gain pour outrepasser un veto
-                    <input type="number" value={minimumGainToForceVeto} onChange={changeMinimumGainToForceVeto} />
-                </label>
-                <div className="Actions">
-                    <button onClick={() => playOne()} disabled={!isPlayable(game)}>Jouer une action</button>
-                    <button onClick={() => playToEnd()} disabled={!isPlayable(game) || notPlayer === game.turn}>Jouer et finir</button>
-                    <button onClick={() => restart()}>Relancer</button>
+                <FormCriteria
+                    tactic={tactic}
+                    setTactic={setTactic}
+                    minimumGainToForceVeto={minimumGainToForceVeto}
+                    setMinimumGainToForceVeto={setMinimumGainToForceVeto}
+                    useBetterStarter={useBetterStarter}
+                    setUseBetterStarter={setUseBetterStarter}
+                    useVeto10={useVeto10}
+                    setUseVeto10={setUseVeto10}
+                    useVeto1={useVeto1}
+                    setUseVeto1={setUseVeto1} />
+                <div className="Form-game">
+                    <div className="Actions">
+                        <button onClick={() => playOne()} disabled={!isPlayable(game)}>Jouer une action</button>
+                        <button onClick={() => playToEnd()} disabled={!isPlayable(game) || notPlayer === game.turn}>Jouer et finir</button>
+                        <button onClick={() => restart()}>Relancer</button>
+                    </div>
+                    <Link to="/">Back to stats</Link>
                 </div>
-                <Link to="/">Back to stats</Link>
-
-
             </div>
             <History list={game.history} end={game.lost ? 'lost' : game.won ? 'won' : false} />
             <div className="Board">

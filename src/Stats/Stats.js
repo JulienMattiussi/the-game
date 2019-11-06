@@ -3,31 +3,8 @@ import {
     playManyGames,
 } from '../model/game';
 import { tactics } from '../model/player';
+import FormCriteria from '../Forms/FormCriteria';
 import Stat from './Stat';
-
-const log = false;
-
-const logStats = (stats) => {
-    console.log(`STATS for ${stats.numberOfPlayers} players (${stats.numberOfGames} games)`);
-    console.log("BEST")
-    console.log('Won : ', stats.best.won);
-    console.log('Remaining cards : ', stats.best.remaining);
-    console.log('Turns : ', stats.best.time);
-    console.log(stats.best.game);
-    console.log("WORST")
-    console.log('Won : ', stats.worst.won);
-    console.log('Remaining cards : ', stats.worst.remaining);
-    console.log('Turns : ', stats.worst.time);
-    console.log(stats.worst.game);
-    console.log("TOTAL")
-    console.log('Won : ', stats.total.won);
-    console.log('Lost <= 10 remaining : ', stats.total.lost10);
-    console.log('Lost > 10 remaining : ', stats.total.lostMore);
-    console.log("AVERAGE")
-    console.log('Won : ', stats.average.wonPercent);
-    console.log('Remaining cards : ', stats.average.remaining);
-    console.log('Turns : ', stats.average.time);
-}
 
 const emptyStat = { best: {}, worst: {}, total: {}, average: {}, tactic: '', options: {} };
 
@@ -67,7 +44,6 @@ const Stats = () => {
                         tactic,
                         options: { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
                     };
-                    if (log) logStats(stats[number]);
                 }
                 return null;
             }
@@ -90,21 +66,6 @@ const Stats = () => {
         }), {}));
     }
 
-    const changeUseBetterStarter = () => {
-        setUseBetterStarter(!useBetterStarter);
-    }
-
-    const changeUseVeto10 = () => {
-        setUseVeto10(!useVeto10);
-    }
-
-    const changeUseVeto1 = () => {
-        setUseVeto1(!useVeto1);
-    }
-    const changeMinimumGainToForceVeto = (event) => {
-        setMinimumGainToForceVeto(+event.target.value);
-    }
-
     const changeNbPlayers = (number) => {
         const players = { ...nbPlayers };
         players[number] = !players[number];
@@ -121,58 +82,45 @@ const Stats = () => {
         }), {}));
     }
 
-    const changeTactic = (event) => {
-        setTactic(event.target.value);
-    }
-
-
     return (
-        <div>
+        <div className="Page">
             <div className="Form">
-                <label>
-                    Tactique
-                    <select onChange={changeTactic} >
-                        {Object.keys(tactics).map(tactic => (
-                            <option key={tactic} value={tactic} >{tactics[tactic].label}</option>
-                        ))}
-                    </select>
-                </label>
-                <div className="NbPlayers">
-                    {
-                        Object.keys(nbPlayers).map(key => {
-                            return (
-                                <label key={key}>
-                                    <input
-                                        type="checkbox"
-                                        checked={nbPlayers[key]}
-                                        onChange={() => changeNbPlayers(+key)} />
-                                    {key} joueurs
+                <FormCriteria
+                    tactic={tactic}
+                    setTactic={setTactic}
+                    minimumGainToForceVeto={minimumGainToForceVeto}
+                    setMinimumGainToForceVeto={setMinimumGainToForceVeto}
+                    useBetterStarter={useBetterStarter}
+                    setUseBetterStarter={setUseBetterStarter}
+                    useVeto10={useVeto10}
+                    setUseVeto10={setUseVeto10}
+                    useVeto1={useVeto1}
+                    setUseVeto1={setUseVeto1}
+                />
+                <div className="Form-statistics">
+                    <div className="NbPlayers">
+                        {
+                            Object.keys(nbPlayers).map(key => {
+                                return (
+                                    <label key={key}>
+                                        <input
+                                            type="checkbox"
+                                            checked={nbPlayers[key]}
+                                            onChange={() => changeNbPlayers(+key)} />
+                                        {key} joueurs
                             </label>
-                            )
-                        })
-                    }
+                                )
+                            })
+                        }
+                    </div>
+                    <label>
+                        Nombre de jeux
+                        <input type="number" value={nbGames} onChange={changeNbGames} />
+                    </label>
+                    <div className="Actions">
+                        <button onClick={() => computeStat(tactic, nbGames)}>Lancer les statistiques</button>
+                    </div>
                 </div>
-                <label>
-                    <input type="checkbox" checked={useBetterStarter} onChange={changeUseBetterStarter} />
-                    Optimiser le démarrage
-                </label>
-                <label>
-                    <input type="checkbox" checked={useVeto10} onChange={changeUseVeto10} />
-                    Annoncer les veto quand une reduction de 10 est possible
-                </label>
-                <label>
-                    <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
-                    Annoncer les veto quand la carte suivante est disponible
-                </label>
-                <label>
-                    Valeur minimum de gain pour outrepasser un veto
-                    <input type="number" value={minimumGainToForceVeto} onChange={changeMinimumGainToForceVeto} />
-                </label>
-                <label>
-                    Nombre de jeux
-                    <input type="number" value={nbGames} onChange={changeNbGames} />
-                </label>
-                <button onClick={() => computeStat(tactic, nbGames)}>Lancer les statistiques</button>
             </div>
             <div className="Stats">
                 {

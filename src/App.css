@@ -3,7 +3,7 @@
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 30vmin;
 }
 
 .App-header {
@@ -39,8 +39,38 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 0 0 4px 0;
   max-width: 30%;
-  margin: auto;
+}
+
+.Form-criteria {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+
+.Form-statistics, .Form-game {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.Actions {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: calc(100% - 30px);
 }
 
 input[type="number"] {

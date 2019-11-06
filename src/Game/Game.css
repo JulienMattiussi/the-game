@@ -10,15 +10,6 @@ body {
   width: 100%;
 }
 
-.Form {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 10px;
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 0 0 4px 0;
-}
-
 .Player0 {
     position: absolute;
     top: 40%;
@@ -53,13 +44,4 @@ body {
     position: absolute;
     bottom: 0;
     left: 10%;
-}
-
-
-.Actions {
-  padding: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: calc(100% - 30px);
 }
