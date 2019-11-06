@@ -4,7 +4,7 @@ import {
     playManyGames,
 } from '../model/game';
 import { tactics } from '../model/player';
-import { saveStats } from '../model/save';
+import { saveStats, getStat } from '../model/save';
 import FormCriteria from '../Forms/FormCriteria';
 import Stat from './Stat';
 
@@ -33,6 +33,7 @@ const Stats = () => {
 
     const computeStat = (tactic, numberOfGames) => {
         setLoading(true);
+        getStat("toto");
         const stats = {};
         Object.keys(nbPlayers).map(
             number => {

@@ -16,6 +16,9 @@ const StatElement = ({ title, value }) =>
 const StatTitle = ({ title }) =>
     (<span className="Stat-title">{title}</span>)
 
+const StatBigTitle = ({ title }) =>
+    (<span className="Stat-big-title">{title}</span>)
+
 
 
 const Stat = ({ stats, loading }) => {
@@ -25,7 +28,7 @@ const Stat = ({ stats, loading }) => {
             {loading ?
                 <span>LOADING</span> :
                 <div className="Stat">
-                    <StatTitle title={`STATS pour ${stats.numberOfPlayers} joueurs (${stats.numberOfGames} parties)`} />
+                    <StatBigTitle title={`STATS pour ${stats.numberOfPlayers} joueurs (${stats.numberOfGames} parties)`} />
                     <div className="Stat-zone">
                         <StatTitle title="LA MEILLEURE" />
                         {stats.best.game && <button onClick={() =>
