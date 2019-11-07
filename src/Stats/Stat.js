@@ -1,5 +1,7 @@
 import React from 'react';
 import './Stat.css';
+import TitleZone, { LEFT, RIGHT } from '../Components/TitleZone';
+import Zone from '../Components/Zone';
 import TitleElement from '../Components/TitleElement';
 import SimpleElement from '../Components/SimpleElement';
 
@@ -11,9 +13,6 @@ const playGame = (cards, players, tactic, options) => {
         JSON.stringify(options)}`;
 }
 
-const StatBigTitle = ({ title, global }) =>
-    (<span className={global ? 'Stat-big-title-global' : 'Stat-big-title'}>{title}</span>)
-
 const Stat = ({ stats, global, loading }) => {
     const title = global ?
         `Cumul pour ${stats.numberOfGames} parties` :
@@ -24,8 +23,8 @@ const Stat = ({ stats, global, loading }) => {
             {loading ?
                 <span>LOADING</span> :
                 <div className="Stat">
-                    <StatBigTitle title={title} global={global} />
-                    <div className={global ? 'Stat-zone-global' : 'Stat-zone'}>
+                    <TitleZone title={title} position={global ? RIGHT : LEFT} />
+                    <Zone position={global ? RIGHT : LEFT}>
                         <TitleElement title="LA MEILLEURE" />
                         <div className="Actions">
                             {stats.best.game && <button onClick={() =>
@@ -39,8 +38,8 @@ const Stat = ({ stats, global, loading }) => {
                         <SimpleElement title="Gagné" value={stats.best.won ? "Oui" : "Non"} />
                         <SimpleElement title="Cartes restantes" value={stats.best.remaining} />
                         <SimpleElement title="Tours" value={stats.best.time} />
-                    </div>
-                    <div className={global ? 'Stat-zone-global' : 'Stat-zone'}>
+                    </Zone>
+                    <Zone position={global ? RIGHT : LEFT}>
                         <TitleElement title="LA PIRE" />
                         <div className="Actions">
                             {stats.worst.game &&
@@ -56,21 +55,21 @@ const Stat = ({ stats, global, loading }) => {
                         <SimpleElement title="Gagné" value={stats.worst.won ? "Oui" : "Non"} />
                         <SimpleElement title="Cartes restantes" value={stats.worst.remaining} />
                         <SimpleElement title="Tours" value={stats.worst.time} />
-                    </div>
-                    <div className={global ? 'Stat-zone-global' : 'Stat-zone'}>
+                    </Zone>
+                    <Zone position={global ? RIGHT : LEFT}>
                         <TitleElement title="TOTAL" />
                         <SimpleElement title="Gagné" value={stats.total.won} />
                         <SimpleElement title="Perdu &lt;= 5 restantes" value={stats.total.lost5} />
                         <SimpleElement title="Perdu &gt;5 à 10 restantes" value={stats.total.lost10} />
                         <SimpleElement title="Perdu &gt; 10 restantes" value={stats.total.lostMore} />
-                    </div>
-                    <div className={global ? 'Stat-zone-global' : 'Stat-zone'}>
+                    </Zone>
+                    <Zone position={global ? RIGHT : LEFT}>
                         <TitleElement title="MOYENNE" />
                         <SimpleElement title="Gagné" value={stats.average.wonPercent} />
                         <SimpleElement title="Cartes restantes" value={stats.average.remaining} />
                         <SimpleElement title="Nombre Tours Gagnants" value={stats.average.timeWon} />
                         <SimpleElement title="Nombre Tours Perdants" value={stats.average.timeLost} />
-                    </div>
+                    </Zone>
                 </div>
             }
         </div>)
