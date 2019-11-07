@@ -15,7 +15,7 @@ const buildStrategy = (statKey, stat, tx) => (
 
 const setStrategyDate = (strategy, nbPlayers, choice, newDate) => {
     const previousStrategy = getStrategy(nbPlayers, choice);
-    if (previousStrategy.statKey !== strategy.statKey) {
+    if (!previousStrategy || previousStrategy.statKey !== strategy.statKey) {
         return ({ ...strategy, date: newDate });
     }
     return { ...strategy, date: previousStrategy.date || newDate };
