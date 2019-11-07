@@ -13,6 +13,8 @@ import {
     changeTurn,
     playATurn,
     playFullGame,
+    LOST,
+    WON,
 } from '../model/game';
 import { tactics, setBetterStarter } from '../model/player';
 import {
@@ -126,7 +128,7 @@ const Game = () => {
                     <Link to="/">Retour aux statistiques</Link>
                 </FormBottomContainer>
             </FormContainer>
-            <History list={game.history} end={game.lost ? 'lost' : game.won ? 'won' : false} />
+            <History list={game.history} end={game.lost ? LOST : game.won ? WON : false} />
             <div className="Board">
                 <MiddleBoard
                     goesUpOne={game.goesUpOne}

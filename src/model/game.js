@@ -3,6 +3,9 @@ import { computeAverage, getEmptyStat } from '../model/stats';
 
 export const NB_CARDS_IN_HAND = 6;
 
+export const WON = 'won';
+export const LOST = 'lost';
+
 export const goesUpOne = 'goesUpOne';
 export const goesUpTwo = 'goesUpTwo';
 export const goesDownOne = 'goesDownOne';

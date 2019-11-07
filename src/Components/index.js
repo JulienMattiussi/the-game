@@ -8,6 +8,7 @@ import RowMiddleContainer from './RowMiddleContainer';
 import TitleZone from './TitleZone';
 import Zone from './Zone';
 import TitleElement from './TitleElement';
+import StrongElement from './StrongElement';
 import SimpleElement from './SimpleElement';
 
 
@@ -23,4 +24,5 @@ export {
     Zone,
     TitleElement,
     SimpleElement,
+    StrongElement,
 };

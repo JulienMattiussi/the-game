@@ -2,6 +2,24 @@
 export const LEFT = 'l';
 export const RIGHT = 'r';
 
+export const playersTheme = [
+    {
+        mainColor: 'blue',
+    },
+    {
+        mainColor: 'lime',
+    },
+    {
+        mainColor: 'red',
+    },
+    {
+        mainColor: 'yellow',
+    },
+    {
+        mainColor: 'purple',
+    },
+];
+
 export const colors = {
     darkGrey: '#282c34',
     whiteTransparency: 'rgba(255, 255, 255, 0.5)',
@@ -15,6 +33,8 @@ export const colors = {
     cardTextClickable: 'rgba(50, 50, 250, 0.9)',
     cardTextStartOne: 'cornflowerblue',
     cardTextStart100: 'lightsalmon',
+    goesUpColor: 'cornflowerblue',
+    goesDownColor: 'lightsalmon',
 };
 
 export const borderRadius = 4;
