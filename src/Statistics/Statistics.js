@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Stats.css';
 import { Link } from "react-router-dom";
 import {
     playManyGames,
@@ -7,8 +6,15 @@ import {
 import { tactics } from '../model/player';
 import { computeAverage } from '../model/stats';
 import { saveStats, getStat, getKeyForStat } from '../model/save';
+import {
+    RowLeftContainer,
+    RowMiddleContainer,
+    ActionsContainer,
+    FormContainer,
+    FormBottomContainer,
+} from '../Components';
 import FormCriteria from '../Forms/FormCriteria';
-import Stat from './Stat';
+import Statistic from './Statistic';
 
 const emptyStat = { best: {}, worst: {}, total: {}, average: {}, tactic: '', options: {} };
 
@@ -89,7 +95,7 @@ const Stats = () => {
 
     return (
         <div className="Page">
-            <div className="Form">
+            <FormContainer>
                 <FormCriteria
                     tactic={tactic}
                     setTactic={setTactic}
@@ -102,8 +108,8 @@ const Stats = () => {
                     useVeto1={useVeto1}
                     setUseVeto1={setUseVeto1}
                 />
-                <div className="Form-statistics">
-                    <div className="Stats-nb-players">
+                <FormBottomContainer>
+                    <RowMiddleContainer>
                         {
                             Object.keys(nbPlayers).map(key => {
                                 return (
@@ -117,33 +123,33 @@ const Stats = () => {
                                 )
                             })
                         }
-                    </div>
+                    </RowMiddleContainer>
                     <label>
                         Nombre de jeux
                         <input type="number" value={nbGames} onChange={changeNbGames} />
                     </label>
-                    <div className="Actions">
+                    <ActionsContainer>
                         <button onClick={() => computeStat(tactic, nbGames)}>Lancer les statistiques</button>
-                    </div>
+                    </ActionsContainer>
                     <Link to="/strategies">Voir les stratégies</Link>
-                </div>
-            </div>
-            <div className="Stats">
+                </FormBottomContainer>
+            </FormContainer>
+            <RowMiddleContainer>
                 {
                     Object.keys(nbPlayers).map(key => {
                         if (nbPlayers[key]) {
                             const emptyStat = getStat(getKeyForStat(stats[key]));
                             const globalStat = computeAverage(emptyStat, emptyStat ? emptyStat.numberOfGames : 0);
                             return (
-                                <div key={key} className="Stat-container">
-                                    <Stat stats={stats[key]} loading={loading} />
-                                    <Stat global={true} stats={globalStat} loading={loading} />
-                                </div>)
+                                <RowLeftContainer key={key}>
+                                    <Statistic stats={stats[key]} loading={loading} />
+                                    <Statistic global={true} stats={globalStat} loading={loading} />
+                                </RowLeftContainer>)
                         }
                         return null;
                     })
                 }
-            </div>
+            </RowMiddleContainer>
         </div>)
 }
 

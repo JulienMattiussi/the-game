@@ -1,13 +1,16 @@
 import React, { Fragment } from 'react';
 import { formatDistance } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import './Strategy.css';
 import { BEST, WORST } from '../model/strategy';
 import { tactics } from '../model/player';
-import TitleZone from '../Components/TitleZone';
-import Zone from '../Components/Zone';
-import TitleElement from '../Components/TitleElement';
-import SimpleElement from '../Components/SimpleElement';
+import {
+    Loader,
+    ColumnLeftContainer,
+    TitleZone,
+    Zone,
+    TitleElement,
+    SimpleElement
+} from '../Components';
 
 const StrategyZone = ({ strat, choice }) => {
     if (!strat)
@@ -43,16 +46,14 @@ const StrategyZone = ({ strat, choice }) => {
 const Strategy = ({ nbPlayers, best, worst, loading }) => {
     const title = `Strategie pour ${nbPlayers} joueurs`;
     return (
-        <div>
-            {loading ?
-                <span>LOADING</span> :
-                <div className="Strategy">
-                    <TitleZone title={title} />
-                    <StrategyZone strat={best} choice={BEST} />
-                    <StrategyZone strat={worst} choice={WORST} />
-                </div>
-            }
-        </div>)
+        loading
+            ? <Loader />
+            : <ColumnLeftContainer>
+                <TitleZone title={title} />
+                <StrategyZone strat={best} choice={BEST} />
+                <StrategyZone strat={worst} choice={WORST} />
+            </ColumnLeftContainer>
+    )
 }
 
 export default Strategy;

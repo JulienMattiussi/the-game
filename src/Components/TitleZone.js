@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { colors, getBorderRadius, LEFT, RIGHT } from '../theme';
+import { colors, getBorderRadius } from '../theme';
 
 const style = ({ position }) => ({
     fontWeight: 'bolder',
@@ -20,8 +20,5 @@ const TitleZone = ({ title, position }) => (
         {title}
     </StyledSpan>
 )
-
-
-export { LEFT, RIGHT };
 
 export default TitleZone;

@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import logo from './assets/thegame.jpeg';
 import './App.css';
-import Stats from './Stats/Stats';
+import Statistics from './Statistics/Statistics';
 import Strategies from './Strategies/Strategies';
 import Game from './Game/Game';
 
@@ -23,7 +23,7 @@ function App() {
                                 The game
                             </p>
                         </header>
-                        <Stats />
+                        <Statistics />
                     </Route>
                     <Route path="/game">
                         <Game />

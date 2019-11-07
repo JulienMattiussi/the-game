@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import './Strategies.css';
 import { Link } from "react-router-dom";
 import { computeStrategies, BEST, WORST } from '../model/strategy';
 import { getStrategy } from '../model/save';
+import {
+    RowMiddleContainer,
+    ActionsContainer,
+    FormContainer,
+    FormBottomContainer,
+} from '../Components';
 import Strategy from './Strategy';
 
 
@@ -27,19 +32,19 @@ const Strategies = () => {
 
     return (
         <div className="Page">
-            <div className="Form">
-                <div className="Form-statistics">
-                    <div className="Actions">
+            <FormContainer>
+                <FormBottomContainer>
+                    <ActionsContainer>
                         <button onClick={reComputeStrategies}>Recalculer les meilleures stratégies</button>
-                    </div>
+                    </ActionsContainer>
                     <Link to="/">Retour aux statistiques</Link>
-                </div>
-            </div>
-            <div className="Strategies">
+                </FormBottomContainer>
+            </FormContainer>
+            <RowMiddleContainer>
                 <Strategy nbPlayers={3} best={bestStrategy3} worst={worstStrategy3} />
                 <Strategy nbPlayers={4} best={bestStrategy4} worst={worstStrategy4} />
                 <Strategy nbPlayers={5} best={bestStrategy5} worst={worstStrategy5} />
-            </div>
+            </RowMiddleContainer>
         </div>)
 }
 

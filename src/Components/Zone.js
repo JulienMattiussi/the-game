@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { colors, getBorderRadius, LEFT, RIGHT } from '../theme';
+import { colors, getBorderRadius, RIGHT } from '../theme';
 
 const style = ({ position }) => ({
     display: 'flex',
@@ -24,8 +24,5 @@ const Zone = ({ children, position }) => (
         {children}
     </StyledDiv>
 )
-
-
-export { LEFT, RIGHT };
 
 export default Zone;

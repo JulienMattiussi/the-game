@@ -15,6 +15,11 @@ import {
     playFullGame,
 } from '../model/game';
 import { tactics, setBetterStarter } from '../model/player';
+import {
+    ActionsContainer,
+    FormContainer,
+    FormBottomContainer,
+} from '../Components';
 import FormCriteria from '../Forms/FormCriteria';
 import Player from './Player';
 import MiddleBoard from './MiddleBoard';
@@ -100,7 +105,7 @@ const Game = () => {
 
     return (
         <div className="Page">
-            <div className="Form">
+            <FormContainer>
                 <FormCriteria
                     tactic={tactic}
                     setTactic={setTactic}
@@ -112,15 +117,15 @@ const Game = () => {
                     setUseVeto10={setUseVeto10}
                     useVeto1={useVeto1}
                     setUseVeto1={setUseVeto1} />
-                <div className="Form-game">
-                    <div className="Actions">
+                <FormBottomContainer>
+                    <ActionsContainer>
                         <button onClick={() => playOne()} disabled={!isPlayable(game)}>Jouer une action</button>
                         <button onClick={() => playToEnd()} disabled={!isPlayable(game) || notPlayer === game.turn}>Jouer et finir</button>
                         <button onClick={() => restart()}>Relancer</button>
-                    </div>
+                    </ActionsContainer>
                     <Link to="/">Retour aux statistiques</Link>
-                </div>
-            </div>
+                </FormBottomContainer>
+            </FormContainer>
             <History list={game.history} end={game.lost ? 'lost' : game.won ? 'won' : false} />
             <div className="Board">
                 <MiddleBoard

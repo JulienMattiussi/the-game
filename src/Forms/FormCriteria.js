@@ -1,5 +1,15 @@
 import React from 'react';
+import styled from '@emotion/styled';
 import { tactics } from '../model/player';
+
+const style = ({ position }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    width: '100%',
+});
+
+const StyledDiv = styled.div(props => style(props));
 
 const FormCriteria = (
     {
@@ -37,7 +47,7 @@ const FormCriteria = (
 
 
     return (
-        <div className="Form-criteria">
+        <StyledDiv>
             <label>
                 Tactique
                     <select onChange={changeTactic} defaultValue={tactic}>
@@ -62,7 +72,7 @@ const FormCriteria = (
                 Valeur minimum de gain pour outrepasser un veto
                     <input type="number" value={minimumGainToForceVeto} onChange={changeMinimumGainToForceVeto} />
             </label>
-        </div>)
+        </StyledDiv>)
 }
 
 export default FormCriteria;
