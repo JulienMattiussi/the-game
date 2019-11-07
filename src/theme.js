@@ -5,18 +5,49 @@ export const RIGHT = 'r';
 export const playersTheme = [
     {
         mainColor: 'blue',
+        secondaryColor: 'lightblue',
+        selectedTextColor: 'lightblue',
     },
     {
         mainColor: 'lime',
+        secondaryColor: 'green',
+        selectedTextColor: 'green',
     },
     {
         mainColor: 'red',
+        secondaryColor: 'lightpink',
+        selectedTextColor: 'lightpink',
     },
     {
         mainColor: 'yellow',
+        secondaryColor: 'rgba(255, 255, 255, 0.5)',
+        selectedTextColor: 'lightcoral',
     },
     {
         mainColor: 'purple',
+        secondaryColor: 'rgba(255, 255, 255, 0.5)',
+        selectedTextColor: 'lightcoral',
+    },
+];
+
+export const cardPositionTheme = [
+    {
+        transform: 'rotateZ(-30deg) translateY(64px)',
+    },
+    {
+        transform: 'rotateZ(-18deg) translateX(6px) translateY(24px)',
+    },
+    {
+        transform: 'rotateZ(-6deg)',
+    },
+    {
+        transform: 'rotateZ(6deg) translateX(-10px)',
+    },
+    {
+        transform: 'rotateZ(18deg) translateX(-16px) translateY(24px)',
+    },
+    {
+        transform: 'rotateZ(30deg) translateX(-6px) translateY(64px)',
     },
 ];
 
