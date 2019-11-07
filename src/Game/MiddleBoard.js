@@ -1,6 +1,6 @@
 import React from 'react';
-import Card from './Card';
-import RemainingCard from './RemainingCard';
+import CardFront from './CardFront';
+import CardBack from './CardBack';
 import './MiddleBoard.css';
 import {
     goesUpOne as pileGoesUpOne,
@@ -33,28 +33,28 @@ const MiddleBoard = ({
             <div className="MiddleBoard">
                 <div className="Pile">
                     <div className="LeftHint">PILE MONTANTE</div>
-                    <Card
+                    <CardFront
                         value={goesUpOne[0]}
                         clickable={isCardValid(choosenCard, pileGoesUpOne, goesUpOne[0])}
-                        onClick={() => handlePlaceCard(pileGoesUpOne, goesUpOne[0])} />
-                    <Card
+                        handleClick={() => handlePlaceCard(pileGoesUpOne, goesUpOne[0])} />
+                    <CardFront
                         value={goesUpTwo[0]}
                         clickable={isCardValid(choosenCard, pileGoesUpTwo, goesUpTwo[0])}
-                        onClick={() => handlePlaceCard(pileGoesUpTwo, goesUpTwo[0])} />
+                        handleClick={() => handlePlaceCard(pileGoesUpTwo, goesUpTwo[0])} />
                 </div>
                 <div className="Pile">
                     <div className="RightHint">PILE DESCENDANTE</div>
-                    <Card
+                    <CardFront
                         value={goesDownOne[0]}
                         clickable={isCardValid(choosenCard, pileGoesDownOne, goesDownOne[0])}
-                        onClick={() => handlePlaceCard(pileGoesDownOne, goesDownOne[0])} />
-                    <Card
+                        handleClick={() => handlePlaceCard(pileGoesDownOne, goesDownOne[0])} />
+                    <CardFront
                         value={goesDownTwo[0]}
                         clickable={isCardValid(choosenCard, pileGoesDownTwo, goesDownTwo[0])}
-                        onClick={() => handlePlaceCard(pileGoesDownTwo, goesDownTwo[0])} />
+                        handleClick={() => handlePlaceCard(pileGoesDownTwo, goesDownTwo[0])} />
                 </div>
                 <div className="RemainingCard">
-                    <RemainingCard value={remainingCards} />
+                    <CardBack value={remainingCards} />
                 </div>
             </div>
             {vetos.map(veto => {

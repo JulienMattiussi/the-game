@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { colors, borderRadius } from '../theme';
-import './Card.css';
 
-const style = ({ clickable, selected }) => {
+const styleCard = ({ clickable, selected }) => {
     const selectedStyle = {
         backgroundColor: colors.cardFrontSelected,
         color: colors.cardTextSelected,
@@ -38,36 +37,12 @@ const style = ({ clickable, selected }) => {
             : basicStyle;
 };
 
-const StyledCard = styled.div(props => style(props));
+const StyledCard = styled.div(props => styleCard(props));
 
-const Card = ({ value, clickable, selected, onClick }) => {
+const Card = ({ className, value, clickable, selected, children, handleClick }) => {
     return (
-        <StyledCard clickable={clickable} selected={selected} onClick={onClick}>
-            <div className="CardTop">
-                <span>
-                    {value}
-                </span>
-                <span>
-                    {value}
-                </span>
-            </div>
-            <span className={`CardMiddle${
-                value === 1 ?
-                    ' StartOne' :
-                    value === 100 ?
-                        ' Start100' :
-                        ''
-                } `}>
-                {value}
-            </span>
-            <div className="CardBottom">
-                <span>
-                    {value}
-                </span>
-                <span>
-                    {value}
-                </span>
-            </div>
+        <StyledCard className={className} clickable={clickable} selected={selected} onClick={handleClick}>
+            {children}
         </StyledCard>)
 }
 

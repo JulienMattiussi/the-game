@@ -1,6 +1,6 @@
 import React from 'react';
-import Card from './Card';
-import RemainingCard from './RemainingCard';
+import CardFront from './CardFront';
+import CardBack from './CardBack';
 import './Player.css';
 
 
@@ -29,13 +29,13 @@ const Player = ({
                 {cards && cards.map((card, index) =>
                     <div key={index} className={cardStyle(index, nbCards)}>
                         {!onlyPlayer || onlyPlayer === id ?
-                            <Card
+                            <CardFront
                                 value={card}
                                 clickable={isTurn && card}
                                 selected={choosenCard === card}
-                                onClick={() => handleChooseCard(card)}
+                                handleClick={() => handleChooseCard(card)}
                             /> :
-                            <RemainingCard />
+                            <CardBack />
                         }
                     </div>)}
             </div>
