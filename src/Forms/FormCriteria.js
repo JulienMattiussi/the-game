@@ -2,14 +2,14 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { tactics } from '../model/player';
 
-const style = ({ position }) => ({
+const style = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
     width: '100%',
-});
+};
 
-const StyledDiv = styled.div(props => style(props));
+const StyledDiv = styled.div(style);
 
 const FormCriteria = (
     {

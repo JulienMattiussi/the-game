@@ -12,7 +12,7 @@ const style = {
     backgroundColor: colors.whiteTransparency,
 };
 
-const StyledDiv = styled.div(props => style(props));
+const StyledDiv = styled.div(style);
 
 const Loader = () => (
     <StyledDiv>

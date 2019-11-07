@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Link } from "react-router-dom";
 import { computeStrategies, BEST, WORST } from '../model/strategy';
 import { getStrategy } from '../model/save';
@@ -31,7 +31,7 @@ const Strategies = () => {
     }
 
     return (
-        <div className="Page">
+        <Fragment>
             <FormContainer>
                 <FormBottomContainer>
                     <ActionsContainer>
@@ -45,7 +45,7 @@ const Strategies = () => {
                 <Strategy nbPlayers={4} best={bestStrategy4} worst={worstStrategy4} />
                 <Strategy nbPlayers={5} best={bestStrategy5} worst={worstStrategy5} />
             </RowMiddleContainer>
-        </div>)
+        </Fragment>)
 }
 
 export default Strategies;

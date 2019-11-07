@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import {
     useLocation,
     Link,
@@ -104,7 +104,7 @@ const Game = () => {
     }
 
     return (
-        <div className="Page">
+        <Fragment>
             <FormContainer>
                 <FormCriteria
                     tactic={tactic}
@@ -156,7 +156,7 @@ const Game = () => {
                     )
                 })}
             </div>
-        </div>)
+        </Fragment>)
 }
 
 export default Game;

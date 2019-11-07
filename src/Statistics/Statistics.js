@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Link } from "react-router-dom";
 import {
     playManyGames,
@@ -94,7 +94,7 @@ const Stats = () => {
     }
 
     return (
-        <div className="Page">
+        <Fragment>
             <FormContainer>
                 <FormCriteria
                     tactic={tactic}
@@ -117,7 +117,8 @@ const Stats = () => {
                                         <input
                                             type="checkbox"
                                             checked={nbPlayers[key]}
-                                            onChange={() => changeNbPlayers(+key)} />
+                                            onChange={() => changeNbPlayers(+key)}
+                                        />
                                         {key} joueurs
                             </label>
                                 )
@@ -150,7 +151,7 @@ const Stats = () => {
                     })
                 }
             </RowMiddleContainer>
-        </div>)
+        </Fragment>)
 }
 
 export default Stats;
