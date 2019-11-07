@@ -1,5 +1,7 @@
 import React from 'react';
 import './Stat.css';
+import TitleElement from '../Components/TitleElement';
+import SimpleElement from '../Components/SimpleElement';
 
 const playGame = (cards, players, tactic, options) => {
     window.location.href = `/game?cards=${
@@ -8,13 +10,6 @@ const playGame = (cards, players, tactic, options) => {
         tactic}&options=${
         JSON.stringify(options)}`;
 }
-
-const StatElement = ({ title, value }) =>
-    (<span><strong>{title}{value != null ? ' : ' : ''}</strong> {value}</span>)
-
-
-const StatTitle = ({ title }) =>
-    (<span className="Stat-title">{title}</span>)
 
 const StatBigTitle = ({ title, global }) =>
     (<span className={global ? 'Stat-big-title-global' : 'Stat-big-title'}>{title}</span>)
@@ -31,7 +26,7 @@ const Stat = ({ stats, global, loading }) => {
                 <div className="Stat">
                     <StatBigTitle title={title} global={global} />
                     <div className={global ? 'Stat-zone-global' : 'Stat-zone'}>
-                        <StatTitle title="LA MEILLEURE" />
+                        <TitleElement title="LA MEILLEURE" />
                         <div className="Actions">
                             {stats.best.game && <button onClick={() =>
                                 playGame(
@@ -41,12 +36,12 @@ const Stat = ({ stats, global, loading }) => {
                                     stats.options,
                                 )}>Rejouer cette partie</button>}
                         </div>
-                        <StatElement title="Gagné" value={stats.best.won ? "Oui" : "Non"} />
-                        <StatElement title="Cartes restantes" value={stats.best.remaining} />
-                        <StatElement title="Tours" value={stats.best.time} />
+                        <SimpleElement title="Gagné" value={stats.best.won ? "Oui" : "Non"} />
+                        <SimpleElement title="Cartes restantes" value={stats.best.remaining} />
+                        <SimpleElement title="Tours" value={stats.best.time} />
                     </div>
                     <div className={global ? 'Stat-zone-global' : 'Stat-zone'}>
-                        <StatTitle title="LA PIRE" />
+                        <TitleElement title="LA PIRE" />
                         <div className="Actions">
                             {stats.worst.game &&
                                 <button onClick={() =>
@@ -58,23 +53,23 @@ const Stat = ({ stats, global, loading }) => {
                                     )}>Rejouer cette partie</button>
                             }
                         </div>
-                        <StatElement title="Gagné" value={stats.worst.won ? "Oui" : "Non"} />
-                        <StatElement title="Cartes restantes" value={stats.worst.remaining} />
-                        <StatElement title="Tours" value={stats.worst.time} />
+                        <SimpleElement title="Gagné" value={stats.worst.won ? "Oui" : "Non"} />
+                        <SimpleElement title="Cartes restantes" value={stats.worst.remaining} />
+                        <SimpleElement title="Tours" value={stats.worst.time} />
                     </div>
                     <div className={global ? 'Stat-zone-global' : 'Stat-zone'}>
-                        <StatTitle title="TOTAL" />
-                        <StatElement title="Gagné" value={stats.total.won} />
-                        <StatElement title="Perdu &lt;= 5 restantes" value={stats.total.lost5} />
-                        <StatElement title="Perdu &gt;5 à 10 restantes" value={stats.total.lost10} />
-                        <StatElement title="Perdu &gt; 10 restantes" value={stats.total.lostMore} />
+                        <TitleElement title="TOTAL" />
+                        <SimpleElement title="Gagné" value={stats.total.won} />
+                        <SimpleElement title="Perdu &lt;= 5 restantes" value={stats.total.lost5} />
+                        <SimpleElement title="Perdu &gt;5 à 10 restantes" value={stats.total.lost10} />
+                        <SimpleElement title="Perdu &gt; 10 restantes" value={stats.total.lostMore} />
                     </div>
                     <div className={global ? 'Stat-zone-global' : 'Stat-zone'}>
-                        <StatTitle title="MOYENNE" />
-                        <StatElement title="Gagné" value={stats.average.wonPercent} />
-                        <StatElement title="Cartes restantes" value={stats.average.remaining} />
-                        <StatElement title="Nombre Tours Gagnants" value={stats.average.timeWon} />
-                        <StatElement title="Nombre Tours Perdants" value={stats.average.timeLost} />
+                        <TitleElement title="MOYENNE" />
+                        <SimpleElement title="Gagné" value={stats.average.wonPercent} />
+                        <SimpleElement title="Cartes restantes" value={stats.average.remaining} />
+                        <SimpleElement title="Nombre Tours Gagnants" value={stats.average.timeWon} />
+                        <SimpleElement title="Nombre Tours Perdants" value={stats.average.timeLost} />
                     </div>
                 </div>
             }

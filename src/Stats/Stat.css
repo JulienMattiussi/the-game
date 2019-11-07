@@ -35,12 +35,6 @@
   border-radius: 0 4px 4px 0;
 }
 
-.Stat-title {
-    font-weight: bolder;
-    width: 100%;
-    text-align: center;
-}
-
 .Stat-big-title, .Stat-big-title-global {
   display: flex;
   flex-direction: column;

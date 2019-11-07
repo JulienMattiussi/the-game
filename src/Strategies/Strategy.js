@@ -4,13 +4,8 @@ import { fr } from 'date-fns/locale'
 import './Strategy.css';
 import { BEST, WORST } from '../model/strategy';
 import { tactics } from '../model/player';
-
-const StatElement = ({ title, value }) =>
-    (<span><strong>{title}{value != null ? ' : ' : ''}</strong> {value}</span>)
-
-
-const StrategyTitle = ({ title }) =>
-    (<span className="Strategy-title">{title}</span>)
+import TitleElement from '../Components/TitleElement';
+import SimpleElement from '../Components/SimpleElement';
 
 const StrategyBigTitle = ({ title }) =>
     (<span className="Strategy-big-title">{title}</span>)
@@ -20,9 +15,8 @@ const StrategyZone = ({ strat, choice }) => {
         return null;
     const { tactic, options, tx, numberOfGames, date } = strat;
     const computedTx = tx ? Math.round(tx * 100) / 100 : 0;
-    console.log(date);
     return <div className="Strategy-zone">
-        <StrategyTitle title={`LA ${choice === BEST ?
+        <TitleElement title={`LA ${choice === BEST ?
             'MEILLEURE' :
             choice === WORST ?
                 'PIRE' :
@@ -30,15 +24,15 @@ const StrategyZone = ({ strat, choice }) => {
         {tactic && options &&
             <Fragment>
                 <br />
-                <StatElement title="Calculée sur" value={numberOfGames + " parties"} />
-                <StatElement title="Déterminé il y a" value={date ? formatDistance(new Date(date), new Date(), { locale: fr }) : 'jamais'} />
+                <SimpleElement title="Calculée sur" value={numberOfGames + " parties"} />
+                <SimpleElement title="Déterminé il y a" value={date ? formatDistance(new Date(date), new Date(), { locale: fr }) : 'jamais'} />
                 <br />
-                <StatElement title="Tactique" value={tactic ? tactics[tactic].label : ''} />
+                <SimpleElement title="Tactique" value={tactic ? tactics[tactic].label : ''} />
                 <br />
-                <StatElement title="Optimiser le démarrage" value={options.useBetterStarter ? 'Oui' : 'Non'} />
-                <StatElement title="Annoncer les vétos de -10" value={options.useVeto10 ? 'Oui' : 'Non'} />
-                <StatElement title="Annoncer les vétos de +1" value={options.useVeto1 ? 'Oui' : 'Non'} />
-                <StatElement title="Valeur de gain minimum" value={options.minimumGainToForceVeto} />
+                <SimpleElement title="Optimiser le démarrage" value={options.useBetterStarter ? 'Oui' : 'Non'} />
+                <SimpleElement title="Annoncer les vétos de -10" value={options.useVeto10 ? 'Oui' : 'Non'} />
+                <SimpleElement title="Annoncer les vétos de +1" value={options.useVeto1 ? 'Oui' : 'Non'} />
+                <SimpleElement title="Valeur de gain minimum" value={options.minimumGainToForceVeto} />
             </Fragment>}
     </div>
 }
