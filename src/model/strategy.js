@@ -1,11 +1,25 @@
-import { STAT_PREFIX, getAllStatKeys, getStat, saveStrategy } from './save';
+import { STAT_PREFIX, getAllStatKeys, getStat, getStrategy, saveStrategy } from './save';
 
 const VALIDITY_LIMIT = 1000;
+export const BEST = 'best';
+export const WORST = 'worst';
 export const nbPlayers = [3, 4, 5];
 
 export const getNbPlayersFromKey = key =>
     key.startsWith(STAT_PREFIX) ? key.charAt(STAT_PREFIX.length) : 0;
 
+
+const buildStrategy = (statKey, stat, tx) => (
+    { tx, statKey, numberOfGames: stat.numberOfGames, tactic: stat.tactic, options: { ...stat.options } }
+);
+
+const setStrategyDate = (strategy, nbPlayers, choice, newDate) => {
+    const previousStrategy = getStrategy(nbPlayers, choice);
+    if (previousStrategy.statKey !== strategy.statKey) {
+        return ({ ...strategy, date: newDate });
+    }
+    return { ...strategy, date: previousStrategy.date || newDate };
+}
 
 export const computeStrategies = () => {
     const statKeys = getAllStatKeys();
@@ -29,20 +43,22 @@ export const computeStrategies = () => {
             const tx = stat.total.won / stat.numberOfGames * 100;
             let strategy = playersStrategies[getNbPlayersFromKey(statKey)];
             if (tx > strategy.bestStrategy.tx) {
-                strategy.bestStrategy = { tx, numberOfGames: stat.numberOfGames, tactic: stat.tactic, options: { ...stat.options } }
+                strategy.bestStrategy = buildStrategy(statKey, stat, tx);
             }
             if (tx < strategy.worstStrategy.tx) {
-                strategy.worstStrategy = { tx, numberOfGames: stat.numberOfGames, tactic: stat.tactic, options: { ...stat.options } }
+                strategy.worstStrategy = buildStrategy(statKey, stat, tx);
             }
         }
 
         return true;
     });
 
+    const newDate = new Date();
+
     Object.keys(playersStrategies).map(key => {
         const playersStrategy = playersStrategies[key];
-        saveStrategy(playersStrategy.bestStrategy, key, 'best');
-        saveStrategy(playersStrategy.worstStrategy, key, 'worst');
+        saveStrategy(setStrategyDate(playersStrategy.bestStrategy, key, BEST, newDate), key, BEST);
+        saveStrategy(setStrategyDate(playersStrategy.worstStrategy, key, BEST, newDate), key, WORST);
 
         return true;
     });

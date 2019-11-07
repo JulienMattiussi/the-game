@@ -1,5 +1,8 @@
 import React, { Fragment } from 'react';
+import { formatDistance } from 'date-fns'
+import { fr } from 'date-fns/locale'
 import './Strategy.css';
+import { BEST, WORST } from '../model/strategy';
 import { tactics } from '../model/player';
 
 const StatElement = ({ title, value }) =>
@@ -13,17 +16,24 @@ const StrategyBigTitle = ({ title }) =>
     (<span className="Strategy-big-title">{title}</span>)
 
 const StrategyZone = ({ strat, choice }) => {
-
-    const { tactic, options, tx } = strat;
+    if (!strat)
+        return null;
+    const { tactic, options, tx, numberOfGames, date } = strat;
     const computedTx = tx ? Math.round(tx * 100) / 100 : 0;
+    console.log(date);
     return <div className="Strategy-zone">
-        <StrategyTitle title={`LA ${choice === 'best' ? 'MEILLEURE' : 'PIRE'} : ${computedTx}%`} />
+        <StrategyTitle title={`LA ${choice === BEST ?
+            'MEILLEURE' :
+            choice === WORST ?
+                'PIRE' :
+                '?'} : ${computedTx}%`} />
         {tactic && options &&
             <Fragment>
                 <br />
-                <StatElement title="Caculée sur" value={strat.numberOfGames + " parties"} />
+                <StatElement title="Calculée sur" value={numberOfGames + " parties"} />
+                <StatElement title="Déterminé il y a" value={date ? formatDistance(new Date(date), new Date(), { locale: fr }) : 'jamais'} />
                 <br />
-                <StatElement title="Tactique" value={strat.tactic ? tactics[tactic].label : ''} />
+                <StatElement title="Tactique" value={tactic ? tactics[tactic].label : ''} />
                 <br />
                 <StatElement title="Optimiser le démarrage" value={options.useBetterStarter ? 'Oui' : 'Non'} />
                 <StatElement title="Annoncer les vétos de -10" value={options.useVeto10 ? 'Oui' : 'Non'} />
@@ -41,8 +51,8 @@ const Strategy = ({ nbPlayers, best, worst, loading }) => {
                 <span>LOADING</span> :
                 <div className="Strategy">
                     <StrategyBigTitle title={title} />
-                    <StrategyZone strat={best} choice="best" />
-                    <StrategyZone strat={worst} choice="worst" />
+                    <StrategyZone strat={best} choice={BEST} />
+                    <StrategyZone strat={worst} choice={WORST} />
                 </div>
             }
         </div>)
