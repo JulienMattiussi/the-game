@@ -25,26 +25,34 @@ const FormCriteria = (
         setUseVeto10,
         useVeto1,
         setUseVeto1,
+        handleRefreshStats,
     }
 ) => {
 
+    const refreshStats = handleRefreshStats ? handleRefreshStats : () => { };
+
     const changeUseBetterStarter = () => {
-        setUseBetterStarter(!useBetterStarter);
+        setUseBetterStarter(!useBetterStarter,
+            refreshStats());
     }
 
     const changeUseVeto10 = () => {
-        setUseVeto10(!useVeto10);
+        setUseVeto10(!useVeto10,
+            refreshStats());
     }
 
     const changeUseVeto1 = () => {
-        setUseVeto1(!useVeto1);
+        setUseVeto1(!useVeto1,
+            refreshStats());
     }
     const changeMinimumGainToForceVeto = (event) => {
-        setMinimumGainToForceVeto(+event.target.value);
+        setMinimumGainToForceVeto(+event.target.value,
+            refreshStats());
     }
 
     const changeTactic = (event) => {
-        setTactic(event.target.value);
+        setTactic(event.target.value,
+            refreshStats());
     }
 
 

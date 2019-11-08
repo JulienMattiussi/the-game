@@ -36,12 +36,6 @@ const Header = () =>
         <p>The game Analyser</p>
     </StyledHeader>
 
-const styleGlobal = {
-    backgroundColor: colors.backGround,
-}
-
-const StyledGlobal = styled.div(styleGlobal);
-
 const App = () =>
     <div>
         <Global

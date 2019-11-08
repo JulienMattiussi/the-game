@@ -62,7 +62,7 @@ const appendStatToSave = (key, stat) => {
     ) {
         newWorst = worst;
     }
-    return { ...newStat, best: newBest, worst: newWorst };
+    return { ...newStat, best: newBest, worst: newWorst, date: new Date() };
 }
 
 const saveStat = (stat, reset = false) => {

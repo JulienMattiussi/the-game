@@ -1,4 +1,6 @@
 import React from 'react';
+import { formatDistance } from 'date-fns'
+import { fr } from 'date-fns/locale'
 import { translate } from 'react-polyglot';
 import { LEFT, RIGHT } from '../theme';
 import {
@@ -26,6 +28,12 @@ const Stat = ({ t, stats, global, loading }) => {
             numberOfPlayers: stats.numberOfPlayers,
             numberOfGames: stats.numberOfGames
         });
+
+    const dateTitle = global
+        ? stats.date
+            ? formatDistance(new Date(stats.date), new Date(), { locale: fr })
+            : t('never')
+        : t('statistic_date_title');
 
     return (
         loading
@@ -64,6 +72,7 @@ const Stat = ({ t, stats, global, loading }) => {
                     <SimpleElement title={t('remaning_cards', { s: 's' })} value={stats.worst.remaining} />
                     <SimpleElement title={t('turns')} value={stats.worst.time} />
                 </Zone>
+                <TitleZone title={dateTitle} position={global ? RIGHT : LEFT} />
                 <Zone position={global ? RIGHT : LEFT}>
                     <TitleElement title={t('total')} />
                     <SimpleElement title={t('statistic_won')} value={stats.total.won} />

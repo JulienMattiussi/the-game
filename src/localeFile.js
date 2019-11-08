@@ -58,6 +58,7 @@ const locale = {
     statistic_lost_remaining: "Perdu %{range} restantes",
     statistic_number_winning_turn: "Nombre Tours Gagnants",
     statistic_number_loosing_turn: "Nombre Tours Perdants",
+    statistic_date_title: "Calculé il y a",
 
     strategy_title: "Strategie pour %{nbPlayers} joueurs",
     strategy_nb_games_title: "Calculée sur",

@@ -66,23 +66,18 @@ const Stats = ({ t }) => {
 
     const changeNbGames = (event) => {
         setNbGames(+event.target.value);
-        setStats(Object.keys(nbPlayers).reduce((all, number) => ({
-            ...all,
-            [number]: {
-                ...emptyStat,
-                numberOfPlayers: +number,
-                numberOfGames: +event.target.value,
-                tactic,
-                options: { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
-            }
-        }), {}));
+        handleRefreshStats();
     }
 
     const changeNbPlayers = (number) => {
         const players = { ...nbPlayers };
         players[number] = !players[number];
         setNbPlayers(players);
-        setStats(Object.keys(players).reduce((all, number) => ({
+        handleRefreshStats();
+    }
+
+    const handleRefreshStats = () => {
+        setStats(Object.keys(nbPlayers).reduce((all, number) => ({
             ...all,
             [number]: {
                 ...emptyStat,
@@ -108,6 +103,7 @@ const Stats = ({ t }) => {
                     setUseVeto10={setUseVeto10}
                     useVeto1={useVeto1}
                     setUseVeto1={setUseVeto1}
+                    handleRefreshStats={handleRefreshStats}
                 />
                 <FormBottomContainer>
                     <RowMiddleContainer>
