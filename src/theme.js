@@ -66,6 +66,8 @@ export const colors = {
     cardTextStart100: 'lightsalmon',
     goesUpColor: 'cornflowerblue',
     goesDownColor: 'lightsalmon',
+    won: 'aqua',
+    lost: 'red',
 };
 
 export const borderRadius = 4;

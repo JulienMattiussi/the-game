@@ -37,7 +37,7 @@ const Stat = ({ stats, global, loading }) => {
                                 stats.best.players,
                                 stats.tactic,
                                 stats.options,
-                            )}>Rejouer cette partie</button>}
+                            )}>Revoir cette partie</button>}
                     </ActionsContainer>
                     <SimpleElement title="Gagné" value={stats.best.won ? "Oui" : "Non"} />
                     <SimpleElement title="Cartes restantes" value={stats.best.remaining} />
