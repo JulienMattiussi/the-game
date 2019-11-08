@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from "react-router-dom";
+import { translate } from 'react-polyglot';
 import { computeStrategies, BEST, WORST } from '../model/strategy';
 import { getStrategy } from '../model/save';
 import {
@@ -11,7 +12,7 @@ import {
 import Strategy from './Strategy';
 
 
-const Strategies = () => {
+const Strategies = ({ t }) => {
     const [bestStrategy3, setBestStrategy3] = useState(getStrategy(3, BEST));
     const [worstStrategy3, setWorstStrategy3] = useState(getStrategy(3, WORST));
     const [bestStrategy4, setBestStrategy4] = useState(getStrategy(4, BEST));
@@ -37,7 +38,7 @@ const Strategies = () => {
                     <ActionsContainer>
                         <button onClick={reComputeStrategies}>Recalculer les meilleures stratégies</button>
                     </ActionsContainer>
-                    <Link to="/">Retour aux statistiques</Link>
+                    <Link to="/">{t('link_statistics')}</Link>
                 </FormBottomContainer>
             </FormContainer>
             <RowMiddleContainer>
@@ -48,4 +49,4 @@ const Strategies = () => {
         </Fragment>)
 }
 
-export default Strategies;
+export default translate()(Strategies);

@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { I18n } from 'react-polyglot';
+import localeFile from './localeFile';
 import {
     BrowserRouter as Router,
     Switch,
@@ -10,6 +12,9 @@ import { Logo } from './Components';
 import Statistics from './Statistics/Statistics';
 import Strategies from './Strategies/Strategies';
 import Game from './Game/Game';
+
+const locale = window.locale || 'fr';
+const messages = localeFile;
 
 const styleHeader = {
     display: 'flex',
@@ -37,22 +42,24 @@ const styleGlobal = {
 const StyledGlobal = styled.div(styleGlobal);
 
 const App = () =>
-    <StyledGlobal>
-        <Router>
-            <Switch>
-                <Route exact path="/">
-                    <Header />
-                    <Statistics />
-                </Route>
-                <Route path="/game">
-                    <Game />
-                </Route>
-                <Route path="/strategies">
-                    <Header />
-                    <Strategies />
-                </Route>
-            </Switch>
-        </Router>
-    </StyledGlobal>
+    <I18n locale={locale} messages={messages}>
+        <StyledGlobal>
+            <Router>
+                <Switch>
+                    <Route exact path="/">
+                        <Header />
+                        <Statistics />
+                    </Route>
+                    <Route path="/game">
+                        <Game />
+                    </Route>
+                    <Route path="/strategies">
+                        <Header />
+                        <Strategies />
+                    </Route>
+                </Switch>
+            </Router>
+        </StyledGlobal>
+    </I18n>
 
 export default App;

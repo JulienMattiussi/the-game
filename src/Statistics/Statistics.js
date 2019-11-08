@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from "react-router-dom";
+import { translate } from 'react-polyglot';
 import {
     playManyGames,
 } from '../model/game';
@@ -18,7 +19,7 @@ import Statistic from './Statistic';
 
 const emptyStat = { best: {}, worst: {}, total: {}, average: {}, tactic: '', options: {} };
 
-const Stats = () => {
+const Stats = ({ t }) => {
     const [tactic, setTactic] = useState(Object.keys(tactics)[0]);
     const [nbPlayers, setNbPlayers] = useState({ 3: false, 4: true, 5: true });
     const [nbGames, setNbGames] = useState(100);
@@ -132,7 +133,7 @@ const Stats = () => {
                     <ActionsContainer>
                         <button onClick={() => computeStat(tactic, nbGames)}>Lancer les statistiques</button>
                     </ActionsContainer>
-                    <Link to="/strategies">Voir les stratégies</Link>
+                    <Link to="/strategies">{t('link_strategies')}</Link>
                 </FormBottomContainer>
             </FormContainer>
             <RowMiddleContainer>
@@ -154,4 +155,4 @@ const Stats = () => {
         </Fragment>)
 }
 
-export default Stats;
+export default translate()(Stats);

@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import { translate } from 'react-polyglot';
 import styled from '@emotion/styled';
 import {
     useLocation,
@@ -97,7 +98,7 @@ const playerStyle = ({ player, total }) => {
 
 const StyledPlayer = styled.div(props => playerStyle(props));
 
-const Game = () => {
+const Game = ({ t }) => {
     const query = useQuery();
 
     const options = JSON.parse(query.get("options"));
@@ -184,7 +185,7 @@ const Game = () => {
                         <button onClick={() => playToEnd()} disabled={!isPlayable(game) || notPlayer === game.turn}>Jouer et finir</button>
                         <button onClick={() => restart()}>Relancer</button>
                     </ActionsContainer>
-                    <Link to="/">Retour aux statistiques</Link>
+                    <Link to="/">{t('link_statistics')}</Link>
                 </FormBottomContainer>
             </FormContainer>
             <History list={game.history} end={game.lost ? LOST : game.won ? WON : false} />
@@ -220,4 +221,4 @@ const Game = () => {
         </Fragment >)
 }
 
-export default Game;
+export default translate()(Game);
