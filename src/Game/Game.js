@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from 'react';
+import styled from '@emotion/styled';
 import {
     useLocation,
     Link,
 } from "react-router-dom";
-import './Game.css';
 import {
     loadGame,
     isPlayable,
@@ -37,6 +37,65 @@ const initNewGame = (cards, players, middle, turn, useBetterStarter) => {
     }
     return newGame;
 }
+
+const boardStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    width: '100%',
+}
+
+const Board = styled.div(boardStyle);
+
+const playerStyle = ({ player, total }) => {
+
+    const position = 'absolute';
+
+    switch (player) {
+        case 0:
+            return {
+                top: '40%',
+                left: 0,
+                position
+            };
+        case 1:
+            return {
+                top: 0,
+                left: 'calc(50% - 260px)',
+                position
+            };
+        case 2:
+            return {
+                top: '40%',
+                right: 0,
+                position
+            };
+        case 3:
+            if (total === 4) {
+                return {
+                    bottom: 0,
+                    left: 'calc(50% - 260px)',
+                    position
+                };
+            }
+            return {
+                bottom: 0,
+                right: '10%',
+                position
+            };
+        case 4:
+            return {
+                bottom: 0,
+                left: '10%',
+                position
+            };
+        default:
+            return { position };
+    }
+}
+
+const StyledPlayer = styled.div(props => playerStyle(props));
 
 const Game = () => {
     const query = useQuery();
@@ -129,7 +188,7 @@ const Game = () => {
                 </FormBottomContainer>
             </FormContainer>
             <History list={game.history} end={game.lost ? LOST : game.won ? WON : false} />
-            <div className="Board">
+            <Board>
                 <MiddleBoard
                     goesUpOne={game.goesUpOne}
                     goesUpTwo={game.goesUpTwo}
@@ -145,7 +204,7 @@ const Game = () => {
                 />
                 {game && game.players.map((player, index) => {
                     return (
-                        <div key={index} className={`Player${index}${index === 3 ? `For${game.players.length}` : ''}`}>
+                        <StyledPlayer key={index} player={index} total={game.players.length} >
                             <Player
                                 id={index}
                                 cards={player}
@@ -154,11 +213,11 @@ const Game = () => {
                                 choosenCard={choosenCard}
                                 chooseCard={chooseCard}
                             />
-                        </div>
+                        </StyledPlayer>
                     )
                 })}
-            </div>
-        </Fragment>)
+            </Board>
+        </Fragment >)
 }
 
 export default Game;
