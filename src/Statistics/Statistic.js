@@ -1,4 +1,5 @@
 import React from 'react';
+import { translate } from 'react-polyglot';
 import { LEFT, RIGHT } from '../theme';
 import {
     Loader,
@@ -18,10 +19,13 @@ const playGame = (cards, players, tactic, options) => {
         JSON.stringify(options)}`;
 }
 
-const Stat = ({ stats, global, loading }) => {
-    const title = global ?
-        `Cumul pour ${stats.numberOfGames} parties` :
-        `Pour ${stats.numberOfPlayers} joueurs (${stats.numberOfGames} parties)`;
+const Stat = ({ t, stats, global, loading }) => {
+    const title = global
+        ? t('statistic_title_global', { numberOfGames: stats.numberOfGames })
+        : t('statistic_title', {
+            numberOfPlayers: stats.numberOfPlayers,
+            numberOfGames: stats.numberOfGames
+        });
 
     return (
         loading
@@ -29,7 +33,7 @@ const Stat = ({ stats, global, loading }) => {
             : <ColumnLeftContainer>
                 <TitleZone title={title} position={global ? RIGHT : LEFT} />
                 <Zone position={global ? RIGHT : LEFT}>
-                    <TitleElement title="LA MEILLEURE" />
+                    <TitleElement title={t('best')} />
                     <ActionsContainer>
                         {stats.best.game && <button onClick={() =>
                             playGame(
@@ -37,14 +41,14 @@ const Stat = ({ stats, global, loading }) => {
                                 stats.best.players,
                                 stats.tactic,
                                 stats.options,
-                            )}>Revoir cette partie</button>}
+                            )}>{t('button_see_detailled_game')}</button>}
                     </ActionsContainer>
-                    <SimpleElement title="Gagné" value={stats.best.won ? "Oui" : "Non"} />
-                    <SimpleElement title="Cartes restantes" value={stats.best.remaining} />
-                    <SimpleElement title="Tours" value={stats.best.time} />
+                    <SimpleElement title={t('won')} value={stats.best.won ? t('yes') : t('no')} />
+                    <SimpleElement title={t('remaning_cards')} value={stats.best.remaining} />
+                    <SimpleElement title={t('turns')} value={stats.best.time} />
                 </Zone>
                 <Zone position={global ? RIGHT : LEFT}>
-                    <TitleElement title="LA PIRE" />
+                    <TitleElement title={t('worst')} />
                     <ActionsContainer>
                         {stats.worst.game &&
                             <button onClick={() =>
@@ -53,29 +57,29 @@ const Stat = ({ stats, global, loading }) => {
                                     stats.worst.players,
                                     stats.tactic,
                                     stats.options,
-                                )}>Rejouer cette partie</button>
+                                )}>{t('button_see_detailled_game')}</button>
                         }
                     </ActionsContainer>
-                    <SimpleElement title="Gagné" value={stats.worst.won ? "Oui" : "Non"} />
-                    <SimpleElement title="Cartes restantes" value={stats.worst.remaining} />
-                    <SimpleElement title="Tours" value={stats.worst.time} />
+                    <SimpleElement title={t('won')} value={stats.worst.won ? t('yes') : t('no')} />
+                    <SimpleElement title={t('remaning_cards')} value={stats.worst.remaining} />
+                    <SimpleElement title={t('turns')} value={stats.worst.time} />
                 </Zone>
                 <Zone position={global ? RIGHT : LEFT}>
-                    <TitleElement title="TOTAL" />
-                    <SimpleElement title="Gagné" value={stats.total.won} />
-                    <SimpleElement title="Perdu &lt;= 5 restantes" value={stats.total.lost5} />
-                    <SimpleElement title="Perdu &gt;5 à 10 restantes" value={stats.total.lost10} />
-                    <SimpleElement title="Perdu &gt; 10 restantes" value={stats.total.lostMore} />
+                    <TitleElement title={t('total')} />
+                    <SimpleElement title={t('won')} value={stats.total.won} />
+                    <SimpleElement title={t('statistic_lost_remaining', { range: '<= 5' })} value={stats.total.lost5} />
+                    <SimpleElement title={t('statistic_lost_remaining', { range: '>5 à 10' })} value={stats.total.lost10} />
+                    <SimpleElement title={t('statistic_lost_remaining', { range: '> 10' })} value={stats.total.lostMore} />
                 </Zone>
                 <Zone position={global ? RIGHT : LEFT}>
-                    <TitleElement title="MOYENNE" />
-                    <SimpleElement title="Gagné" value={stats.average.wonPercent} />
-                    <SimpleElement title="Cartes restantes" value={stats.average.remaining} />
-                    <SimpleElement title="Nombre Tours Gagnants" value={stats.average.timeWon} />
-                    <SimpleElement title="Nombre Tours Perdants" value={stats.average.timeLost} />
+                    <TitleElement title={t('average')} />
+                    <SimpleElement title={t('won')} value={stats.average.wonPercent} />
+                    <SimpleElement title={t('remaning_cards')} value={stats.average.remaining} />
+                    <SimpleElement title={t('statistic_number_winning_turn')} value={stats.average.timeWon} />
+                    <SimpleElement title={t('statistic_number_loosing_turn')} value={stats.average.timeLost} />
                 </Zone>
             </ColumnLeftContainer>
     )
 }
 
-export default Stat;
+export default translate()(Stat);

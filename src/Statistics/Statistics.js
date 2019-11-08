@@ -120,18 +120,18 @@ const Stats = ({ t }) => {
                                             checked={nbPlayers[key]}
                                             onChange={() => changeNbPlayers(+key)}
                                         />
-                                        {key} joueurs
-                            </label>
+                                        {t('form_nb_players', { key })}
+                                    </label>
                                 )
                             })
                         }
                     </RowMiddleContainer>
                     <label>
-                        Nombre de jeux
+                        {t('form_nb_games')}
                         <input type="number" value={nbGames} onChange={changeNbGames} />
                     </label>
                     <ActionsContainer>
-                        <button onClick={() => computeStat(tactic, nbGames)}>Lancer les statistiques</button>
+                        <button onClick={() => computeStat(tactic, nbGames)}>{t('button_stactistics')}</button>
                     </ActionsContainer>
                     <Link to="/strategies">{t('link_strategies')}</Link>
                 </FormBottomContainer>

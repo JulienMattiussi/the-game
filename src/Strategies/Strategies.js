@@ -36,7 +36,7 @@ const Strategies = ({ t }) => {
             <FormContainer>
                 <FormBottomContainer>
                     <ActionsContainer>
-                        <button onClick={reComputeStrategies}>Recalculer les meilleures stratégies</button>
+                        <button onClick={reComputeStrategies}>{t('button_strategies')}</button>
                     </ActionsContainer>
                     <Link to="/">{t('link_statistics')}</Link>
                 </FormBottomContainer>

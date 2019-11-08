@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { Global } from '@emotion/core';
 import { I18n } from 'react-polyglot';
 import localeFile from './localeFile';
 import {
@@ -42,8 +43,16 @@ const styleGlobal = {
 const StyledGlobal = styled.div(styleGlobal);
 
 const App = () =>
-    <I18n locale={locale} messages={messages}>
-        <StyledGlobal>
+    <div>
+        <Global
+            styles={{
+                'body': {
+                    backgroundColor: colors.backGround,
+                }
+            }}
+        />
+        <I18n locale={locale} messages={messages}>
+
             <Router>
                 <Switch>
                     <Route exact path="/">
@@ -59,7 +68,7 @@ const App = () =>
                     </Route>
                 </Switch>
             </Router>
-        </StyledGlobal>
-    </I18n>
+        </I18n>
+    </div>
 
 export default App;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { translate } from 'react-polyglot';
 import { tactics } from '../model/player';
 
 const style = {
@@ -13,6 +14,7 @@ const StyledDiv = styled.div(style);
 
 const FormCriteria = (
     {
+        t,
         tactic,
         setTactic,
         minimumGainToForceVeto,
@@ -49,8 +51,8 @@ const FormCriteria = (
     return (
         <StyledDiv>
             <label>
-                Tactique
-                    <select onChange={changeTactic} defaultValue={tactic}>
+                {t('form_tactic')}
+                <select onChange={changeTactic} defaultValue={tactic}>
                     {Object.keys(tactics).map(t => (
                         <option key={t} value={t} >{tactics[t].label}</option>
                     ))}
@@ -58,21 +60,21 @@ const FormCriteria = (
             </label>
             <label>
                 <input type="checkbox" checked={useBetterStarter} onChange={changeUseBetterStarter} />
-                Optimiser le démarrage
-                </label>
+                {t('form_better_starter')}
+            </label>
             <label>
                 <input type="checkbox" checked={useVeto10} onChange={changeUseVeto10} />
-                Annoncer les veto quand une reduction de 10 est possible
-                </label>
+                {t('form_veto10')}
+            </label>
             <label>
                 <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
-                Annoncer les veto quand la carte suivante est disponible
-                </label>
+                {t('form_veto1')}
+            </label>
             <label>
-                Valeur minimum de gain pour outrepasser un veto
-                    <input type="number" value={minimumGainToForceVeto} onChange={changeMinimumGainToForceVeto} />
+                {t('form_minimum_gain_to_force')}
+                <input type="number" value={minimumGainToForceVeto} onChange={changeMinimumGainToForceVeto} />
             </label>
         </StyledDiv>)
 }
 
-export default FormCriteria;
+export default translate()(FormCriteria);

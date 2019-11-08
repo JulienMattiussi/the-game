@@ -181,9 +181,9 @@ const Game = ({ t }) => {
                     setUseVeto1={setUseVeto1} />
                 <FormBottomContainer>
                     <ActionsContainer>
-                        <button onClick={() => playOne()} disabled={!isPlayable(game)}>Jouer une action</button>
-                        <button onClick={() => playToEnd()} disabled={!isPlayable(game) || notPlayer === game.turn}>Jouer et finir</button>
-                        <button onClick={() => restart()}>Relancer</button>
+                        <button onClick={() => playOne()} disabled={!isPlayable(game)}>{t('button_play_next')}</button>
+                        <button onClick={() => playToEnd()} disabled={!isPlayable(game) || notPlayer === game.turn}>{t('button_play_to_end')}</button>
+                        <button onClick={() => restart()}>{t('button_restart')}</button>
                     </ActionsContainer>
                     <Link to="/">{t('link_statistics')}</Link>
                 </FormBottomContainer>
