@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { translate } from 'react-polyglot';
 import { colors, playersTheme, borderRadius } from '../theme';
-import { StrongElement } from '../Components';
+import { TitleElement, StrongElement } from '../Components';
 import {
     goesUpOne,
     goesUpTwo,
@@ -17,9 +18,9 @@ const sensStyle = ({ goesUp }) => ({
 
 const StyledSens = styled.strong(props => sensStyle(props));
 
-const SensElement = ({ goesUp }) =>
+const SensElement = ({ t, goesUp }) =>
     <StyledSens goesUp={goesUp}>
-        {goesUp ? 'PILE MONTANTE' : 'PILE DESCENDANTE'}
+        {goesUp ? t('goesUpPile') : t('goesDownPile')}
     </StyledSens>
 
 const playerStyle = ({ number }) => ({
@@ -28,14 +29,14 @@ const playerStyle = ({ number }) => ({
 
 const StyledPlayer = styled.strong(props => playerStyle(props));
 
-const PlayerElement = ({ number }) =>
+const PlayerElement = ({ t, number }) =>
     <StyledPlayer number={number}>
-        Joueur {number}
+        {t('player', { number })}
     </StyledPlayer>
 
-const ResultElement = ({ result }) =>
+const ResultElement = ({ t, result }) =>
     <StrongElement
-        value={result === WON ? 'GAGNE !!!' : result === LOST ? 'PERDU ...' : ''} />
+        value={result === WON ? t('won') : result === LOST ? t('lost') : ''} />
 
 const historyStyle = {
     display: 'flex',
@@ -55,18 +56,18 @@ const historyStyle = {
 
 const StyledHistory = styled.div(historyStyle);
 
-const History = ({ list, end }) => {
+const History = ({ t, list, end }) => {
     const turns = list.filter(item => item.type === 'move').length;
     return (
         <StyledHistory>
-            <StrongElement value={`HISTORIQUE (${turns} tours)`} />
-            <ResultElement result={end} />
+            <TitleElement title={t('history_title', { turns })} />
+            <ResultElement t={t} result={end} />
             {
                 list && list.map((event, index) => {
-                    const player = <PlayerElement number={event.player} />
+                    const player = <PlayerElement t={t} number={event.player} />
                     const value = <StrongElement value={event.value} />
                     const previous = <StrongElement value={event.previous} />
-                    const positionPartSense = <SensElement goesUp={
+                    const positionPartSense = <SensElement t={t} goesUp={
                         event.position === goesUpOne ||
                         event.position === goesUpTwo} />
 
@@ -80,11 +81,11 @@ const History = ({ list, end }) => {
                         case 'move':
                             return (
                                 <span key={index}>
-                                    {player} joue ( {value} sur {previous} ) en {positionPartSense} {positionPartNumber}
+                                    {player} {t('play')} ( {value} {t('on')} {previous} ) {t('in')} {positionPartSense} {positionPartNumber}
                                 </span>);
                         case 'veto':
                             return <span key={index}>
-                                {player} demande un <StrongElement value="VETO" /> en {positionPartSense} {positionPartNumber}
+                                {player} {t('ask_for')} <StrongElement value={t('veto')} /> {t('in')} {positionPartSense} {positionPartNumber}
                             </span>
                         default:
                             return null;
@@ -95,4 +96,4 @@ const History = ({ list, end }) => {
     )
 }
 
-export default History;
+export default translate()(History);

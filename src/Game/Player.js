@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { translate } from 'react-polyglot';
 import { playersTheme, cardPositionTheme, borderRadius } from '../theme';
 import CardFront from './CardFront';
 import CardBack from './CardBack';
@@ -67,9 +68,9 @@ const labelStyle = ({ isTurn, number }) => {
 
 const StyledLabel = styled.div(props => labelStyle(props));
 
-const Label = ({ isTurn, number }) =>
+const Label = ({ t, isTurn, number }) =>
     <StyledLabel isTurn={isTurn} number={number}>
-        Joueur {number}
+        {t('player', { number })}
     </StyledLabel>
 
 const selectorStyle = ({ number }) => {
@@ -110,6 +111,7 @@ const playerStyle = {
 const StyledPlayer = styled.div(playerStyle);
 
 const Player = ({
+    t,
     id,
     cards,
     isTurn,
@@ -140,9 +142,9 @@ const Player = ({
                     </CardPosition>)}
             </Cards>
             {isTurn && <Selector number={id} />}
-            <Label isTurn={isTurn} number={id} />
+            <Label t={t} isTurn={isTurn} number={id} />
         </StyledPlayer>
     )
 }
 
-export default Player;
+export default translate()(Player);

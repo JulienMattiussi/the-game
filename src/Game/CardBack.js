@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core'
+import { translate } from 'react-polyglot';
 import { colors } from '../theme';
 import Card from './Card';
 
@@ -28,16 +29,16 @@ const StyledNumber = ({ value }) =>
         {value}
     </StyledSpan>
 
-const CardBack = ({ value, clickable, selected, handleClick }) => {
+const CardBack = ({ t, value, clickable, selected, handleClick }) => {
     return (
         <StyledBack clickable={clickable} selected={selected} handleClick={handleClick}>
             {value != null &&
                 <Fragment>
                     <StyledNumber value={value} />
-                    Carte{pluralise(value)} restante{pluralise(value)}
+                    {t('remaning_cards', { s: pluralise(value) })}
                 </Fragment>
             }
         </StyledBack>)
 }
 
-export default CardBack;
+export default translate()(CardBack);

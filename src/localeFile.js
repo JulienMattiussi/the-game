@@ -18,6 +18,18 @@ const locale = {
     form_nb_games: "Nombre de jeux",
     form_nb_players: "%{key} joueurs",
 
+    goesUpPile: "PILE MONTANTE",
+    goesDownPile: "PILE DESCENDANTE",
+
+    history_title: "HISTORIQUE (%{turns} tours)",
+
+    play: 'joue',
+    in: 'en',
+    on: 'sur',
+    ask_for: 'demande un',
+    veto: 'VETO',
+
+    lock: "Verrou",
 
     unknown: "LA ?",
     best: "LA MEILLEURE",
@@ -33,12 +45,16 @@ const locale = {
     no: "Non",
     never: "jamais",
 
-    won: "Gagné",
-    remaning_cards: "Cartes restantes",
+    won: "GAGNE !!!",
+    lost: "PERDU ...",
+
+    remaning_cards: "Carte%{s} restante%{s}",
     turns: "Tours",
+    player: "Joueur %{number}",
 
     statistic_title_global: "Cumul pour %{numberOfGames} parties",
     statistic_title: "Pour %{numberOfPlayers} joueurs (%{numberOfGames} parties)",
+    statistic_won: "Gagné",
     statistic_lost_remaining: "Perdu %{range} restantes",
     statistic_number_winning_turn: "Nombre Tours Gagnants",
     statistic_number_loosing_turn: "Nombre Tours Perdants",

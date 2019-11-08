@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { translate } from 'react-polyglot';
 import { colors, playersTheme } from '../theme';
 import { RowMiddleContainer } from '../Components';
 import CardFront from './CardFront';
@@ -56,10 +57,10 @@ const lockStyle = ({ position, player }) => {
 
 const StyledLock = styled.span(props => lockStyle(props));
 
-const Lock = ({ position, player }) =>
-    <StyledLock role="img" aria-label="Verrou" player={player} position={position}>
+const Lock = ({ t, position, player }) =>
+    <StyledLock role="img" aria-label={t('lock')} player={player} position={position} >
         🔒
-    </StyledLock>
+    </StyledLock >
 
 const endStyle = ({ end, won }) => ({
     display: end ? 'block' : 'none',
@@ -74,9 +75,9 @@ const endStyle = ({ end, won }) => ({
 
 const StyledEnd = styled.div(props => endStyle(props));
 
-const EndElement = ({ lost, won }) =>
+const EndElement = ({ t, lost, won }) =>
     <StyledEnd end={lost || won} won={won} >
-        {lost ? 'PERDU ...' : won ? 'GAGNE!!!!' : ''}
+        {lost ? t('lost') : won ? t('won') : ''}
     </StyledEnd >
 
 const hintStyle = ({ leftPosition }) => {
@@ -97,9 +98,9 @@ const hintStyle = ({ leftPosition }) => {
 
 const StyledHint = styled.div(props => hintStyle(props));
 
-const HintElement = ({ left }) =>
+const HintElement = ({ t, left }) =>
     <StyledHint leftPosition={left} >
-        {left ? 'PILE MONTANTE' : 'PILE DESCENDANTE'}
+        {left ? t('goesUpPile') : t('goesDownPile')}
     </StyledHint >
 
 const remainingStyle = {
@@ -116,6 +117,7 @@ const RemainingCard = ({ value }) =>
     </StyledRemaining>
 
 const MiddleBoard = ({
+    t,
     goesUpOne,
     goesUpTwo,
     goesDownOne,
@@ -136,7 +138,7 @@ const MiddleBoard = ({
         <Board>
             <RowMiddleContainer>
                 <CardsColumn>
-                    <HintElement left />
+                    <HintElement t={t} left />
                     <CardFront
                         value={goesUpOne[0]}
                         clickable={isCardValid(choosenCard, pileGoesUpOne, goesUpOne[0])}
@@ -147,7 +149,7 @@ const MiddleBoard = ({
                         handleClick={() => handlePlaceCard(pileGoesUpTwo, goesUpTwo[0])} />
                 </CardsColumn>
                 <CardsColumn>
-                    <HintElement right />
+                    <HintElement t={t} right />
                     <CardFront
                         value={goesDownOne[0]}
                         clickable={isCardValid(choosenCard, pileGoesDownOne, goesDownOne[0])}
@@ -159,10 +161,10 @@ const MiddleBoard = ({
                 </CardsColumn>
                 <RemainingCard value={remainingCards} />
             </RowMiddleContainer>
-            {vetos.map(veto => <Lock key={veto.player} player={veto.player} position={veto.position} />)}
-            <EndElement lost={lost} won={won} />
+            {vetos.map(veto => <Lock t={t} key={veto.player} player={veto.player} position={veto.position} />)}
+            <EndElement t={t} lost={lost} won={won} />
         </Board >
     )
 }
 
-export default MiddleBoard;
+export default translate()(MiddleBoard);

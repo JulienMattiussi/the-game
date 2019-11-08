@@ -43,8 +43,8 @@ const Stat = ({ t, stats, global, loading }) => {
                                 stats.options,
                             )}>{t('button_see_detailled_game')}</button>}
                     </ActionsContainer>
-                    <SimpleElement title={t('won')} value={stats.best.won ? t('yes') : t('no')} />
-                    <SimpleElement title={t('remaning_cards')} value={stats.best.remaining} />
+                    <SimpleElement title={t('statistic_won')} value={stats.best.won ? t('yes') : t('no')} />
+                    <SimpleElement title={t('remaning_cards', { s: 's' })} value={stats.best.remaining} />
                     <SimpleElement title={t('turns')} value={stats.best.time} />
                 </Zone>
                 <Zone position={global ? RIGHT : LEFT}>
@@ -60,21 +60,21 @@ const Stat = ({ t, stats, global, loading }) => {
                                 )}>{t('button_see_detailled_game')}</button>
                         }
                     </ActionsContainer>
-                    <SimpleElement title={t('won')} value={stats.worst.won ? t('yes') : t('no')} />
-                    <SimpleElement title={t('remaning_cards')} value={stats.worst.remaining} />
+                    <SimpleElement title={t('statistic_won')} value={stats.worst.won ? t('yes') : t('no')} />
+                    <SimpleElement title={t('remaning_cards', { s: 's' })} value={stats.worst.remaining} />
                     <SimpleElement title={t('turns')} value={stats.worst.time} />
                 </Zone>
                 <Zone position={global ? RIGHT : LEFT}>
                     <TitleElement title={t('total')} />
-                    <SimpleElement title={t('won')} value={stats.total.won} />
+                    <SimpleElement title={t('statistic_won')} value={stats.total.won} />
                     <SimpleElement title={t('statistic_lost_remaining', { range: '<= 5' })} value={stats.total.lost5} />
                     <SimpleElement title={t('statistic_lost_remaining', { range: '>5 à 10' })} value={stats.total.lost10} />
                     <SimpleElement title={t('statistic_lost_remaining', { range: '> 10' })} value={stats.total.lostMore} />
                 </Zone>
                 <Zone position={global ? RIGHT : LEFT}>
                     <TitleElement title={t('average')} />
-                    <SimpleElement title={t('won')} value={stats.average.wonPercent} />
-                    <SimpleElement title={t('remaning_cards')} value={stats.average.remaining} />
+                    <SimpleElement title={t('statistic_won')} value={stats.average.wonPercent} />
+                    <SimpleElement title={t('remaning_cards', { s: 's' })} value={stats.average.remaining} />
                     <SimpleElement title={t('statistic_number_winning_turn')} value={stats.average.timeWon} />
                     <SimpleElement title={t('statistic_number_loosing_turn')} value={stats.average.timeLost} />
                 </Zone>
