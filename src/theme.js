@@ -52,6 +52,8 @@ export const cardPositionTheme = [
 ];
 
 export const colors = {
+    white: 'white',
+    backGround: 'darkgreen',
     darkGrey: '#282c34',
     whiteTransparency: 'rgba(255, 255, 255, 0.5)',
     blueTransparency: 'rgba(55, 125, 255, 0.7)',

@@ -1,46 +1,58 @@
 import React from 'react';
+import styled from '@emotion/styled';
 import {
     BrowserRouter as Router,
     Switch,
     Route,
 } from "react-router-dom";
-import logo from './assets/thegame.jpeg';
-import './App.css';
+import { colors } from './theme';
+import { Logo } from './Components';
 import Statistics from './Statistics/Statistics';
 import Strategies from './Strategies/Strategies';
 import Game from './Game/Game';
 
+const styleHeader = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.darkGrey,
+    minHeight: '8vh',
+    fontSize: 'calc(10px + 2vmin)',
+    color: colors.white,
+};
 
-function App() {
-    return (
-        <div className="App">
-            <Router>
-                <Switch>
-                    <Route exact path="/">
-                        <header className="App-header">
-                            <img src={logo} className="App-logo" alt="logo" />
-                            <p>
-                                The game
-                            </p>
-                        </header>
-                        <Statistics />
-                    </Route>
-                    <Route path="/game">
-                        <Game />
-                    </Route>
-                    <Route path="/strategies">
-                        <header className="App-header">
-                            <img src={logo} className="App-logo" alt="logo" />
-                            <p>
-                                The game
-                            </p>
-                        </header>
-                        <Strategies />
-                    </Route>
-                </Switch>
-            </Router>
-        </div>
-    );
+const StyledHeader = styled.header(styleHeader);
+
+const Header = () =>
+    <StyledHeader>
+        <Logo />
+        <p>The game Analyser</p>
+    </StyledHeader>
+
+const styleGlobal = {
+    backgroundColor: colors.backGround,
 }
+
+const StyledGlobal = styled.div(styleGlobal);
+
+const App = () =>
+    <StyledGlobal>
+        <Router>
+            <Switch>
+                <Route exact path="/">
+                    <Header />
+                    <Statistics />
+                </Route>
+                <Route path="/game">
+                    <Game />
+                </Route>
+                <Route path="/strategies">
+                    <Header />
+                    <Strategies />
+                </Route>
+            </Switch>
+        </Router>
+    </StyledGlobal>
 
 export default App;

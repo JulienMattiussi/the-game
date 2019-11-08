@@ -10,6 +10,7 @@ import Zone from './Zone';
 import TitleElement from './TitleElement';
 import StrongElement from './StrongElement';
 import SimpleElement from './SimpleElement';
+import Logo from './Logo';
 
 
 export {
@@ -25,4 +26,5 @@ export {
     TitleElement,
     SimpleElement,
     StrongElement,
+    Logo
 };

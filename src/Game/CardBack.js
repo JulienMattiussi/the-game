@@ -11,6 +11,7 @@ const styleBack = css({
     backgroundColor: colors.cardBack,
     justifyContent: 'center',
     fontWeight: 'bolder',
+    textAlign: 'center',
 });
 
 const StyledBack = styled(Card)(styleBack);
