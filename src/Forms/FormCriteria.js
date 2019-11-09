@@ -44,7 +44,9 @@ const FormCriteria = (
     }
 
     const changeMinimumGainToForceVeto = (event) => {
-        setCriteria(prevState => ({ ...prevState, minimumGainToForceVeto: +event.target.value }));
+        event.persist();
+        if (event.target && event.target.value)
+            setCriteria(prevState => ({ ...prevState, minimumGainToForceVeto: +event.target.value }));
     }
 
     const changeTactic = (event) => {
