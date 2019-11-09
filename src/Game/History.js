@@ -58,21 +58,11 @@ const historyStyle = {
 
 const StyledHistory = styled.div(historyStyle);
 
-const History = ({ t, list, end }) => {
-    const turns = list
-        .filter(item => item.type === HISTORY_MOVE)
-        .reduce((turnsList, row) =>
-            turnsList.length
-                ? turnsList[0] !== row.player
-                    ? [row.player, ...turnsList]
-                    : turnsList
-                : [row.player]
-            , []).length;
-    console.log(turns);
+const History = ({ t, list, turnsNumber, finish }) => {
     return (
         <StyledHistory>
-            <TitleElement title={t('history_title', { turns })} />
-            <ResultElement t={t} result={end} />
+            <TitleElement title={t('history_title', { turnsNumber })} />
+            <ResultElement t={t} result={finish} />
             {
                 list && list.map((event, index) => {
                     const player = <PlayerElement t={t} number={event.player} />

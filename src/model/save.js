@@ -95,8 +95,6 @@ export const clearStat = stat => {
 
 export const clearStatByKey = key => {
     localStorage.removeItem(key);
-
-    console.log('removeItem', key);
 }
 
 export const clearAllStats = () => {

@@ -55,6 +55,7 @@ export const initGame = (nbPlayers = 4) => {
         players,
         cards,
         history: [],
+        turnsNumber: 0,
     }
 }
 
@@ -80,6 +81,7 @@ export const loadGame = (
         players: sortedPlayers,
         cards: [...cards],
         history: [],
+        turnsNumber: 0,
     })
 }
 
@@ -97,11 +99,28 @@ export const cloneGame = game => {
         vetos: game.vetos,
         won: game.won,
         history: game.history,
+        turnsNumber: game.turnsNumber,
         statsMode: game.statsMode,
     }
 
     return newGame;
 }
+
+export const appendToHistory = (game, event, notPlayer) => {
+    if (!game.statsMode) {
+        if (event.type === HISTORY_MOVE) {
+            const movesList = game.history.filter(row => row.type === HISTORY_MOVE);
+            if (!movesList.length || movesList[0].player !== event.player) {
+                game.turnsNumber += 1;
+            }
+        }
+        if (notPlayer != null) {
+            game.history = game.history.filter((row, index) => index < 8);
+        }
+        game.history.unshift(event);
+    }
+    return game;
+};
 
 export const move = (game, card, position, options = {}) => {
     const { useVeto10, useVeto1 } = options;
@@ -111,9 +130,17 @@ export const move = (game, card, position, options = {}) => {
     player.splice(index, 1);
 
     newGame[position].unshift(card);
-    if (!game.statsMode) {
-        newGame.history.unshift({ player: newGame.turn, type: HISTORY_MOVE, value: card, previous: newGame[position][1], position: position });
-    }
+    appendToHistory(
+        newGame,
+        {
+            player: newGame.turn,
+            type: HISTORY_MOVE,
+            value: card, previous: newGame[position][1],
+            position: position
+        },
+        options.notPlayer,
+    );
+
     if (useVeto10 || useVeto1) {
         return setVeto(newGame, useVeto10, useVeto1);
     }
@@ -121,7 +148,7 @@ export const move = (game, card, position, options = {}) => {
     return newGame;
 }
 
-export const reload = (game, options = {}) => {
+export const reload = (game) => {
     const newGame = cloneGame(game);
     for (let i = newGame.players[newGame.turn].length; i < NB_CARDS_IN_HAND; i++) {
         if (newGame.cards.length) {

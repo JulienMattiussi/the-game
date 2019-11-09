@@ -112,9 +112,9 @@ const remainingStyle = {
 
 const StyledRemaining = styled.div(remainingStyle);
 
-const RemainingCard = ({ value }) =>
+const RemainingCard = ({ value, handleClick, clickable }) =>
     <StyledRemaining>
-        <CardBack value={value} />
+        <CardBack value={value} handleClick={handleClick} clickable={clickable} />
     </StyledRemaining>
 
 const MiddleBoard = ({
@@ -125,6 +125,8 @@ const MiddleBoard = ({
     goesDownTwo,
     remainingCards,
     placeCard,
+    reloadCards,
+    remainingMoves,
     choosenCard,
     vetos = [],
     lost,
@@ -160,7 +162,10 @@ const MiddleBoard = ({
                         clickable={isCardValid(choosenCard, pileGoesDownTwo, goesDownTwo[0])}
                         handleClick={() => handlePlaceCard(pileGoesDownTwo, goesDownTwo[0])} />
                 </CardsColumn>
-                <RemainingCard value={remainingCards} />
+                <RemainingCard
+                    value={remainingCards}
+                    clickable={remainingMoves === 0}
+                    handleClick={reloadCards} />
             </RowMiddleContainer>
             {vetos.map(veto => <Lock t={t} key={veto.player} player={veto.player} position={veto.position} />)}
             <EndElement t={t} lost={lost} won={won} />

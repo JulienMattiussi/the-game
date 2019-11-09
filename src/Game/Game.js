@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { translate } from 'react-polyglot';
 import styled from '@emotion/styled';
 import {
@@ -113,13 +113,18 @@ const Game = ({ t }) => {
     const [criteria, setCriteria] = useState({ ...options, minimumGainToForceVeto: options.minimumGainToForceVeto || 100 });
     const [game, setGame] = useState(initNewGame(cards, players, middle, turn, criteria.useBetterStarter));
     const [choosenCard, setChoosenCard] = useState(0);
-    const [turnNumber, setTurnNumber] = useState(0);
+    const [moveNumber, setMoveNumber] = useState(0);
+    const [minimalMoveNumber, setMinimalMoveNumber] = useState(getMinimalMoveNumber(game.cards));
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setMinimalMoveNumber(getMinimalMoveNumber(game.cards));
+    }, [game.cards]);
 
     const playOne = () => {
         setLoading(true);
         setChoosenCard(0);
-        setTurnNumber(0);
+        setMoveNumber(0);
         const newGame = playATurn(game, tactics[tactic].algo, criteria);
         setGame(newGame);
         setLoading(false);
@@ -128,7 +133,7 @@ const Game = ({ t }) => {
     const playToEnd = () => {
         setLoading(true);
         setChoosenCard(0);
-        setTurnNumber(0);
+        setMoveNumber(0);
         const newGame = playFullGame(game, tactics[tactic].algo, { ...criteria, notPlayer });
         setGame(newGame);
         setLoading(false);
@@ -136,7 +141,7 @@ const Game = ({ t }) => {
 
     const restart = () => {
         setChoosenCard(0);
-        setTurnNumber(0);
+        setMoveNumber(0);
         setGame(initNewGame(cards, players, middle, turn, criteria.useBetterStarter));
     }
 
@@ -145,21 +150,15 @@ const Game = ({ t }) => {
     }
 
     const placeCard = (value, position) => {
-        const minimalMoveNumber = getMinimalMoveNumber(game.cards);
-        const vetoCriteria = { useVeto1: criteria.useVeto1, useVeto10: criteria.useVeto10 };
-        if (turnNumber === 0 && minimalMoveNumber === 2) {
-            setGame(move(game, value, position, vetoCriteria));
-            setTurnNumber(1);
-        } else {
-            setGame(
-                changeTurn(
-                    reload(
-                        move(game, value, position, vetoCriteria)
-                    ),
-                    vetoCriteria)
-            );
-            setTurnNumber(0);
-        }
+        setGame(move(game, value, position, criteria));
+        setMoveNumber(previousState => previousState + 1);
+        setChoosenCard(0);
+    }
+
+    const reloadCards = (value, position) => {
+        setGame(
+            changeTurn(reload(game))
+        );
         setChoosenCard(0);
     }
 
@@ -184,7 +183,10 @@ const Game = ({ t }) => {
                     <Link to="/">{t('link_statistics')}</Link>
                 </FormBottomContainer>
             </FormContainer>
-            <History list={game.history} end={game.lost ? LOST : game.won ? WON : false} />
+            <History
+                list={game.history}
+                finish={game.lost ? LOST : game.won ? WON : false}
+                turnsNumber={game.turnsNumber} />
             <Board>
                 <MiddleBoard
                     goesUpOne={game.goesUpOne}
@@ -193,6 +195,8 @@ const Game = ({ t }) => {
                     goesDownTwo={game.goesDownTwo}
                     remainingCards={game.cards.length}
                     placeCard={placeCard}
+                    reloadCards={reloadCards}
+                    remainingMoves={minimalMoveNumber - moveNumber}
                     choosenCard={choosenCard}
                     vetos={game.vetos}
                     lost={game.lost}

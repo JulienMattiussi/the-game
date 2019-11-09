@@ -15,7 +15,7 @@ const locale = {
 
     form_tactic: "Tactique",
     form_better_starter: "Optimiser le démarrage",
-    form_veto10: "Annoncer les veto quand une reduction de 10 est possible",
+    form_veto10: "Annoncer les veto quand une réduction de 10 est possible",
     form_veto1: "Annoncer les veto quand la carte suivante est disponible",
     form_minimum_gain_to_force: "Valeur minimum de gain pour outrepasser un veto",
     form_play_combos: "Jouer les combos de -10",
@@ -26,7 +26,7 @@ const locale = {
     goesUpPile: "PILE MONTANTE",
     goesDownPile: "PILE DESCENDANTE",
 
-    history_title: "HISTORIQUE (%{turns} tours)",
+    history_title: "HISTORIQUE (%{turnsNumber} tours)",
 
     confirm_delete: "Confirmez la suppression",
     reinit_stat: 'Réinitialiser cette statistique',
@@ -101,8 +101,12 @@ sur une pile s'il possède la carte de +1 qui va dessus.
 Remarque : Si un joueur possède la carte -10 pour cette
 pile, il ignorera ce Véto.`,
     minimumGainToForceVeto_description: `Le joueur va ignorer le Véto demandé sur une pile par
-un autre joueur si celà l'oblige à jouer une carte ayant 
-un gain supérieur à %{gain}.`,
+un autre joueur si celà l'oblige à jouer une carte ayant
+un gain supérieur à %{gain}.
+
+Remarque : Dans tous les cas, le joueur ignore le Veto
+s'il possède la carte -10 pour cette pile.
+Cette option n'a d'effet qu'en activant les veto de carte suivante.`,
 
 }
 

@@ -36,7 +36,11 @@ const FormCriteria = (
     }
 
     const changeUseVeto1 = () => {
-        setCriteria(prevState => ({ ...prevState, useVeto1: !useVeto1 }));
+        setCriteria(prevState => ({
+            ...prevState,
+            minimumGainToForceVeto: prevState.useVeto1 ? 100 : prevState.minimumGainToForceVeto,
+            useVeto1: !useVeto1,
+        }));
     }
 
     const changePlayCombos = () => {
@@ -85,6 +89,7 @@ const FormCriteria = (
                     type="number"
                     value={minimumGainToForceVeto}
                     onChange={changeMinimumGainToForceVeto}
+                    disabled={!useVeto1}
                 /> <InfoElement value={t('minimumGainToForceVeto_description', { gain: minimumGainToForceVeto })} />
             </label>
         </StyledDiv>)
