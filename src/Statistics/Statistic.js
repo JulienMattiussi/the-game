@@ -31,6 +31,7 @@ export const resetStat = (t, clearStat) => {
 
 const GameElement = ({ t, type, global, game, tactic, options }) => {
     const exists = game.game && game.game.cards;
+    console.log(game);
     return <Zone position={global ? RIGHT : LEFT}>
         <TitleElement title={t(type)} />
         <ActionsContainer>
@@ -45,6 +46,8 @@ const GameElement = ({ t, type, global, game, tactic, options }) => {
         <SimpleElement title={t('statistic_won')} value={game.won ? t('yes') : t('no')} />
         <SimpleElement title={t('remaning_cards', { s: 's' })} value={exists && game.remaining} />
         <SimpleElement title={t('turns')} value={exists && game.time} />
+        <SimpleElement title={t('statistic_total_veto10')} value={exists && game.game.vetosAnalysis && game.game.vetosAnalysis.vetos10Invoked} />
+        <SimpleElement title={t('statistic_total_veto1')} value={exists && game.game.vetosAnalysis && game.game.vetosAnalysis.vetos1Invoked} />
     </Zone>
 }
 
