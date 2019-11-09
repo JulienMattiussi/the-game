@@ -18,7 +18,7 @@ const Strategies = ({ t }) => {
     const [bestStrategy4, setBestStrategy4] = useState(getStrategy(4, BEST));
     const [worstStrategy4, setWorstStrategy4] = useState(getStrategy(4, WORST));
     const [bestStrategy5, setBestStrategy5] = useState(getStrategy(5, BEST));
-    const [worstStrategy5, setWorstStrategy5] = useState(getStrategy(4, WORST));
+    const [worstStrategy5, setWorstStrategy5] = useState(getStrategy(5, WORST));
 
     const reComputeStrategies = () => {
         computeStrategies();

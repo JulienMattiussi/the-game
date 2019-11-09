@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { translate } from 'react-polyglot';
 import {
@@ -19,26 +19,36 @@ import Statistic from './Statistic';
 
 const emptyStat = { best: {}, worst: {}, total: {}, average: {}, tactic: '', options: {} };
 
+const defaultOptions = {
+    minimumGainToForceVeto: 100,
+    useBetterStarter: true,
+    useVeto10: true,
+    useVeto1: false,
+};
+
+const rebuildStats = (nbPlayers, nbGames, tactic, criteria) =>
+    Object.keys(nbPlayers).reduce((all, number) => ({
+        ...all,
+        [number]: {
+            ...emptyStat,
+            numberOfPlayers: +number,
+            numberOfGames: nbGames,
+            tactic,
+            options: { ...criteria },
+        }
+    }), {});
+
 const Stats = ({ t }) => {
+    const [criteria, setCriteria] = useState(defaultOptions);
     const [tactic, setTactic] = useState(Object.keys(tactics)[0]);
     const [nbPlayers, setNbPlayers] = useState({ 3: false, 4: true, 5: true });
     const [nbGames, setNbGames] = useState(100);
-    const [minimumGainToForceVeto, setMinimumGainToForceVeto] = useState(100);
-    const [useBetterStarter, setUseBetterStarter] = useState(true);
-    const [useVeto10, setUseVeto10] = useState(true);
-    const [useVeto1, setUseVeto1] = useState(false);
-    const [stats, setStats] = useState(
-        Object.keys(nbPlayers).reduce((all, number) => ({
-            ...all,
-            [number]: {
-                ...emptyStat,
-                numberOfPlayers: +number,
-                numberOfGames: nbGames,
-                tactic,
-                options: { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
-            }
-        }), {}));
+    const [stats, setStats] = useState(rebuildStats(nbPlayers, nbGames, tactic, criteria));
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setStats(rebuildStats(nbPlayers, nbGames, tactic, criteria));
+    }, [criteria, tactic, nbPlayers, nbGames]);
 
     const computeStat = (tactic, numberOfGames) => {
         setLoading(true);
@@ -49,11 +59,11 @@ const Stats = ({ t }) => {
                     stats[number] = {
                         ...playManyGames(
                             tactics[tactic].algo,
-                            { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
+                            { ...criteria },
                             +number,
                             numberOfGames),
                         tactic,
-                        options: { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
+                        options: { ...criteria },
                     };
                 }
                 return null;
@@ -66,27 +76,12 @@ const Stats = ({ t }) => {
 
     const changeNbGames = (event) => {
         setNbGames(+event.target.value);
-        handleRefreshStats();
     }
 
     const changeNbPlayers = (number) => {
         const players = { ...nbPlayers };
         players[number] = !players[number];
         setNbPlayers(players);
-        handleRefreshStats();
-    }
-
-    const handleRefreshStats = () => {
-        setStats(Object.keys(nbPlayers).reduce((all, number) => ({
-            ...all,
-            [number]: {
-                ...emptyStat,
-                numberOfPlayers: +number,
-                numberOfGames: nbGames,
-                tactic,
-                options: { minimumGainToForceVeto, useBetterStarter, useVeto10, useVeto1 },
-            }
-        }), {}));
     }
 
     return (
@@ -94,16 +89,12 @@ const Stats = ({ t }) => {
             <FormContainer>
                 <FormCriteria
                     tactic={tactic}
+                    minimumGainToForceVeto={criteria.minimumGainToForceVeto}
+                    useBetterStarter={criteria.useBetterStarter}
+                    useVeto10={criteria.useVeto10}
+                    useVeto1={criteria.useVeto1}
                     setTactic={setTactic}
-                    minimumGainToForceVeto={minimumGainToForceVeto}
-                    setMinimumGainToForceVeto={setMinimumGainToForceVeto}
-                    useBetterStarter={useBetterStarter}
-                    setUseBetterStarter={setUseBetterStarter}
-                    useVeto10={useVeto10}
-                    setUseVeto10={setUseVeto10}
-                    useVeto1={useVeto1}
-                    setUseVeto1={setUseVeto1}
-                    handleRefreshStats={handleRefreshStats}
+                    setCriteria={setCriteria}
                 />
                 <FormBottomContainer>
                     <RowMiddleContainer>
@@ -136,8 +127,10 @@ const Stats = ({ t }) => {
                 {
                     Object.keys(nbPlayers).map(key => {
                         if (nbPlayers[key]) {
-                            const emptyStat = getStat(getKeyForStat(stats[key]));
-                            const globalStat = computeAverage(emptyStat, emptyStat ? emptyStat.numberOfGames : 0);
+                            const emptyGlobalStat = getStat(getKeyForStat(stats[key]));
+                            const globalStat = computeAverage(emptyGlobalStat, emptyGlobalStat
+                                ? emptyGlobalStat.numberOfGames :
+                                0);
                             return (
                                 <RowLeftContainer key={key}>
                                     <Statistic stats={stats[key]} loading={loading} />

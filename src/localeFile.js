@@ -15,7 +15,7 @@ const locale = {
     form_veto1: "Annoncer les veto quand la carte suivante est disponible",
     form_minimum_gain_to_force: "Valeur minimum de gain pour outrepasser un veto",
 
-    form_nb_games: "Nombre de jeux",
+    form_nb_games: "Nombre de parties",
     form_nb_players: "%{key} joueurs",
 
     goesUpPile: "PILE MONTANTE",
@@ -67,6 +67,30 @@ const locale = {
     strategy_veto10: "Annoncer les vétos de -10",
     strategy_veto1: "Annoncer les vétos de +1",
     strategy_minimum_gain_to_force: "Valeur de gain minimum",
+
+    mininumCards_description: "Joue toujours le nombre minimum de cartes autorisé.",
+    threeBestCards_description: `Joue jusqu'a 3 cartes maximum
+tant qu'il lui reste des -10 ou des +1.`,
+    allBestCards_description: `Joue toutes les cartes possibles
+tant qu'il lui reste des -10 ou des +1.`,
+    allBestCardsUntilEmpty_description: `Joue toutes les cartes possibles
+tant qu'il lui reste des -10 ou des +1
+et tant qu'il reste des cartes sur la pioche.
+
+Puis ne joue plus qu'une carte à la fois.`,
+
+    better_starter_description: "Le joueur qui commence est celui qui possède la carte avec le plus faible gain.",
+    veto10_description: `Un joueur va demander aux autres d'éviter de jouer
+sur une pile s'il possède la carte de -10 qui va dessus.`,
+    veto1_description: `Un joueur va demander aux autres d'éviter de jouer
+sur une pile s'il possède la carte de +1 qui va dessus.
+
+Remarque : Si un joueur possède la carte -10 pour cette
+pile, il ignorera ce Véto.`,
+    minimumGainToForceVeto_description: `Le joueur va ignorer le Véto demandé sur une pile par
+un autre joueur si celà l'oblige à jouer une carte ayant 
+un gain supérieur à %{gain}.`,
+
 }
 
 export default locale;

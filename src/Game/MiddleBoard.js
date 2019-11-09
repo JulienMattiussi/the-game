@@ -32,6 +32,7 @@ const CardsColumn = styled.div(cardsColumnStyle);
 const lockStyle = ({ position, player }) => {
     const basicStyle = {
         position: 'absolute',
+        textAlign: 'center',
         paddingTop: 4,
         height: 26,
         width: 30,

@@ -110,11 +110,8 @@ const Game = ({ t }) => {
     const turn = query.get("turn") ? +query.get("turn") : undefined;
 
     const [tactic, setTactic] = useState(query.get("tactic"));
-    const [useBetterStarter, setUseBetterStarter] = useState(options.useBetterStarter);
-    const [minimumGainToForceVeto, setMinimumGainToForceVeto] = useState(options.minimumGainToForceVeto || 100);
-    const [useVeto1, setUseVeto1] = useState(options.useVeto1);
-    const [useVeto10, setUseVeto10] = useState(options.useVeto10);
-    const [game, setGame] = useState(initNewGame(cards, players, middle, turn, useBetterStarter));
+    const [criteria, setCriteria] = useState({ ...options, minimumGainToForceVeto: options.minimumGainToForceVeto || 100 });
+    const [game, setGame] = useState(initNewGame(cards, players, middle, turn, criteria.useBetterStarter));
     const [choosenCard, setChoosenCard] = useState(0);
     const [turnNumber, setTurnNumber] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -123,7 +120,7 @@ const Game = ({ t }) => {
         setLoading(true);
         setChoosenCard(0);
         setTurnNumber(0);
-        const newGame = playATurn(game, tactics[tactic].algo, { minimumGainToForceVeto, useBetterStarter, useVeto1, useVeto10 });
+        const newGame = playATurn(game, tactics[tactic].algo, criteria);
         setGame(newGame);
         setLoading(false);
     }
@@ -132,7 +129,7 @@ const Game = ({ t }) => {
         setLoading(true);
         setChoosenCard(0);
         setTurnNumber(0);
-        const newGame = playFullGame(game, tactics[tactic].algo, { minimumGainToForceVeto, useBetterStarter, useVeto1, useVeto10, notPlayer });
+        const newGame = playFullGame(game, tactics[tactic].algo, { ...criteria, notPlayer });
         setGame(newGame);
         setLoading(false);
     }
@@ -140,7 +137,7 @@ const Game = ({ t }) => {
     const restart = () => {
         setChoosenCard(0);
         setTurnNumber(0);
-        setGame(initNewGame(cards, players, middle, turn, useBetterStarter));
+        setGame(initNewGame(cards, players, middle, turn, criteria.useBetterStarter));
     }
 
     const chooseCard = (card) => {
@@ -149,16 +146,17 @@ const Game = ({ t }) => {
 
     const placeCard = (value, position) => {
         const minimalMoveNumber = getMinimalMoveNumber(game.cards);
+        const vetoCriteria = { useVeto1: criteria.useVeto1, useVeto10: criteria.useVeto10 };
         if (turnNumber === 0 && minimalMoveNumber === 2) {
-            setGame(move(game, value, position, { useVeto1, useVeto10 }));
+            setGame(move(game, value, position, vetoCriteria));
             setTurnNumber(1);
         } else {
             setGame(
                 changeTurn(
                     reload(
-                        move(game, value, position, { useVeto1, useVeto10 })
+                        move(game, value, position, vetoCriteria)
                     ),
-                    { useVeto1, useVeto10 })
+                    vetoCriteria)
             );
             setTurnNumber(0);
         }
@@ -170,15 +168,12 @@ const Game = ({ t }) => {
             <FormContainer>
                 <FormCriteria
                     tactic={tactic}
+                    minimumGainToForceVeto={criteria.minimumGainToForceVeto}
+                    useBetterStarter={criteria.useBetterStarter}
+                    useVeto10={criteria.useVeto10}
+                    useVeto1={criteria.useVeto1}
                     setTactic={setTactic}
-                    minimumGainToForceVeto={minimumGainToForceVeto}
-                    setMinimumGainToForceVeto={setMinimumGainToForceVeto}
-                    useBetterStarter={useBetterStarter}
-                    setUseBetterStarter={setUseBetterStarter}
-                    useVeto10={useVeto10}
-                    setUseVeto10={setUseVeto10}
-                    useVeto1={useVeto1}
-                    setUseVeto1={setUseVeto1} />
+                    setCriteria={setCriteria} />
                 <FormBottomContainer>
                     <ActionsContainer>
                         <button onClick={() => playOne()} disabled={!isPlayable(game)}>{t('button_play_next')}</button>

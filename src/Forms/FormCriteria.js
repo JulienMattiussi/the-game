@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { translate } from 'react-polyglot';
+import { InfoElement } from '../Components';
 import { tactics } from '../model/player';
 
 const style = {
@@ -16,45 +17,34 @@ const FormCriteria = (
     {
         t,
         tactic,
-        setTactic,
         minimumGainToForceVeto,
-        setMinimumGainToForceVeto,
         useBetterStarter,
-        setUseBetterStarter,
         useVeto10,
-        setUseVeto10,
         useVeto1,
-        setUseVeto1,
-        handleRefreshStats,
+        setTactic,
+        setCriteria,
     }
 ) => {
 
-    const refreshStats = handleRefreshStats ? handleRefreshStats : () => { };
-
     const changeUseBetterStarter = () => {
-        setUseBetterStarter(!useBetterStarter,
-            refreshStats());
+        setCriteria({ useBetterStarter: !useBetterStarter });
     }
 
     const changeUseVeto10 = () => {
-        setUseVeto10(!useVeto10,
-            refreshStats());
+        setCriteria({ useVeto10: !useVeto10 });
     }
 
     const changeUseVeto1 = () => {
-        setUseVeto1(!useVeto1,
-            refreshStats());
+        setCriteria({ useVeto1: !useVeto1 });
     }
+
     const changeMinimumGainToForceVeto = (event) => {
-        setMinimumGainToForceVeto(+event.target.value,
-            refreshStats());
+        setCriteria({ minimumGainToForceVeto: +event.target.value });
     }
 
     const changeTactic = (event) => {
-        setTactic(event.target.value,
-            refreshStats());
+        setTactic(event.target.value);
     }
-
 
     return (
         <StyledDiv>
@@ -64,23 +54,27 @@ const FormCriteria = (
                     {Object.keys(tactics).map(t => (
                         <option key={t} value={t} >{tactics[t].label}</option>
                     ))}
-                </select>
+                </select> <InfoElement value={t(tactic + '_description')} />
             </label>
             <label>
                 <input type="checkbox" checked={useBetterStarter} onChange={changeUseBetterStarter} />
-                {t('form_better_starter')}
+                {t('form_better_starter')} <InfoElement value={t('better_starter_description')} />
             </label>
             <label>
                 <input type="checkbox" checked={useVeto10} onChange={changeUseVeto10} />
-                {t('form_veto10')}
+                {t('form_veto10')} <InfoElement value={t('veto10_description')} />
             </label>
             <label>
                 <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
-                {t('form_veto1')}
+                {t('form_veto1')} <InfoElement value={t('veto1_description')} />
             </label>
             <label>
                 {t('form_minimum_gain_to_force')}
-                <input type="number" value={minimumGainToForceVeto} onChange={changeMinimumGainToForceVeto} />
+                <input
+                    type="number"
+                    value={minimumGainToForceVeto}
+                    onChange={changeMinimumGainToForceVeto}
+                /> <InfoElement value={t('minimumGainToForceVeto_description', { gain: minimumGainToForceVeto })} />
             </label>
         </StyledDiv>)
 }
