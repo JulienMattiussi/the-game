@@ -7,28 +7,38 @@ import {
     NB_CARDS_IN_HAND,
 } from './game';
 
-export const getValidCardsAndPositions = (game, player) => {
-    const validCards = [];
-    const playerCards = game.players[player];
-    const nbCards = playerCards.length;
-    for (let ic = 0; ic < nbCards; ic++) {
-        const card = playerCards[ic];
-        const positions = getValidPositions(game, card);
-        for (let ip = 0; ip < positions.length; ip++) {
-            validCards.push({ card, position: positions[ip] })
-        }
-    }
-    return validCards;
-};
+export const getValidCardsAndPositions = (game, player) =>
+    game.players[player].reduce((accc, card) =>
+        getValidPositions(game, card).reduce((accp, position) =>
+            [...accp, { card, position }]
+            , accc)
+        , []);
 
 export const getTenReducingCards = (game, player) => game.players[player].reduce((list, card) => {
-    const positions = isTenReducingCard(game, card);
-    if (positions) {
-        const newList = { cards: [...list.cards, card], positions: [...list.positions, [positions]] };
-        return newList;
+    const position = isTenReducingCard(game, card);
+    if (position) {
+        return [...list, { card, position }];
     }
     return list;
-}, { cards: [], positions: [] });
+}, []);
+
+export const getReducingComboCards = (game, player) => {
+    const cards = game.players[player];
+    const reducingCards = cards.reduce((accA, cardA) =>
+        cards.filter(card => card < cardA).reduce((accB, cardB) => {
+            if (Math.abs(cardA - cardB) === 10) {
+                return [...accB, { cardA, cardB }];
+            }
+            return accB;
+        }, accA)
+        , []);
+
+    if (reducingCards.length) {
+        console.log(reducingCards.length);
+    }
+
+    return reducingCards.length;
+}
 
 export const getValuedCards = (game, cards) => {
     const valueArray = cards.map(card => {
@@ -46,8 +56,8 @@ export const getBestCard = (game, validCards) => {
 
 export const chooseCard = (game, options = { minimumGainToForceVeto: 100 }) => {
     const tenReducingCards = getTenReducingCards(game, game.turn);
-    if (tenReducingCards.cards.length) {
-        return { card: tenReducingCards.cards[0], position: tenReducingCards.positions[0][0] }
+    if (tenReducingCards.length) {
+        return tenReducingCards[0];
     }
     const validCards = getValidCardsAndPositions(game, game.turn);
     if (validCards.length) {
@@ -88,11 +98,11 @@ export const setVeto = (game, useVeto10, useVeto1) => {
         for (let player = 0; player < nbPlayers; player++) {
             if (newGame.turn !== player) {
                 const tenReducingCards = getTenReducingCards(newGame, player);
-                if (tenReducingCards.cards.length) {
-                    const newVeto = { player, position: tenReducingCards.positions[0][0] }
+                if (tenReducingCards.length) {
+                    const newVeto = { player, position: tenReducingCards[0].position }
                     newGame.vetos.push(newVeto)
                     if (!newGame.statsMode && !game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
-                        newGame.history.unshift({ player, type: 'veto', position: tenReducingCards.positions[0][0] });
+                        newGame.history.unshift({ player, type: 'veto', position: tenReducingCards[0].position });
                     }
                 }
             }
@@ -192,6 +202,7 @@ export const allBestCardsUntilEmptyTactic = (
     options = { minimumGainToForceVeto: 100, useVeto10: false, useVeto1: false }
 ) => {
     const minimalMoveNumber = getMinimalMoveNumber(game.cards);
+    const cards = getReducingComboCards(game, game.turn);
     if (minimalMoveNumber === 2) {
         return allBestCardsTactic(game, options);
     } else {

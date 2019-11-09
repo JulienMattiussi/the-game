@@ -66,10 +66,7 @@ export const loadGame = (
     },
     turn = 0,
 ) => {
-    const sortedPlayers = [...players];
-    for (let player = 0; player < sortedPlayers.length; player++) {
-        players[player].sort((ca, cb) => ca - cb);
-    }
+    const sortedPlayers = [...players].map(player => player.sort((ca, cb) => ca - cb));
     return ({
         goesUpOne: middle.goesUpOne,
         goesUpTwo: middle.goesUpTwo,

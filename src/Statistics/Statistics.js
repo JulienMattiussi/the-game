@@ -53,6 +53,7 @@ const Stats = ({ t }) => {
 
     const computeStat = (tactic, numberOfGames) => {
         setLoading(true);
+        const start = new Date();
         const stats = {};
         Object.keys(nbPlayers).map(
             number => {
@@ -74,6 +75,7 @@ const Stats = ({ t }) => {
         saveStats(stats);
         setStats(stats);
         setLoading(false);
+        console.log(new Date() - start);
     }
 
     const changeNbGames = (event) => {
