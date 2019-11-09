@@ -297,7 +297,7 @@ export const isTenReducingCard = (game, card) => {
     return false;
 }
 
-export const getValidPositions = (game, card) => {
+const getValidPositions = (game, card) => {
     let validPositions = []
     if (game[goesUpOne][0] < card) {
         validPositions.push(goesUpOne);
@@ -318,4 +318,70 @@ export const getValidPositions = (game, card) => {
         }
     }
     return validPositions;
+}
+
+const getValidComboPositions = (game, comboCard) => {
+    let validPositions = []
+    if (comboCard.cardA === comboCard.cardB + 10 && game[goesUpOne][0] < comboCard.cardA) {
+        validPositions.push(goesUpOne);
+    }
+    if (comboCard.cardA === comboCard.cardB + 10 && game[goesUpTwo][0] < comboCard.cardA) {
+        validPositions.push(goesUpTwo);
+    }
+    if (comboCard.cardA === comboCard.cardB - 10 && game[goesDownOne][0] > comboCard.cardA) {
+        validPositions.push(goesDownOne);
+    }
+    if (comboCard.cardA === comboCard.cardB - 10 && game[goesDownTwo][0] > comboCard.cardA) {
+        validPositions.push(goesDownTwo);
+    }
+
+    return validPositions;
+}
+
+export const getValuedCards = (game, cards) => {
+    const valueArray = cards.map(card => {
+        return { ...card, value: Math.abs(game[card.position][0] - card.card) }
+    });
+
+    valueArray.sort((itemA, itemB) => itemA.value - itemB.value);
+
+    return valueArray;
+}
+
+
+export const getValidCardsAndPositions = (game, player) =>
+    game.players[player].reduce((accc, card) =>
+        getValidPositions(game, card).reduce((accp, position) =>
+            [...accp, { card, position }]
+            , accc)
+        , []);
+
+export const getTenReducingCards = (game, player) => game.players[player].reduce((list, card) => {
+    const position = isTenReducingCard(game, card);
+    if (position) {
+        return [...list, { card, position }];
+    }
+    return list;
+}, []);
+
+export const getValidComboCardsAndPositions = (game, comboCards) =>
+    comboCards.reduce((accc, comboCard) =>
+        getValidComboPositions(game, comboCard).reduce((accp, position) =>
+            [...accp, { ...comboCard, position }]
+            , accc)
+        , []);
+
+export const getValuedComboCards = (game, comboCards) => {
+    const valueArray = comboCards.map(comboCard => {
+        const value = comboCard.cardB - game[comboCard.position][0];
+        return {
+            ...comboCard,
+            value: comboCard.position === goesUpOne || comboCard.position === goesUpTwo
+                ? value : -value
+        }
+    });
+
+    valueArray.sort((itemA, itemB) => itemA.value - itemB.value);
+
+    return valueArray;
 }

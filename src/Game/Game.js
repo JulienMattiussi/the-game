@@ -172,6 +172,7 @@ const Game = ({ t }) => {
                     useBetterStarter={criteria.useBetterStarter}
                     useVeto10={criteria.useVeto10}
                     useVeto1={criteria.useVeto1}
+                    playCombos={criteria.playCombos}
                     setTactic={setTactic}
                     setCriteria={setCriteria} />
                 <FormBottomContainer>

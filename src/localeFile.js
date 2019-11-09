@@ -18,6 +18,7 @@ const locale = {
     form_veto10: "Annoncer les veto quand une reduction de 10 est possible",
     form_veto1: "Annoncer les veto quand la carte suivante est disponible",
     form_minimum_gain_to_force: "Valeur minimum de gain pour outrepasser un veto",
+    form_play_combos: "Jouer les combos de -10",
 
     form_nb_games: "Nombre de parties",
     form_nb_players: "%{key} joueurs",
@@ -82,6 +83,10 @@ tant qu'il lui reste des -10 ou des +1
 et tant qu'il reste des cartes sur la pioche.
 
 Puis ne joue plus qu'une carte à la fois.`,
+    play_combos_description: ` Si le joueur à dans sa main un combo de -10
+(par exemple 12 et 22)
+Il va les jouer pour réduire les gains
+Poser 22 sur 18, puis 12 sur 22, ce qui donne un gain de -6`,
 
     better_starter_description: "Le joueur qui commence est celui qui possède la carte avec le plus faible gain.",
     veto10_description: `Un joueur va demander aux autres d'éviter de jouer

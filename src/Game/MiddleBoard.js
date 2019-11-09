@@ -59,12 +59,12 @@ const lockStyle = ({ position, player }) => {
 const StyledLock = styled.span(props => lockStyle(props));
 
 const Lock = ({ t, position, player }) =>
-    <StyledLock role="img" aria-label={t('lock')} player={player} position={position} >
-        🔒
+    <StyledLock player={player} position={position} >
+        <span role="img" aria-label={t('lock')}>🔒</span>
     </StyledLock >
 
-const endStyle = ({ end, won }) => ({
-    display: end ? 'block' : 'none',
+const endStyle = ({ finish, won }) => ({
+    display: finish ? 'block' : 'none',
     position: 'absolute',
     bottom: -60,
     width: 250,
@@ -77,7 +77,7 @@ const endStyle = ({ end, won }) => ({
 const StyledEnd = styled.div(props => endStyle(props));
 
 const EndElement = ({ t, lost, won }) =>
-    <StyledEnd end={lost || won} won={won} >
+    <StyledEnd finish={lost || won} won={won} >
         {lost ? t('lost') : won ? t('won') : ''}
     </StyledEnd >
 

@@ -1,53 +1,28 @@
 import {
     cloneGame,
     move,
-    getValidPositions,
+    getValidCardsAndPositions,
+    getValidComboCardsAndPositions,
+    getTenReducingCards,
+    getValuedCards,
+    getValuedComboCards,
     getMinimalMoveNumber,
     isTenReducingCard,
     NB_CARDS_IN_HAND,
 } from './game';
 
-export const getValidCardsAndPositions = (game, player) =>
-    game.players[player].reduce((accc, card) =>
-        getValidPositions(game, card).reduce((accp, position) =>
-            [...accp, { card, position }]
-            , accc)
-        , []);
-
-export const getTenReducingCards = (game, player) => game.players[player].reduce((list, card) => {
-    const position = isTenReducingCard(game, card);
-    if (position) {
-        return [...list, { card, position }];
-    }
-    return list;
-}, []);
-
 export const getReducingComboCards = (game, player) => {
     const cards = game.players[player];
     const reducingCards = cards.reduce((accA, cardA) =>
-        cards.filter(card => card < cardA).reduce((accB, cardB) => {
-            if (Math.abs(cardA - cardB) === 10) {
-                return [...accB, { cardA, cardB }];
-            }
-            return accB;
-        }, accA)
+        cards.reduce((accB, cardB) =>
+            Math.abs(cardA - cardB) === 10 ? [...accB, { cardA, cardB }] : accB
+            , accA)
         , []);
 
-    if (reducingCards.length) {
-        console.log(reducingCards.length);
-    }
-
-    return reducingCards.length;
-}
-
-export const getValuedCards = (game, cards) => {
-    const valueArray = cards.map(card => {
-        return { ...card, value: Math.abs(game[card.position][0] - card.card) }
-    });
-
-    valueArray.sort((itemA, itemB) => itemA.value - itemB.value);
-
-    return valueArray;
+    const valuedCombos = getValuedComboCards(
+        game,
+        getValidComboCardsAndPositions(game, reducingCards));
+    return valuedCombos;
 }
 
 export const getBestCard = (game, validCards) => {
@@ -58,6 +33,12 @@ export const chooseCard = (game, options = { minimumGainToForceVeto: 100 }) => {
     const tenReducingCards = getTenReducingCards(game, game.turn);
     if (tenReducingCards.length) {
         return tenReducingCards[0];
+    }
+    if (options.playCombos) {
+        const comboCards = getReducingComboCards(game, game.turn);
+        if (comboCards.length && comboCards[0].value < 0) {
+            return comboCards[0].cardA;
+        }
     }
     const validCards = getValidCardsAndPositions(game, game.turn);
     if (validCards.length) {
@@ -202,7 +183,6 @@ export const allBestCardsUntilEmptyTactic = (
     options = { minimumGainToForceVeto: 100, useVeto10: false, useVeto1: false }
 ) => {
     const minimalMoveNumber = getMinimalMoveNumber(game.cards);
-    const cards = getReducingComboCards(game, game.turn);
     if (minimalMoveNumber === 2) {
         return allBestCardsTactic(game, options);
     } else {

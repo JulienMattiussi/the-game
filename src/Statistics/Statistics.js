@@ -25,6 +25,7 @@ const defaultOptions = {
     useBetterStarter: true,
     useVeto10: true,
     useVeto1: false,
+    playCombos: false,
 };
 
 const rebuildStats = (nbPlayers, nbGames, tactic, criteria) =>
@@ -111,6 +112,7 @@ const Stats = ({ t }) => {
                     useBetterStarter={criteria.useBetterStarter}
                     useVeto10={criteria.useVeto10}
                     useVeto1={criteria.useVeto1}
+                    playCombos={criteria.playCombos}
                     setTactic={setTactic}
                     setCriteria={setCriteria}
                 />

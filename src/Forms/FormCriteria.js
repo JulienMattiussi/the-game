@@ -21,6 +21,7 @@ const FormCriteria = (
         useBetterStarter,
         useVeto10,
         useVeto1,
+        playCombos,
         setTactic,
         setCriteria,
     }
@@ -36,6 +37,10 @@ const FormCriteria = (
 
     const changeUseVeto1 = () => {
         setCriteria(prevState => ({ ...prevState, useVeto1: !useVeto1 }));
+    }
+
+    const changePlayCombos = () => {
+        setCriteria(prevState => ({ ...prevState, playCombos: !playCombos }));
     }
 
     const changeMinimumGainToForceVeto = (event) => {
@@ -67,6 +72,10 @@ const FormCriteria = (
             <label>
                 <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
                 {t('form_veto1')} <InfoElement value={t('veto1_description')} />
+            </label>
+            <label>
+                <input type="checkbox" checked={playCombos} onChange={changePlayCombos} />
+                {t('form_play_combos')} <InfoElement value={t('play_combos_description')} />
             </label>
             <label>
                 {t('form_minimum_gain_to_force')}
