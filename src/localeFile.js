@@ -28,6 +28,9 @@ const locale = {
 
     history_title: "HISTORIQUE (%{turns} tours)",
 
+    confirm_delete: "Confirmez la suppression",
+    reinit_stat: 'Réinitialiser cette statistique',
+
     play: 'joue',
     in: 'en',
     on: 'sur',

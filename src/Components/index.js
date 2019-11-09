@@ -12,6 +12,7 @@ import StrongElement from './StrongElement';
 import SimpleElement from './SimpleElement';
 import InfoElement from './InfoElement';
 import Logo from './Logo';
+import Icon from './Icon';
 
 
 export {
@@ -28,5 +29,6 @@ export {
     SimpleElement,
     StrongElement,
     InfoElement,
-    Logo
+    Logo,
+    Icon,
 };

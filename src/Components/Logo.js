@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import logo from '../assets/thegame.jpeg';
 
 const style = {
-    height: '30vmin',
+    height: '25vmin',
 };
 
 const StyledImg = styled.img(style);

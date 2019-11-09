@@ -7,7 +7,7 @@ import {
 } from '../model/game';
 import { tactics, setBetterStarter } from '../model/player';
 import { computeAverage } from '../model/stats';
-import { saveStats, getStat, getKeyForStat } from '../model/save';
+import { saveStats, getStat, getKeyForStat, clearStat } from '../model/save';
 import {
     RowLeftContainer,
     RowMiddleContainer,
@@ -40,17 +40,23 @@ const rebuildStats = (nbPlayers, nbGames, tactic, criteria) =>
         }
     }), {});
 
-const Stats = ({ t }) => {
+const Statistics = ({ t }) => {
     const [criteria, setCriteria] = useState(defaultOptions);
     const [tactic, setTactic] = useState(Object.keys(tactics)[0]);
     const [nbPlayers, setNbPlayers] = useState({ 3: false, 4: true, 5: true });
     const [nbGames, setNbGames] = useState(100);
     const [stats, setStats] = useState(rebuildStats(nbPlayers, nbGames, tactic, criteria));
     const [loading, setLoading] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         setStats(rebuildStats(nbPlayers, nbGames, tactic, criteria));
     }, [criteria, tactic, nbPlayers, nbGames]);
+
+    useEffect(() => {
+        setLoading(false);
+    }, [stats]);
 
     const computeStat = (tactic, numberOfGames) => {
         setLoading(true);
@@ -75,7 +81,6 @@ const Stats = ({ t }) => {
         );
         saveStats(stats);
         setStats(stats);
-        setLoading(false);
         console.log(new Date() - start);
     }
 
@@ -101,6 +106,11 @@ const Stats = ({ t }) => {
             tactic,
             { ...criteria, notPlayer: game.turn },
         )
+    }
+
+    const handleClearStat = (stat) => {
+        clearStat(stat);
+        setRefresh(!refresh);
     }
 
     return (
@@ -159,8 +169,12 @@ const Stats = ({ t }) => {
                                 0);
                             return (
                                 <RowLeftContainer key={key}>
-                                    <Statistic stats={stats[key]} loading={loading} />
-                                    <Statistic global={true} stats={globalStat} loading={loading} />
+                                    <Statistic stat={stats[key]} loading={loading} />
+                                    <Statistic
+                                        global={true}
+                                        stat={globalStat}
+                                        loading={loading}
+                                        clearStat={() => handleClearStat(globalStat)} />
                                 </RowLeftContainer>)
                         }
                         return null;
@@ -170,4 +184,4 @@ const Stats = ({ t }) => {
         </Fragment>)
 }
 
-export default translate()(Stats);
+export default translate()(Statistics);

@@ -64,12 +64,11 @@ export const colors = {
     cardTextSelected: 'rgba(0, 0, 200, 0.9)',
     cardFrontClickable: 'rgba(200, 200, 250, 0.9)',
     cardTextClickable: 'rgba(50, 50, 250, 0.9)',
-    cardTextStartOne: 'cornflowerblue',
-    cardTextStart100: 'lightsalmon',
     goesUpColor: 'cornflowerblue',
     goesDownColor: 'lightsalmon',
     won: 'aqua',
     lost: 'red',
+    alert: 'darkred',
 };
 
 export const borderRadius = 4;

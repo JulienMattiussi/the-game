@@ -9,6 +9,7 @@ import {
     getMinimalMoveNumber,
     isTenReducingCard,
     NB_CARDS_IN_HAND,
+    HISTORY_VETO,
 } from './game';
 
 export const getReducingComboCards = (game, player) => {
@@ -83,7 +84,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                     const newVeto = { player, position: tenReducingCards[0].position }
                     newGame.vetos.push(newVeto)
                     if (!newGame.statsMode && !game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
-                        newGame.history.unshift({ player, type: 'veto', position: tenReducingCards[0].position });
+                        newGame.history.unshift({ player, type: HISTORY_VETO, position: tenReducingCards[0].position });
                     }
                 }
             }
@@ -99,7 +100,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                     const newVeto = { player, position: bestCard.position }
                     newGame.vetos.push(newVeto)
                     if (!newGame.statsMode && !game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
-                        newGame.history.unshift({ player, type: 'veto', position: bestCard.position });
+                        newGame.history.unshift({ player, type: HISTORY_VETO, position: bestCard.position });
                     }
                 }
             }

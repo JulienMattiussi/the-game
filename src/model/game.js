@@ -6,6 +6,9 @@ export const NB_CARDS_IN_HAND = 6;
 export const WON = 'won';
 export const LOST = 'lost';
 
+export const HISTORY_MOVE = 'move';
+export const HISTORY_VETO = 'veto';
+
 export const goesUpOne = 'goesUpOne';
 export const goesUpTwo = 'goesUpTwo';
 export const goesDownOne = 'goesDownOne';
@@ -109,7 +112,7 @@ export const move = (game, card, position, options = {}) => {
 
     newGame[position].unshift(card);
     if (!game.statsMode) {
-        newGame.history.unshift({ player: newGame.turn, type: 'move', value: card, previous: newGame[position][1], position: position });
+        newGame.history.unshift({ player: newGame.turn, type: HISTORY_MOVE, value: card, previous: newGame[position][1], position: position });
     }
     if (useVeto10 || useVeto1) {
         return setVeto(newGame, useVeto10, useVeto1);

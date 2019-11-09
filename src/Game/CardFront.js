@@ -34,8 +34,8 @@ const StyledFilledEdge = ({ value, position }) =>
 const styleMiddle = ({ startOne, start100 }) => {
     const transform = 'rotateZ(45deg)';
 
-    const startOneColor = colors.cardTextStartOne;
-    const start100Color = colors.cardTextStart100;
+    const startOneColor = colors.goesUpColor;
+    const start100Color = colors.goesDownColor;
 
     const basicStyle = {
         display: 'flex',

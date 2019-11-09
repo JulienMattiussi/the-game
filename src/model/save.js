@@ -37,7 +37,7 @@ const appendStatToSave = (key, stat) => {
     const previousStat = getStat(key);
     let { average, best, worst, ...newStat } = stat;
     if (!previousStat) {
-        return { ...newStat, best, worst };
+        return { ...newStat, best, worst, date: new Date() };
     }
     newStat.numberOfGames += previousStat.numberOfGames;
     let newBest = previousStat.best;
@@ -95,6 +95,8 @@ export const clearStat = stat => {
 
 export const clearStatByKey = key => {
     localStorage.removeItem(key);
+
+    console.log('removeItem', key);
 }
 
 export const clearAllStats = () => {

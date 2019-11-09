@@ -9,6 +9,8 @@ import {
     goesDownOne,
     LOST,
     WON,
+    HISTORY_MOVE,
+    HISTORY_VETO,
 } from '../model/game';
 
 const sensStyle = ({ goesUp }) => ({
@@ -57,7 +59,16 @@ const historyStyle = {
 const StyledHistory = styled.div(historyStyle);
 
 const History = ({ t, list, end }) => {
-    const turns = list.filter(item => item.type === 'move').length;
+    const turns = list
+        .filter(item => item.type === HISTORY_MOVE)
+        .reduce((turnsList, row) =>
+            turnsList.length
+                ? turnsList[0] !== row.player
+                    ? [row.player, ...turnsList]
+                    : turnsList
+                : [row.player]
+            , []).length;
+    console.log(turns);
     return (
         <StyledHistory>
             <TitleElement title={t('history_title', { turns })} />
@@ -78,12 +89,12 @@ const History = ({ t, list, end }) => {
                                 : 2} />
 
                     switch (event.type) {
-                        case 'move':
+                        case HISTORY_MOVE:
                             return (
                                 <span key={index}>
                                     {player} {t('play')} ( {value} {t('on')} {previous} ) {t('in')} {positionPartSense} {positionPartNumber}
                                 </span>);
-                        case 'veto':
+                        case HISTORY_VETO:
                             return <span key={index}>
                                 {player} {t('ask_for')} <StrongElement value={t('veto')} /> {t('in')} {positionPartSense} {positionPartNumber}
                             </span>
