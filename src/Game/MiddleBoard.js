@@ -144,27 +144,27 @@ const MiddleBoard = ({
                     <HintElement t={t} left />
                     <CardFront
                         value={goesUpOne[0]}
-                        clickable={isCardValid(choosenCard, pileGoesUpOne, goesUpOne[0])}
+                        clickable={isCardValid(choosenCard, pileGoesUpOne, goesUpOne[0]) && !won && !lost}
                         handleClick={() => handlePlaceCard(pileGoesUpOne, goesUpOne[0])} />
                     <CardFront
                         value={goesUpTwo[0]}
-                        clickable={isCardValid(choosenCard, pileGoesUpTwo, goesUpTwo[0])}
+                        clickable={isCardValid(choosenCard, pileGoesUpTwo, goesUpTwo[0]) && !won && !lost}
                         handleClick={() => handlePlaceCard(pileGoesUpTwo, goesUpTwo[0])} />
                 </CardsColumn>
                 <CardsColumn>
                     <HintElement t={t} right />
                     <CardFront
                         value={goesDownOne[0]}
-                        clickable={isCardValid(choosenCard, pileGoesDownOne, goesDownOne[0])}
+                        clickable={isCardValid(choosenCard, pileGoesDownOne, goesDownOne[0]) && !won && !lost}
                         handleClick={() => handlePlaceCard(pileGoesDownOne, goesDownOne[0])} />
                     <CardFront
                         value={goesDownTwo[0]}
-                        clickable={isCardValid(choosenCard, pileGoesDownTwo, goesDownTwo[0])}
+                        clickable={isCardValid(choosenCard, pileGoesDownTwo, goesDownTwo[0]) && !won && !lost}
                         handleClick={() => handlePlaceCard(pileGoesDownTwo, goesDownTwo[0])} />
                 </CardsColumn>
                 <RemainingCard
                     value={remainingCards}
-                    clickable={remainingMoves === 0}
+                    clickable={remainingMoves === 0 && !won && !lost}
                     handleClick={reloadCards} />
             </RowMiddleContainer>
             {vetos.map(veto => <Lock t={t} key={veto.player} player={veto.player} position={veto.position} />)}
