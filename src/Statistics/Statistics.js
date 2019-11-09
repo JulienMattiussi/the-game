@@ -2,9 +2,10 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { translate } from 'react-polyglot';
 import {
+    initGame,
     playManyGames,
 } from '../model/game';
-import { tactics } from '../model/player';
+import { tactics, setBetterStarter } from '../model/player';
 import { computeAverage } from '../model/stats';
 import { saveStats, getStat, getKeyForStat } from '../model/save';
 import {
@@ -15,7 +16,7 @@ import {
     FormBottomContainer,
 } from '../Components';
 import FormCriteria from '../Forms/FormCriteria';
-import Statistic from './Statistic';
+import Statistic, { playGame } from './Statistic';
 
 const emptyStat = { best: {}, worst: {}, total: {}, average: {}, tactic: '', options: {} };
 
@@ -84,6 +85,20 @@ const Stats = ({ t }) => {
         setNbPlayers(players);
     }
 
+    const playNewGame = () => {
+        let game = initGame();
+        if (criteria.useBetterStarter) {
+            game = setBetterStarter(game);
+        }
+
+        playGame(
+            game.cards,
+            game.players,
+            tactic,
+            { ...criteria, notPlayer: game.turn },
+        )
+    }
+
     return (
         <Fragment>
             <FormContainer>
@@ -119,6 +134,7 @@ const Stats = ({ t }) => {
                     </label>
                     <ActionsContainer>
                         <button onClick={() => computeStat(tactic, nbGames)}>{t('button_stactistics')}</button>
+                        <button onClick={playNewGame}>{t('button_play_game_4')}</button>
                     </ActionsContainer>
                     <Link to="/strategies">{t('link_strategies')}</Link>
                 </FormBottomContainer>

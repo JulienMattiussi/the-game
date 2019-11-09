@@ -13,7 +13,7 @@ import {
     SimpleElement
 } from '../Components';
 
-const playGame = (cards, players, tactic, options) => {
+export const playGame = (cards, players, tactic, options) => {
     window.location.href = `/game?cards=${
         JSON.stringify(cards)}&players=${
         JSON.stringify(players)}&tactic=${
@@ -28,7 +28,6 @@ const Stat = ({ t, stats, global, loading }) => {
             numberOfPlayers: stats.numberOfPlayers,
             numberOfGames: stats.numberOfGames
         });
-
     const dateTitle = global
         ? stats.date
             ? formatDistance(new Date(stats.date), new Date(), { locale: fr })
