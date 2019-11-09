@@ -86,8 +86,8 @@ const Stats = ({ t }) => {
         setNbPlayers(players);
     }
 
-    const playNewGame = () => {
-        let game = initGame();
+    const playNewGame = (number) => {
+        let game = initGame(number);
         if (criteria.useBetterStarter) {
             game = setBetterStarter(game);
         }
@@ -135,7 +135,12 @@ const Stats = ({ t }) => {
                     </label>
                     <ActionsContainer>
                         <button onClick={() => computeStat(tactic, nbGames)}>{t('button_stactistics')}</button>
-                        <button onClick={playNewGame}>{t('button_play_game_4')}</button>
+                        <RowMiddleContainer>
+                            {t('button_play_game')}
+                            <button onClick={() => playNewGame(3)}>{t('button_play_game_3')}</button>
+                            <button onClick={() => playNewGame(4)}>{t('button_play_game_4')}</button>
+                            <button onClick={() => playNewGame(5)}>{t('button_play_game_5')}</button>
+                        </RowMiddleContainer>
                     </ActionsContainer>
                     <Link to="/strategies">{t('link_strategies')}</Link>
                 </FormBottomContainer>

@@ -8,7 +8,10 @@ const locale = {
     button_play_to_end: "Jouer tous les tours des IA",
     button_restart: "Recommencer",
     button_see_detailled_game: "Revoir cette partie",
-    button_play_game_4: "Faire une partie à 4",
+    button_play_game: "Faire une partie",
+    button_play_game_3: "à 3",
+    button_play_game_4: "à 4",
+    button_play_game_5: "à 5",
 
     form_tactic: "Tactique",
     form_better_starter: "Optimiser le démarrage",
