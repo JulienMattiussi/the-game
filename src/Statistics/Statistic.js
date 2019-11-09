@@ -69,6 +69,7 @@ const Statistic = ({ t, stat, global, loading, clearStat }) => {
             : t('never')
         : t('statistic_date_title');
 
+    console.log(stat);
     return (
         loading
             ? <Loader />
@@ -95,6 +96,8 @@ const Statistic = ({ t, stat, global, loading, clearStat }) => {
                     <SimpleElement title={t('statistic_lost_remaining', { range: '<= 5' })} value={stat.total.lost5} />
                     <SimpleElement title={t('statistic_lost_remaining', { range: '>5 à 10' })} value={stat.total.lost10} />
                     <SimpleElement title={t('statistic_lost_remaining', { range: '> 10' })} value={stat.total.lostMore} />
+                    <SimpleElement title={t('statistic_total_veto10')} value={stat.total.vetos10Invoked} />
+                    <SimpleElement title={t('statistic_total_veto1')} value={stat.total.vetos1Invoked} />
                 </Zone>
                 <Zone position={global ? RIGHT : LEFT}>
                     <TitleElement title={t('average')} />
@@ -102,6 +105,8 @@ const Statistic = ({ t, stat, global, loading, clearStat }) => {
                     <SimpleElement title={t('remaning_cards', { s: 's' })} value={stat.average.remaining} />
                     <SimpleElement title={t('statistic_number_winning_turn')} value={stat.average.timeWon} />
                     <SimpleElement title={t('statistic_number_loosing_turn')} value={stat.average.timeLost} />
+                    <SimpleElement title={t('statistic_average_veto10')} value={stat.average.vetos10Invoked} />
+                    <SimpleElement title={t('statistic_average_veto1')} value={stat.average.vetos1Invoked} />
                 </Zone>
             </ColumnLeftContainer>
     )

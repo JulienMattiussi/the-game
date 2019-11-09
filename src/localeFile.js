@@ -67,6 +67,10 @@ const locale = {
     statistic_number_winning_turn: "Nombre Tours Gagnants",
     statistic_number_loosing_turn: "Nombre Tours Perdants",
     statistic_date_title: "Calculé il y a",
+    statistic_total_veto10: "Veto de 10 invoqués",
+    statistic_total_veto1: "Veto de 1 invoqués",
+    statistic_average_veto10: "Veto de 10 invoqués",
+    statistic_average_veto1: "Veto de 1 invoqués",
 
     strategy_title: "Strategie pour %{nbPlayers} joueurs",
     strategy_nb_games_title: "Calculée sur",

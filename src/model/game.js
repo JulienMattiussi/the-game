@@ -56,6 +56,10 @@ export const initGame = (nbPlayers = 4) => {
         cards,
         history: [],
         turnsNumber: 0,
+        vetosAnalysis: {
+            vetos10Invoked: 0,
+            vetos1Invoked: 0,
+        },
     }
 }
 
@@ -82,6 +86,10 @@ export const loadGame = (
         cards: [...cards],
         history: [],
         turnsNumber: 0,
+        vetosAnalysis: {
+            vetos10Invoked: 0,
+            vetos1Invoked: 0,
+        },
     })
 }
 
@@ -100,6 +108,7 @@ export const cloneGame = game => {
         won: game.won,
         history: game.history,
         turnsNumber: game.turnsNumber,
+        vetosAnalysis: { ...game.vetosAnalysis },
         statsMode: game.statsMode,
     }
 
@@ -251,7 +260,6 @@ export const playManyGames = (
         const players = [...game.players];
         const endGame = playFullGame(game, tactic, options);
         const remaining = getRemainingCards(endGame);
-
         stats.total.won += endGame.won ? 1 : 0;
         stats.total.lost5 += !endGame.won && remaining <= 5 ? 1 : 0;
         stats.total.lost10 += !endGame.won && remaining > 5 && remaining <= 10 ? 1 : 0;
@@ -259,6 +267,8 @@ export const playManyGames = (
         stats.total.remaining += remaining;
         stats.total.timeWon += endGame.won ? endGame.time : 0;
         stats.total.timeLost += endGame.won ? 0 : endGame.time;
+        stats.total.vetos10Invoked += endGame.vetosAnalysis.vetos10Invoked;
+        stats.total.vetos1Invoked += endGame.vetosAnalysis.vetos1Invoked;
         if ((stats.best.won && endGame.won && endGame.time < stats.best.time)
             ||
             remaining < stats.best.remaining

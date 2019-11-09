@@ -87,6 +87,8 @@ const FormCriteria = (
                 {t('form_minimum_gain_to_force')}
                 <input
                     type="number"
+                    min={1}
+                    max={100}
                     value={minimumGainToForceVeto}
                     onChange={changeMinimumGainToForceVeto}
                     disabled={!useVeto1}

@@ -85,6 +85,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                     const newVeto = { player, position: tenReducingCards[0].position }
                     newGame.vetos.push(newVeto)
                     if (!game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
+                        newGame.vetosAnalysis.vetos10Invoked++;
                         appendToHistory(newGame, {
                             player,
                             type: HISTORY_VETO,
@@ -105,6 +106,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                     const newVeto = { player, position: bestCard.position }
                     newGame.vetos.push(newVeto)
                     if (!game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
+                        newGame.vetosAnalysis.vetos1Invoked++;
                         appendToHistory(newGame, {
                             player,
                             type: HISTORY_VETO,

@@ -81,7 +81,7 @@ const Statistics = ({ t }) => {
         );
         saveStats(stats);
         setStats(stats);
-        console.log(new Date() - start);
+        console.log('timing : ', new Date() - start);
     }
 
     const changeNbGames = (event) => {
@@ -145,7 +145,12 @@ const Statistics = ({ t }) => {
                     </RowMiddleContainer>
                     <label>
                         {t('form_nb_games')}
-                        <input type="number" value={nbGames} onChange={changeNbGames} />
+                        <input
+                            type="number"
+                            min={1}
+                            max={999999}
+                            value={nbGames}
+                            onChange={changeNbGames} />
                     </label>
                     <ActionsContainer>
                         <button onClick={() => computeStat(tactic, nbGames)}>{t('button_stactistics')}</button>
