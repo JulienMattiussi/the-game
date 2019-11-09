@@ -75,6 +75,7 @@ const locale = {
     strategy_veto10: "Annoncer les vétos de -10",
     strategy_veto1: "Annoncer les vétos de +1",
     strategy_minimum_gain_to_force: "Valeur de gain minimum",
+    strategy_play_combos: "Combos de -10",
 
     mininumCards_description: "Joue toujours le nombre minimum de cartes autorisé.",
     threeBestCards_description: `Joue jusqu'a 3 cartes maximum

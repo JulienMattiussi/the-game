@@ -39,6 +39,7 @@ const StrategyZone = ({ t, strat, choice }) => {
                     <SimpleElement title={t('strategy_veto10')} value={options.useVeto10 ? t('yes') : t('no')} />
                     <SimpleElement title={t('strategy_veto1')} value={options.useVeto1 ? t('yes') : t('no')} />
                     <SimpleElement title={t('strategy_minimum_gain_to_force')} value={options.minimumGainToForceVeto} />
+                    <SimpleElement title={t('strategy_play_combos')} value={options.playCombos ? t('yes') : t('no')} />
                 </Fragment>}
         </Zone>
     )
