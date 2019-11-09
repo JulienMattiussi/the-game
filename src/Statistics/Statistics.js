@@ -63,6 +63,7 @@ const Stats = ({ t }) => {
                             { ...criteria },
                             +number,
                             numberOfGames),
+                        numberOfPlayers: +number,
                         tactic,
                         options: { ...criteria },
                     };
@@ -142,7 +143,7 @@ const Stats = ({ t }) => {
             <RowMiddleContainer>
                 {
                     Object.keys(nbPlayers).map(key => {
-                        if (nbPlayers[key]) {
+                        if (nbPlayers[key] && stats[key]) {
                             const emptyGlobalStat = getStat(getKeyForStat(stats[key]));
                             const globalStat = computeAverage(emptyGlobalStat, emptyGlobalStat
                                 ? emptyGlobalStat.numberOfGames :
