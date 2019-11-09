@@ -27,19 +27,19 @@ const FormCriteria = (
 ) => {
 
     const changeUseBetterStarter = () => {
-        setCriteria({ useBetterStarter: !useBetterStarter });
+        setCriteria(prevState => ({ ...prevState, useBetterStarter: !useBetterStarter }));
     }
 
     const changeUseVeto10 = () => {
-        setCriteria({ useVeto10: !useVeto10 });
+        setCriteria(prevState => ({ ...prevState, useVeto10: !useVeto10 }));
     }
 
     const changeUseVeto1 = () => {
-        setCriteria({ useVeto1: !useVeto1 });
+        setCriteria(prevState => ({ ...prevState, useVeto1: !useVeto1 }));
     }
 
     const changeMinimumGainToForceVeto = (event) => {
-        setCriteria({ minimumGainToForceVeto: +event.target.value });
+        setCriteria(prevState => ({ ...prevState, minimumGainToForceVeto: +event.target.value }));
     }
 
     const changeTactic = (event) => {
