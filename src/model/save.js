@@ -5,7 +5,8 @@ const OPTION_KEYS = {
     minimumGainToForceVeto: 'mGTFV',
     useBetterStarter: 'uBS',
     useVeto1: 'uV1',
-    useVeto10: 'uV10'
+    useVeto10: 'uV10',
+    playCombos: 'pC',
 }
 
 export const keyToOption = optionKey => {
