@@ -6,7 +6,7 @@ import {
     playManyGames,
 } from '../model/game';
 import { tactics, setBetterStarter } from '../model/player';
-import { computeAverage } from '../model/stats';
+import { computeAverage } from '../model/statistic';
 import { saveStats, getStat, getKeyForStat, clearStat } from '../model/save';
 import {
     RowLeftContainer,

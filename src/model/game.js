@@ -1,5 +1,5 @@
 import { setBetterStarter, setVeto } from './player';
-import { computeAverage, getEmptyStat } from '../model/stats';
+import { computeAverage, getEmptyStat } from './statistic';
 
 export const NB_CARDS_IN_HAND = 6;
 

@@ -58,7 +58,7 @@ export const computeStrategies = () => {
     Object.keys(playersStrategies).map(key => {
         const playersStrategy = playersStrategies[key];
         saveStrategy(setStrategyDate(playersStrategy.bestStrategy, key, BEST, newDate), key, BEST);
-        saveStrategy(setStrategyDate(playersStrategy.worstStrategy, key, BEST, newDate), key, WORST);
+        saveStrategy(setStrategyDate(playersStrategy.worstStrategy, key, WORST, newDate), key, WORST);
 
         return true;
     });
