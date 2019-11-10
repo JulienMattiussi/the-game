@@ -31,7 +31,6 @@ export const resetStat = (t, clearStat) => {
 
 const GameElement = ({ t, type, global, game, tactic, options }) => {
     const exists = game.game && game.game.cards;
-    console.log(game);
     return <Zone position={global ? RIGHT : LEFT}>
         <TitleElement title={t(type)} />
         <ActionsContainer>
@@ -72,7 +71,6 @@ const Statistic = ({ t, stat, global, loading, clearStat }) => {
             : t('never')
         : t('statistic_date_title');
 
-    console.log(stat);
     return (
         loading
             ? <Loader />
