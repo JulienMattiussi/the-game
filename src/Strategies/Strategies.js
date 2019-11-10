@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { translate } from 'react-polyglot';
 import { computeStrategies, BEST, WORST } from '../model/strategy';
 import { getStrategy } from '../model/save';
+import { exportStats } from '../model/exporter';
 import {
     RowMiddleContainer,
     ActionsContainer,
@@ -37,6 +38,7 @@ const Strategies = ({ t }) => {
                 <FormBottomContainer>
                     <ActionsContainer>
                         <button onClick={reComputeStrategies}>{t('button_strategies')}</button>
+                        <button onClick={exportStats}>{t('button_export_stats')}</button>
                     </ActionsContainer>
                     <Link to="/">{t('link_statistics')}</Link>
                 </FormBottomContainer>

@@ -3,6 +3,7 @@ const locale = {
     link_strategies: "Voir les stratégies",
 
     button_strategies: "Recalculer les meilleures stratégies",
+    button_export_stats: "Exporter les statistiques",
     button_stactistics: "Lancer les statistiques",
     button_play_next: "Jouer le prochain tour",
     button_play_to_end: "Jouer tous les tours des IA",
