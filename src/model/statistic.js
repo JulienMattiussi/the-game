@@ -29,7 +29,7 @@ export const getEmptyStat = (numberOfPlayers, numberOfGames = 0) => ({
         vetos1Ignored: 0,
     },
     average: {
-        wonPercent: '0 %',
+        wonPercent: 0,
         remaining: 0,
         timeWon: 0,
         timeLost: 0,
