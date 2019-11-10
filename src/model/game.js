@@ -8,6 +8,7 @@ export const LOST = 'lost';
 
 export const HISTORY_MOVE = 'move';
 export const HISTORY_VETO = 'veto';
+export const HISTORY_COMBO = 'combo';
 
 export const goesUpOne = 'goesUpOne';
 export const goesUpTwo = 'goesUpTwo';
@@ -221,7 +222,7 @@ export const getRemainingCards = game =>
 export const playFullGame = (
     game,
     tactic,
-    options = { minimumGainToForceVeto: 100, useBetterStarter: false, useVeto10: false, useVeto1: false, notPlayer: -1 }
+    options = { minimumGainToForceVeto: 100, notPlayer: -1 }
 ) => {
     let newGame = cloneGame(game);
     let security = 0;
@@ -249,7 +250,7 @@ export const playFullGame = (
 
 export const playManyGames = (
     tactic,
-    options = { minimumGainToForceVeto: 100, useBetterStarter: false, useVeto10: false, useVeto1: false },
+    options = { minimumGainToForceVeto: 100 },
     numberOfPlayers = 4,
     numberOfGames = 1000
 ) => {

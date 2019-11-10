@@ -36,6 +36,7 @@ const locale = {
     in: 'en',
     on: 'sur',
     ask_for: 'demande un',
+    select_combo: 'a sélectionné le combo',
     veto: 'VETO',
 
     lock: "Verrou",

@@ -11,6 +11,7 @@ import {
     NB_CARDS_IN_HAND,
     appendToHistory,
     HISTORY_VETO,
+    HISTORY_COMBO,
 } from './game';
 
 export const getReducingComboCards = (game, player) => {
@@ -39,7 +40,14 @@ const chooseCardWithoutCountingVeto = (game, options = { minimumGainToForceVeto:
     if (options.playCombos) {
         const comboCards = getReducingComboCards(game, game.turn);
         if (comboCards.length && comboCards[0].value < 0) {
-            return comboCards[0].cardA;
+            appendToHistory(game, {
+                player: game.turn,
+                type: HISTORY_COMBO,
+                value: `[${comboCards[0].cardA}, ${comboCards[0].cardB}]`,
+            });
+            return {
+                card: comboCards[0].cardA, position: comboCards[0].position
+            };
         }
     }
     const validCards = getValidCardsAndPositions(game, game.turn);

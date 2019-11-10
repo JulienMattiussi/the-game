@@ -11,6 +11,7 @@ import {
     WON,
     HISTORY_MOVE,
     HISTORY_VETO,
+    HISTORY_COMBO,
 } from '../model/game';
 
 const sensStyle = ({ goesUp }) => ({
@@ -83,11 +84,20 @@ const History = ({ t, list, turnsNumber, finish }) => {
                             return (
                                 <span key={index}>
                                     {player} {t('play')} ( {value} {t('on')} {previous} ) {t('in')} {positionPartSense} {positionPartNumber}
-                                </span>);
+                                </span>
+                            );
                         case HISTORY_VETO:
-                            return <span key={index}>
-                                {player} {t('ask_for')} <StrongElement value={t('veto')} /> {t('in')} {positionPartSense} {positionPartNumber}
-                            </span>
+                            return (
+                                <span key={index}>
+                                    {player} {t('ask_for')} <StrongElement value={t('veto')} /> {t('in')} {positionPartSense} {positionPartNumber}
+                                </span>
+                            );
+                        case HISTORY_COMBO:
+                            return (
+                                <span key={index}>
+                                    {player} {t('select_combo')} {value}
+                                </span>
+                            );
                         default:
                             return null;
                     }
