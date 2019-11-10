@@ -59,6 +59,8 @@ export const initGame = (nbPlayers = 4) => {
         vetosAnalysis: {
             vetos10Invoked: 0,
             vetos1Invoked: 0,
+            vetos10Ignored: 0,
+            vetos1Ignored: 0,
         },
     }
 }
@@ -89,6 +91,8 @@ export const loadGame = (
         vetosAnalysis: {
             vetos10Invoked: 0,
             vetos1Invoked: 0,
+            vetos10Ignored: 0,
+            vetos1Ignored: 0,
         },
     })
 }
@@ -269,6 +273,9 @@ export const playManyGames = (
         stats.total.timeLost += endGame.won ? 0 : endGame.time;
         stats.total.vetos10Invoked += endGame.vetosAnalysis.vetos10Invoked;
         stats.total.vetos1Invoked += endGame.vetosAnalysis.vetos1Invoked;
+        stats.total.vetos10Ignored += endGame.vetosAnalysis.vetos10Ignored;
+        stats.total.vetos1Ignored += endGame.vetosAnalysis.vetos1Ignored;
+
         if ((stats.best.won && endGame.won && endGame.time < stats.best.time)
             ||
             remaining < stats.best.remaining

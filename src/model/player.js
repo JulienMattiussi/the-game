@@ -31,7 +31,7 @@ export const getBestCard = (game, validCards) => {
     return getValuedCards(game, validCards)[0];
 }
 
-export const chooseCard = (game, options = { minimumGainToForceVeto: 100 }) => {
+const chooseCardWithoutCountingVeto = (game, options = { minimumGainToForceVeto: 100 }) => {
     const tenReducingCards = getTenReducingCards(game, game.turn);
     if (tenReducingCards.length) {
         return tenReducingCards[0];
@@ -60,6 +60,24 @@ export const chooseCard = (game, options = { minimumGainToForceVeto: 100 }) => {
     return {};
 }
 
+export const chooseCard = (game, options = { minimumGainToForceVeto: 100 }) => {
+    const choosenCard = chooseCardWithoutCountingVeto(game, options);
+    const ignoredVeto = game.vetos.find(veto => veto.position === choosenCard.position);
+    if (ignoredVeto) {
+        switch (ignoredVeto.type) {
+            case 1:
+                game.vetosAnalysis.vetos1Ignored++;
+                break;
+            case 10:
+                game.vetosAnalysis.vetos10Ignored++;
+                break;
+            default:
+                break;
+        }
+    }
+    return choosenCard;
+}
+
 export const setBetterStarter = game => {
     const newGame = cloneGame(game);
     const validCards = newGame.players.map((player, index) => getValidCardsAndPositions(newGame, index));
@@ -82,7 +100,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
             if (newGame.turn !== player) {
                 const tenReducingCards = getTenReducingCards(newGame, player);
                 if (tenReducingCards.length) {
-                    const newVeto = { player, position: tenReducingCards[0].position }
+                    const newVeto = { player, position: tenReducingCards[0].position, type: 10 }
                     newGame.vetos.push(newVeto)
                     if (!game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
                         newGame.vetosAnalysis.vetos10Invoked++;
@@ -103,7 +121,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
                     newGame,
                     getValidCardsAndPositions(newGame, player));
                 if (bestCard && bestCard.value === 1) {
-                    const newVeto = { player, position: bestCard.position }
+                    const newVeto = { player, position: bestCard.position, type: 1 }
                     newGame.vetos.push(newVeto)
                     if (!game.vetos.some(veto => veto.player === newVeto.player && veto.position === newVeto.position)) {
                         newGame.vetosAnalysis.vetos1Invoked++;

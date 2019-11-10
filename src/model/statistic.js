@@ -25,6 +25,8 @@ export const getEmptyStat = (numberOfPlayers, numberOfGames = 0) => ({
         timeLost: 0,
         vetos10Invoked: 0,
         vetos1Invoked: 0,
+        vetos10Ignored: 0,
+        vetos1Ignored: 0,
     },
     average: {
         wonPercent: '0 %',
@@ -33,6 +35,8 @@ export const getEmptyStat = (numberOfPlayers, numberOfGames = 0) => ({
         timeLost: 0,
         vetos10Invoked: 0,
         vetos1Invoked: 0,
+        vetos10Ignored: 0,
+        vetos1Ignored: 0,
     },
 
 });
@@ -49,6 +53,8 @@ export const computeAverage = (stat, numberOfGames) => {
         timeLost: (numberOfGames - stat.total.won) ? Math.round(stat.total.timeLost / (numberOfGames - stat.total.won) * 100) / 100 : 0,
         vetos10Invoked: Math.round(stat.total.vetos10Invoked / numberOfGames * 100) / 100,
         vetos1Invoked: Math.round(stat.total.vetos1Invoked / numberOfGames * 100) / 100,
+        vetos10Ignored: Math.round(stat.total.vetos10Ignored / numberOfGames * 100) / 100,
+        vetos1Ignored: Math.round(stat.total.vetos1Ignored / numberOfGames * 100) / 100,
     };
 
     return { ...stat, average };

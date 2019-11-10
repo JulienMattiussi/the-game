@@ -31,6 +31,7 @@ export const resetStat = (t, clearStat) => {
 
 const GameElement = ({ t, type, global, game, tactic, options }) => {
     const exists = game.game && game.game.cards;
+    const vetoExists = game.game && game.game.vetosAnalysis;
     return <Zone position={global ? RIGHT : LEFT}>
         <TitleElement title={t(type)} />
         <ActionsContainer>
@@ -45,8 +46,18 @@ const GameElement = ({ t, type, global, game, tactic, options }) => {
         <SimpleElement title={t('statistic_won')} value={game.won ? t('yes') : t('no')} />
         <SimpleElement title={t('remaning_cards', { s: 's' })} value={exists && game.remaining} />
         <SimpleElement title={t('turns')} value={exists && game.time} />
-        <SimpleElement title={t('statistic_total_veto10')} value={exists && game.game.vetosAnalysis && game.game.vetosAnalysis.vetos10Invoked} />
-        <SimpleElement title={t('statistic_total_veto1')} value={exists && game.game.vetosAnalysis && game.game.vetosAnalysis.vetos1Invoked} />
+        <SimpleElement
+            title={t('statistic_veto10')}
+            value={vetoExists && game.game.vetosAnalysis.vetos10Invoked} />
+        <SimpleElement
+            title={t('statistic_veto10_ignored')}
+            value={vetoExists && game.game.vetosAnalysis.vetos10Ignored} />
+        <SimpleElement
+            title={t('statistic_veto1')}
+            value={vetoExists && game.game.vetosAnalysis.vetos1Invoked} />
+        <SimpleElement
+            title={t('statistic_veto1_ignored')}
+            value={vetoExists && game.game.vetosAnalysis.vetos1Ignored} />
     </Zone>
 }
 
@@ -97,8 +108,10 @@ const Statistic = ({ t, stat, global, loading, clearStat }) => {
                     <SimpleElement title={t('statistic_lost_remaining', { range: '<= 5' })} value={stat.total.lost5} />
                     <SimpleElement title={t('statistic_lost_remaining', { range: '>5 à 10' })} value={stat.total.lost10} />
                     <SimpleElement title={t('statistic_lost_remaining', { range: '> 10' })} value={stat.total.lostMore} />
-                    <SimpleElement title={t('statistic_total_veto10')} value={stat.total.vetos10Invoked} />
-                    <SimpleElement title={t('statistic_total_veto1')} value={stat.total.vetos1Invoked} />
+                    <SimpleElement title={t('statistic_veto10')} value={stat.total.vetos10Invoked} />
+                    <SimpleElement title={t('statistic_veto10_ignored')} value={stat.total.vetos10Ignored} />
+                    <SimpleElement title={t('statistic_veto1')} value={stat.total.vetos1Invoked} />
+                    <SimpleElement title={t('statistic_veto1_ignored')} value={stat.total.vetos1Ignored} />
                 </Zone>
                 <Zone position={global ? RIGHT : LEFT}>
                     <TitleElement title={t('average')} />
@@ -106,8 +119,10 @@ const Statistic = ({ t, stat, global, loading, clearStat }) => {
                     <SimpleElement title={t('remaning_cards', { s: 's' })} value={stat.average.remaining} />
                     <SimpleElement title={t('statistic_number_winning_turn')} value={stat.average.timeWon} />
                     <SimpleElement title={t('statistic_number_loosing_turn')} value={stat.average.timeLost} />
-                    <SimpleElement title={t('statistic_average_veto10')} value={stat.average.vetos10Invoked} />
-                    <SimpleElement title={t('statistic_average_veto1')} value={stat.average.vetos1Invoked} />
+                    <SimpleElement title={t('statistic_veto10')} value={stat.average.vetos10Invoked} />
+                    <SimpleElement title={t('statistic_veto10_ignored')} value={stat.average.vetos10Ignored} />
+                    <SimpleElement title={t('statistic_veto1')} value={stat.average.vetos1Invoked} />
+                    <SimpleElement title={t('statistic_veto1_ignored')} value={stat.average.vetos1Ignored} />
                 </Zone>
             </ColumnLeftContainer>
     )

@@ -52,6 +52,9 @@ const appendStatToSave = (key, stat) => {
         won: previousStat.total.won + newStat.total.won,
         vetos10Invoked: (previousStat.total.vetos10Invoked || 0) + newStat.total.vetos10Invoked,
         vetos1Invoked: (previousStat.total.vetos1Invoked || 0) + newStat.total.vetos1Invoked,
+        vetos10Ignored: (previousStat.total.vetos10Ignored || 0) + newStat.total.vetos10Ignored,
+        vetos1Ignored: (previousStat.total.vetos1Ignored || 0) + newStat.total.vetos1Ignored,
+
     }
     if ((newBest.won && best.won && best.time < newBest.time)
         ||
