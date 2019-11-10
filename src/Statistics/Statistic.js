@@ -115,7 +115,7 @@ const Statistic = ({ t, stat, global, loading, clearStat }) => {
                 </Zone>
                 <Zone position={global ? RIGHT : LEFT}>
                     <TitleElement title={t('average')} />
-                    <SimpleElement title={t('statistic_won')} value={stat.average.wonPercent} />
+                    <SimpleElement title={t('statistic_won')} value={`${stat.average.wonPercent} %`} />
                     <SimpleElement title={t('remaning_cards', { s: 's' })} value={stat.average.remaining} />
                     <SimpleElement title={t('statistic_number_winning_turn')} value={stat.average.timeWon} />
                     <SimpleElement title={t('statistic_number_loosing_turn')} value={stat.average.timeLost} />
