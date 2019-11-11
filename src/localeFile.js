@@ -19,6 +19,7 @@ const locale = {
     form_veto10: "Annoncer les veto quand une réduction de 10 est possible",
     form_veto1: "Annoncer les veto quand la carte suivante est disponible",
     form_minimum_gain_to_force: "Valeur minimum de gain pour outrepasser un veto",
+    form_minimum_difference_to_force: "Valeur minimum de difference pour forcer un veto",
     form_play_combos: "Jouer les combos de -10",
 
     form_nb_games: "Nombre de parties",
@@ -81,6 +82,7 @@ const locale = {
     strategy_veto10: "Annoncer les vétos de -10",
     strategy_veto1: "Annoncer les vétos de +1",
     strategy_minimum_gain_to_force: "Valeur de gain minimum",
+    strategy_minimum_difference_to_force: "Valeur de différence minimum",
     strategy_play_combos: "Combos de -10",
 
     mininumCards_description: "Joue toujours le nombre minimum de cartes autorisé.",
@@ -112,7 +114,16 @@ un gain supérieur à %{gain}.
 
 Remarque : Dans tous les cas, le joueur ignore le Veto
 s'il possède la carte -10 pour cette pile.
-Cette option n'a d'effet qu'en activant les veto de carte suivante.`,
+Cette option n'a d'effet qu'en activant les vetos.`,
+
+    minimumDifferenceToForceVeto_description: `Si le joueur est obligé de poser une carte ayant un gain de 36 pour
+respecter un veto, il va choisir une carte sans tenir compte du veto.
+Mais si la seconde carte choisie a un gain de plus de 31, il va tout de
+même poser la carte qui respecte le veto.
+
+Remarque : Dans tous les cas, le joueur ignore le Veto
+s'il possède la carte -10 pour cette pile.
+Cette option n'a d'effet qu'en activant les vetos.`,
 
 }
 

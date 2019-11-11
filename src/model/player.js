@@ -32,7 +32,7 @@ export const getBestCard = (game, validCards) => {
     return getValuedCards(game, validCards)[0];
 }
 
-const chooseCardWithoutCountingVeto = (game, options = { minimumGainToForceVeto: 100 }) => {
+const chooseCardWithoutCountingVeto = (game, options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }) => {
     const tenReducingCards = getTenReducingCards(game, game.turn);
     if (tenReducingCards.length) {
         return tenReducingCards[0];
@@ -56,11 +56,15 @@ const chooseCardWithoutCountingVeto = (game, options = { minimumGainToForceVeto:
             const currentVetos = game.vetos.filter(veto => veto.player !== game.turn);
             const validWithoutVetoCards = validCards.filter(card => !currentVetos.some(veto => veto.position === card.position));
             if (validWithoutVetoCards.length) {
-                const bestVetoCard = getBestCard(game, validWithoutVetoCards);
-                if (bestVetoCard.value > options.minimumGainToForceVeto) {
-                    return getBestCard(game, validCards);
+                const bestVetoSafeCard = getBestCard(game, validWithoutVetoCards);
+                if (bestVetoSafeCard.value > options.minimumGainToForceVeto) {
+                    const bestForcedCard = getBestCard(game, validCards);
+                    if (bestForcedCard.value >= bestVetoSafeCard.value - options.minimumDifferenceToForceVeto) {
+                        return bestVetoSafeCard;
+                    }
+                    return bestForcedCard;
                 }
-                return bestVetoCard;
+                return bestVetoSafeCard;
             }
         }
         return getBestCard(game, validCards);
@@ -68,7 +72,7 @@ const chooseCardWithoutCountingVeto = (game, options = { minimumGainToForceVeto:
     return {};
 }
 
-export const chooseCard = (game, options = { minimumGainToForceVeto: 100 }) => {
+export const chooseCard = (game, options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }) => {
     const choosenCard = chooseCardWithoutCountingVeto(game, options);
     const ignoredVeto = game.vetos.find(veto => veto.position === choosenCard.position);
     if (ignoredVeto) {
@@ -148,7 +152,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
 
 export const mininumCardsTactic = (
     game,
-    options = { minimumGainToForceVeto: 100 }
+    options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }
 ) => {
     const minimalMoveNumber = getMinimalMoveNumber(game.cards);
     const card1 = chooseCard(game, options);
@@ -169,7 +173,7 @@ export const mininumCardsTactic = (
 
 export const threeBestCardsTactic = (
     game,
-    options = { minimumGainToForceVeto: 100 }
+    options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }
 ) => {
     const minimalMoveNumber = getMinimalMoveNumber(game.cards);
     let nbPlayed = 0;
@@ -192,7 +196,7 @@ export const threeBestCardsTactic = (
 
 export const allBestCardsTactic = (
     game,
-    options = { minimumGainToForceVeto: 100 }
+    options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }
 ) => {
     const minimalMoveNumber = getMinimalMoveNumber(game.cards);
     let nbPlayed = 0;
@@ -215,7 +219,7 @@ export const allBestCardsTactic = (
 
 export const allBestCardsUntilEmptyTactic = (
     game,
-    options = { minimumGainToForceVeto: 100 }
+    options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }
 ) => {
     const minimalMoveNumber = getMinimalMoveNumber(game.cards);
     if (minimalMoveNumber === 2) {

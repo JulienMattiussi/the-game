@@ -20,6 +20,7 @@ const emptyStat = { best: {}, worst: {}, total: {}, average: {}, tactic: '', opt
 
 const defaultOptions = {
     minimumGainToForceVeto: 100,
+    minimumDifferenceToForceVeto: 0,
     useBetterStarter: true,
     useVeto10: true,
     useVeto1: false,
@@ -136,6 +137,7 @@ const Statistics = ({ t }) => {
                 <FormCriteria
                     tactic={tactic}
                     minimumGainToForceVeto={criteria.minimumGainToForceVeto}
+                    minimumDifferenceToForceVeto={criteria.minimumDifferenceToForceVeto}
                     useBetterStarter={criteria.useBetterStarter}
                     useVeto10={criteria.useVeto10}
                     useVeto1={criteria.useVeto1}

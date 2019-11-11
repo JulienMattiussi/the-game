@@ -3,6 +3,7 @@ const STRATEGY_PREFIX = "strategy-";
 
 const OPTION_KEYS = {
     minimumGainToForceVeto: 'mGTFV',
+    minimumDifferenceToForceVeto: 'mDTFV',
     useBetterStarter: 'uBS',
     useVeto1: 'uV1',
     useVeto10: 'uV10',

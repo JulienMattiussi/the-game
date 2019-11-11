@@ -18,6 +18,7 @@ const FormCriteria = (
         t,
         tactic,
         minimumGainToForceVeto,
+        minimumDifferenceToForceVeto,
         useBetterStarter,
         useVeto10,
         useVeto1,
@@ -32,13 +33,27 @@ const FormCriteria = (
     }
 
     const changeUseVeto10 = () => {
-        setCriteria(prevState => ({ ...prevState, useVeto10: !useVeto10 }));
+        setCriteria(prevState => ({
+            ...prevState,
+            minimumGainToForceVeto: !prevState.useVeto1 && prevState.useVeto10
+                ? 100
+                : prevState.minimumGainToForceVeto,
+            minimumDifferenceToForceVeto: !prevState.useVeto1 && prevState.useVeto10
+                ? 0
+                : prevState.minimumDifferenceToForceVeto,
+            useVeto10: !useVeto10
+        }));
     }
 
     const changeUseVeto1 = () => {
         setCriteria(prevState => ({
             ...prevState,
-            minimumGainToForceVeto: prevState.useVeto1 ? 100 : prevState.minimumGainToForceVeto,
+            minimumGainToForceVeto: prevState.useVeto1 && !prevState.useVeto10
+                ? 100
+                : prevState.minimumGainToForceVeto,
+            minimumDifferenceToForceVeto: prevState.useVeto1 && !prevState.useVeto10
+                ? 0
+                : prevState.minimumDifferenceToForceVeto,
             useVeto1: !useVeto1,
         }));
     }
@@ -51,6 +66,12 @@ const FormCriteria = (
         event.persist();
         if (event.target && event.target.value)
             setCriteria(prevState => ({ ...prevState, minimumGainToForceVeto: +event.target.value }));
+    }
+
+    const changeMinimumDifferenceToForceVeto = (event) => {
+        event.persist();
+        if (event.target && event.target.value)
+            setCriteria(prevState => ({ ...prevState, minimumDifferenceToForceVeto: +event.target.value }));
     }
 
     const changeTactic = (event) => {
@@ -91,8 +112,19 @@ const FormCriteria = (
                     max={100}
                     value={minimumGainToForceVeto}
                     onChange={changeMinimumGainToForceVeto}
-                    disabled={!useVeto1}
+                    disabled={!useVeto1 && !useVeto10}
                 /> <InfoElement value={t('minimumGainToForceVeto_description', { gain: minimumGainToForceVeto })} />
+            </label>
+            <label>
+                {t('form_minimum_difference_to_force')}
+                <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    value={minimumDifferenceToForceVeto}
+                    onChange={changeMinimumDifferenceToForceVeto}
+                    disabled={!useVeto1 && !useVeto10}
+                /> <InfoElement value={t('minimumDifferenceToForceVeto_description', { gain: minimumDifferenceToForceVeto })} />
             </label>
         </StyledDiv>)
 }

@@ -110,7 +110,11 @@ const Game = ({ t }) => {
     const turn = query.get("turn") ? +query.get("turn") : undefined;
 
     const [tactic, setTactic] = useState(query.get("tactic"));
-    const [criteria, setCriteria] = useState({ ...options, minimumGainToForceVeto: options.minimumGainToForceVeto || 100 });
+    const [criteria, setCriteria] = useState({
+        ...options,
+        minimumGainToForceVeto: options.minimumGainToForceVeto || 100,
+        minimumDifferenceToForceVeto: options.minimumDifferenceToForceVeto || 0
+    });
     const [game, setGame] = useState(initNewGame(cards, players, middle, turn, criteria.useBetterStarter));
     const [choosenCard, setChoosenCard] = useState(0);
     const [moveNumber, setMoveNumber] = useState(0);
