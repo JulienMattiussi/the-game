@@ -46,6 +46,7 @@ const Statistics = ({ t }) => {
     const [stats, setStats] = useState(rebuildStats(nbPlayers, nbGames, tactic, criteria));
     const [loading, setLoading] = useState(false);
     const [refresh, setRefresh] = useState(false);
+    const [nbWorkers, setNbWorkers] = useState(0);
 
     useEffect(() => {
         setLoading(true);
@@ -57,17 +58,27 @@ const Statistics = ({ t }) => {
     }, [stats]);
 
     const statWorker = new worker();
-    statWorker.addEventListener('message', event => {
-        const stats = event.data;
-        console.log('done', stats);
-        saveStats(stats);
-        setStats(stats);
+    statWorker.addEventListener('message', ({ data: computedStats }) => {
+        saveStats(computedStats);
+        setNbWorkers(previousState => previousState - 1);
+        setStats(previousState => {
+            const redraw = Object.keys(nbPlayers).reduce((action, key) => {
+                if (!action && nbPlayers[key] && computedStats[key] && previousState[key]) {
+                    if (getKeyForStat(computedStats[key]) === getKeyForStat(previousState[key])) {
+                        return true;
+                    }
+                }
+                return action;
+            }, false);
+            return redraw ? computedStats : previousState;
+        });
     });
 
     const computeStat = (tactic, numberOfGames) => {
         setLoading(true);
 
         statWorker.postMessage({ nbPlayers, tactic, criteria, numberOfGames });
+        setNbWorkers(previousState => previousState + 1);
         /* const stats = {};
         Object.keys(nbPlayers).map(
             number => {
@@ -159,7 +170,9 @@ const Statistics = ({ t }) => {
                             onChange={changeNbGames} />
                     </label>
                     <ActionsContainer>
-                        <button onClick={() => computeStat(tactic, nbGames)}>{t('button_stactistics')}</button>
+                        <button
+                            onClick={() => computeStat(tactic, nbGames)}>{t('button_stactistics')}
+                        </button> {nbWorkers ? `(${nbWorkers}...)` : ''}
                         <RowMiddleContainer>
                             {t('button_play_game')}
                             <button onClick={() => playNewGame(3)}>{t('button_play_game_3')}</button>
