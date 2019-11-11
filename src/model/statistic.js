@@ -1,4 +1,38 @@
 
+import { tactics, defaultOptions } from './player';
+
+
+const getRandomInt = max => Math.floor(Math.random() * Math.floor(max));
+const getRandomBoolean = () => getRandomInt(1) ? true : false;
+
+export const randomParams = () => {
+    const tacticsName = Object.keys(tactics);
+    const tactic = tacticsName[getRandomInt(tacticsName.length - 1)];
+
+    const criteria = Object.keys(defaultOptions).reduce((options, key) => {
+        const option = defaultOptions[key];
+        switch (typeof option) {
+            case "number":
+                return { ...options, [key]: getRandomInt(100) };
+            case "boolean":
+                return { ...options, [key]: getRandomBoolean() };
+            default:
+                return { ...options, [key]: defaultOptions[key] };
+        }
+    }, {});
+    /*minimumGainToForceVeto = getRandomInt(100);
+    minimumDifferenceToForceVeto = getRandomInt(100);
+    useBetterStarter = getRandomBoolean();
+    useVeto10 = getRandomBoolean();
+    useVeto1 = getRandomBoolean();
+    playCombos = getRandomBoolean();*/
+
+    return {
+        tactic,
+        criteria,
+    };
+}
+
 export const getEmptyStat = (numberOfPlayers, numberOfGames = 0) => ({
 
     numberOfPlayers,

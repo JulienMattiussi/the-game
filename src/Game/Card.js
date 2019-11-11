@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { colors, borderRadius } from '../theme';
+import { colors, cardBorderRadius } from '../theme';
 
 const styleCard = ({ clickable, selected }) => {
     const selectedStyle = {
@@ -25,7 +25,7 @@ const styleCard = ({ clickable, selected }) => {
         width: 80,
         height: 140,
         border: 'solid black 1px',
-        borderRadius,
+        borderRadius: cardBorderRadius,
         backgroundColor: colors.cardFront,
         cursor: 'inherit',
     };

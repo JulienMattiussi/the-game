@@ -2,16 +2,25 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { translate } from 'react-polyglot';
 import worker from '../workers/stat.worker';
+import randomWorker from '../workers/randomStat.worker';
 import { initGame } from '../model/game';
-import { tactics, setBetterStarter, defaultOptions } from '../model/player';
+import {
+    setBetterStarter,
+    defaultOptions,
+    defaultTactic,
+    defaultPlayers
+} from '../model/player';
 import { computeAverage } from '../model/statistic';
 import { saveStats, getStat, getKeyForStat, clearStat } from '../model/save';
 import {
+    ColumnLeftContainer,
     RowLeftContainer,
     RowMiddleContainer,
     ActionsContainer,
+    RightFormContainer,
     FormContainer,
     FormBottomContainer,
+    SimpleElement,
 } from '../Components';
 import FormCriteria from '../Forms/FormCriteria';
 import Statistic, { playGame } from './Statistic';
@@ -32,13 +41,15 @@ const rebuildStats = (nbPlayers, nbGames, tactic, criteria) =>
 
 const Statistics = ({ t }) => {
     const [criteria, setCriteria] = useState(defaultOptions);
-    const [tactic, setTactic] = useState(Object.keys(tactics)[0]);
-    const [nbPlayers, setNbPlayers] = useState({ 3: false, 4: true, 5: true });
+    const [tactic, setTactic] = useState(defaultTactic);
+    const [nbPlayers, setNbPlayers] = useState(defaultPlayers);
     const [nbGames, setNbGames] = useState(100);
     const [stats, setStats] = useState(rebuildStats(nbPlayers, nbGames, tactic, criteria));
     const [loading, setLoading] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [nbWorkers, setNbWorkers] = useState(0);
+    const [permanentWorker, setPermanentWorker] = useState(false);
+    const [totalComputed, setTotalComputed] = useState(0);
 
     useEffect(() => {
         setLoading(true);
@@ -71,26 +82,6 @@ const Statistics = ({ t }) => {
 
         statWorker.postMessage({ nbPlayers, tactic, criteria, numberOfGames });
         setNbWorkers(previousState => previousState + 1);
-        /* const stats = {};
-        Object.keys(nbPlayers).map(
-            number => {
-                if (nbPlayers[number]) {
-                    stats[number] = {
-                        ...playManyGames(
-                            tactics[tactic].algo,
-                            { ...criteria },
-                            +number,
-                            numberOfGames),
-                        numberOfPlayers: +number,
-                        tactic,
-                        options: { ...criteria },
-                    };
-                }
-                return null;
-            }
-        );
-        saveStats(stats);
-        setStats(stats); */
     }
 
     const changeNbGames = (event) => {
@@ -120,6 +111,35 @@ const Statistics = ({ t }) => {
     const handleClearStat = (stat) => {
         clearStat(stat);
         setRefresh(!refresh);
+    }
+
+    const numberToCompute = 100;
+
+    const randomStatWorker = new randomWorker();
+    randomStatWorker.addEventListener('message', ({ data: computedStats }) => {
+        setNbWorkers(previousState => previousState - 1);
+        saveStats(computedStats);
+        setTotalComputed(previousState => previousState + numberToCompute);
+        setPermanentWorker(previousState => {
+            if (previousState) {
+                randomStatWorker.postMessage({ numberOfGames: numberToCompute });
+                setNbWorkers(previousState => previousState + 1);
+            }
+            return previousState;
+        });
+
+    });
+    const handlePermanentCompute = (active) => {
+        if (active) {
+            setPermanentWorker(true);
+            setTotalComputed(0);
+            randomStatWorker.postMessage({ numberOfGames: numberToCompute });
+            setNbWorkers(previousState => previousState + 1);
+        }
+        else {
+            randomStatWorker.postMessage({ terminate: true });
+            setPermanentWorker(false);
+        }
     }
 
     return (
@@ -171,6 +191,22 @@ const Statistics = ({ t }) => {
                     <Link to="/strategies">{t('link_strategies')}</Link>
                 </FormBottomContainer>
             </FormContainer>
+            <RightFormContainer>
+                <ActionsContainer>
+                    {t('button_permanent_worker')}
+                    <button
+                        onClick={() => handlePermanentCompute(true)}
+                        disabled={permanentWorker}
+                    >{t('button_on')}</button>
+                    <button
+                        onClick={() => handlePermanentCompute(false)}
+                        disabled={!permanentWorker}
+                    >{t('button_off')}</button>
+                </ActionsContainer>
+                <FormBottomContainer>
+                    <SimpleElement title={t('number_computed')} value={totalComputed} />
+                </FormBottomContainer>
+            </RightFormContainer>
             <RowMiddleContainer>
                 {
                     Object.keys(nbPlayers).map(key => {

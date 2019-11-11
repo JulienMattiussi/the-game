@@ -13,6 +13,9 @@ const locale = {
     button_play_game_3: "à 3",
     button_play_game_4: "à 4",
     button_play_game_5: "à 5",
+    button_permanent_worker: "Calculer des statistiques en continu",
+    button_on: "Activer",
+    button_off: "Désactiver",
 
     form_tactic: "Tactique",
     form_better_starter: "Optimiser le démarrage",
@@ -24,6 +27,8 @@ const locale = {
 
     form_nb_games: "Nombre de parties",
     form_nb_players: "%{key} joueurs",
+
+    number_computed: "Nombre total calculé",
 
     goesUpPile: "PILE MONTANTE",
     goesDownPile: "PILE DESCENDANTE",

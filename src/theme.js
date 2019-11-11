@@ -72,6 +72,7 @@ export const colors = {
 };
 
 export const borderRadius = 4;
+export const cardBorderRadius = 4;
 
 export const getBorderRadius = position =>
     position === LEFT

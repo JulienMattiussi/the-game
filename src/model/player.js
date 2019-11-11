@@ -23,6 +23,10 @@ export const defaultOptions = {
     playCombos: false,
 };
 
+export const defaultTactic = 'allBestCardsUntilEmpty';
+
+export const defaultPlayers = { 3: false, 4: true, 5: true };
+
 export const getReducingComboCards = (game, player) => {
     const cards = game.players[player];
     const reducingCards = cards.reduce((accA, cardA) =>

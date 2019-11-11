@@ -1,4 +1,5 @@
 import ActionsContainer from './ActionsContainer';
+import RightFormContainer from './RightFormContainer';
 import FormContainer from './FormContainer';
 import FormBottomContainer from './FormBottomContainer';
 import Loader from './Loader';
@@ -17,6 +18,7 @@ import Icon from './Icon';
 
 export {
     ActionsContainer,
+    RightFormContainer,
     FormContainer,
     FormBottomContainer,
     Loader,
