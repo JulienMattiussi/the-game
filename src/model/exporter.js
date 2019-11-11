@@ -41,7 +41,7 @@ export const exportStats = () => {
 
         ]];
     }, [[
-        { v: "Nombre de joueurs", s: { fill: { bgColor: { rgb: "FFFFAA00" } }, font: { bold: true } } },
+        "Nombre de joueurs",
         "Tactique",
         "Date de calcul",
         "Démarrage optimisé",

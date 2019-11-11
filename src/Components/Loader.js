@@ -7,8 +7,8 @@ const style = {
     justifyContent: 'center',
     textAlign: 'center',
     borderRadius,
-    padding: 10,
-    margin: '10px 0',
+    padding: '0 10px',
+    margin: 0,
     backgroundColor: colors.whiteTransparency,
 };
 

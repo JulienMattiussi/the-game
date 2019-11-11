@@ -80,51 +80,53 @@ const Statistic = ({ t, stat, global, loading, clearStat }) => {
                     tooltip={t('reinit_stat')} />
             </RowMiddleContainer>
             : t('never')
-        : t('statistic_date_title');
+        : <RowMiddleContainer>
+            {t('statistic_date_title')}
+            {loading && <Loader />}
+        </RowMiddleContainer>
+
 
     return (
-        loading
-            ? <Loader />
-            : <ColumnLeftContainer>
-                <TitleZone title={title} position={global ? RIGHT : LEFT} />
-                <GameElement
-                    t={t}
-                    type={'best'}
-                    global={global}
-                    game={stat.best}
-                    tactic={stat.tactic}
-                    options={stat.options} />
-                <GameElement
-                    t={t}
-                    type={'worst'}
-                    global={global}
-                    game={stat.worst}
-                    tactic={stat.tactic}
-                    options={stat.options} />
-                <TitleZone title={dateTitle} position={global ? RIGHT : LEFT} />
-                <Zone position={global ? RIGHT : LEFT}>
-                    <TitleElement title={t('total')} />
-                    <SimpleElement title={t('statistic_won')} value={stat.total.won} />
-                    <SimpleElement title={t('statistic_lost_remaining', { range: '<= 5' })} value={stat.total.lost5} />
-                    <SimpleElement title={t('statistic_lost_remaining', { range: '>5 à 10' })} value={stat.total.lost10} />
-                    <SimpleElement title={t('statistic_lost_remaining', { range: '> 10' })} value={stat.total.lostMore} />
-                    <SimpleElement title={t('statistic_veto10')} value={stat.total.vetos10Invoked} />
-                    <SimpleElement title={t('statistic_veto10_ignored')} value={stat.total.vetos10Ignored} />
-                    <SimpleElement title={t('statistic_veto1')} value={stat.total.vetos1Invoked} />
-                    <SimpleElement title={t('statistic_veto1_ignored')} value={stat.total.vetos1Ignored} />
-                </Zone>
-                <Zone position={global ? RIGHT : LEFT}>
-                    <TitleElement title={t('average')} />
-                    <SimpleElement title={t('statistic_won')} value={`${stat.average.wonPercent} %`} />
-                    <SimpleElement title={t('remaning_cards', { s: 's' })} value={stat.average.remaining} />
-                    <SimpleElement title={t('statistic_number_winning_turn')} value={stat.average.timeWon} />
-                    <SimpleElement title={t('statistic_number_loosing_turn')} value={stat.average.timeLost} />
-                    <SimpleElement title={t('statistic_veto10')} value={stat.average.vetos10Invoked} />
-                    <SimpleElement title={t('statistic_veto10_ignored')} value={stat.average.vetos10Ignored} />
-                    <SimpleElement title={t('statistic_veto1')} value={stat.average.vetos1Invoked} />
-                    <SimpleElement title={t('statistic_veto1_ignored')} value={stat.average.vetos1Ignored} />
-                </Zone>
-            </ColumnLeftContainer>
+        <ColumnLeftContainer>
+            <TitleZone title={title} position={global ? RIGHT : LEFT} />
+            <GameElement
+                t={t}
+                type={'best'}
+                global={global}
+                game={stat.best}
+                tactic={stat.tactic}
+                options={stat.options} />
+            <TitleZone title={dateTitle} position={global ? RIGHT : LEFT} />
+            <Zone position={global ? RIGHT : LEFT}>
+                <TitleElement title={t('total')} />
+                <SimpleElement title={t('statistic_won')} value={stat.total.won} />
+                <SimpleElement title={t('statistic_lost_remaining', { range: '<= 5' })} value={stat.total.lost5} />
+                <SimpleElement title={t('statistic_lost_remaining', { range: '>5 à 10' })} value={stat.total.lost10} />
+                <SimpleElement title={t('statistic_lost_remaining', { range: '> 10' })} value={stat.total.lostMore} />
+                <SimpleElement title={t('statistic_veto10')} value={stat.total.vetos10Invoked} />
+                <SimpleElement title={t('statistic_veto10_ignored')} value={stat.total.vetos10Ignored} />
+                <SimpleElement title={t('statistic_veto1')} value={stat.total.vetos1Invoked} />
+                <SimpleElement title={t('statistic_veto1_ignored')} value={stat.total.vetos1Ignored} />
+            </Zone>
+            <Zone position={global ? RIGHT : LEFT}>
+                <TitleElement title={t('average')} />
+                <SimpleElement title={t('statistic_won')} value={`${stat.average.wonPercent} %`} />
+                <SimpleElement title={t('remaning_cards', { s: 's' })} value={stat.average.remaining} />
+                <SimpleElement title={t('statistic_number_winning_turn')} value={stat.average.timeWon} />
+                <SimpleElement title={t('statistic_number_loosing_turn')} value={stat.average.timeLost} />
+                <SimpleElement title={t('statistic_veto10')} value={stat.average.vetos10Invoked} />
+                <SimpleElement title={t('statistic_veto10_ignored')} value={stat.average.vetos10Ignored} />
+                <SimpleElement title={t('statistic_veto1')} value={stat.average.vetos1Invoked} />
+                <SimpleElement title={t('statistic_veto1_ignored')} value={stat.average.vetos1Ignored} />
+            </Zone>
+            <GameElement
+                t={t}
+                type={'worst'}
+                global={global}
+                game={stat.worst}
+                tactic={stat.tactic}
+                options={stat.options} />
+        </ColumnLeftContainer>
     )
 }
 

@@ -1,10 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { translate } from 'react-polyglot';
-import {
-    initGame,
-    playManyGames,
-} from '../model/game';
+import worker from '../workers/stat.worker';
+import { initGame } from '../model/game';
 import { tactics, setBetterStarter } from '../model/player';
 import { computeAverage } from '../model/statistic';
 import { saveStats, getStat, getKeyForStat, clearStat } from '../model/save';
@@ -58,10 +56,19 @@ const Statistics = ({ t }) => {
         setLoading(false);
     }, [stats]);
 
+    const statWorker = new worker();
+    statWorker.addEventListener('message', event => {
+        const stats = event.data;
+        console.log('done', stats);
+        saveStats(stats);
+        setStats(stats);
+    });
+
     const computeStat = (tactic, numberOfGames) => {
         setLoading(true);
-        const start = new Date();
-        const stats = {};
+
+        statWorker.postMessage({ nbPlayers, tactic, criteria, numberOfGames });
+        /* const stats = {};
         Object.keys(nbPlayers).map(
             number => {
                 if (nbPlayers[number]) {
@@ -80,8 +87,7 @@ const Statistics = ({ t }) => {
             }
         );
         saveStats(stats);
-        setStats(stats);
-        console.log('timing : ', new Date() - start);
+        setStats(stats); */
     }
 
     const changeNbGames = (event) => {
