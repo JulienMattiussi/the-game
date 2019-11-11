@@ -59,10 +59,9 @@ const chooseCardWithoutCountingVeto = (game, options = { minimumGainToForceVeto:
                 const bestVetoSafeCard = getBestCard(game, validWithoutVetoCards);
                 if (bestVetoSafeCard.value > options.minimumGainToForceVeto) {
                     const bestForcedCard = getBestCard(game, validCards);
-                    if (bestForcedCard.value >= bestVetoSafeCard.value - options.minimumDifferenceToForceVeto) {
-                        return bestVetoSafeCard;
+                    if (bestForcedCard.value < bestVetoSafeCard.value - options.minimumDifferenceToForceVeto) {
+                        return bestForcedCard;
                     }
-                    return bestForcedCard;
                 }
                 return bestVetoSafeCard;
             }
