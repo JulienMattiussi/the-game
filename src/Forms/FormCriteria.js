@@ -17,19 +17,14 @@ const FormCriteria = (
     {
         t,
         tactic,
-        minimumGainToForceVeto,
-        minimumDifferenceToForceVeto,
-        useBetterStarter,
-        useVeto10,
-        useVeto1,
-        playCombos,
+        criteria,
         setTactic,
         setCriteria,
     }
 ) => {
 
     const changeUseBetterStarter = () => {
-        setCriteria(prevState => ({ ...prevState, useBetterStarter: !useBetterStarter }));
+        setCriteria(prevState => ({ ...prevState, useBetterStarter: !criteria.useBetterStarter }));
     }
 
     const changeUseVeto10 = () => {
@@ -41,7 +36,7 @@ const FormCriteria = (
             minimumDifferenceToForceVeto: !prevState.useVeto1 && prevState.useVeto10
                 ? 0
                 : prevState.minimumDifferenceToForceVeto,
-            useVeto10: !useVeto10
+            useVeto10: !criteria.useVeto10
         }));
     }
 
@@ -54,12 +49,12 @@ const FormCriteria = (
             minimumDifferenceToForceVeto: prevState.useVeto1 && !prevState.useVeto10
                 ? 0
                 : prevState.minimumDifferenceToForceVeto,
-            useVeto1: !useVeto1,
+            useVeto1: !criteria.useVeto1,
         }));
     }
 
     const changePlayCombos = () => {
-        setCriteria(prevState => ({ ...prevState, playCombos: !playCombos }));
+        setCriteria(prevState => ({ ...prevState, playCombos: !criteria.playCombos }));
     }
 
     const changeMinimumGainToForceVeto = (event) => {
@@ -89,19 +84,19 @@ const FormCriteria = (
                 </select> <InfoElement value={t(tactic + '_description')} />
             </label>
             <label>
-                <input type="checkbox" checked={useBetterStarter} onChange={changeUseBetterStarter} />
+                <input type="checkbox" checked={criteria.useBetterStarter} onChange={changeUseBetterStarter} />
                 {t('form_better_starter')} <InfoElement value={t('better_starter_description')} />
             </label>
             <label>
-                <input type="checkbox" checked={useVeto10} onChange={changeUseVeto10} />
+                <input type="checkbox" checked={criteria.useVeto10} onChange={changeUseVeto10} />
                 {t('form_veto10')} <InfoElement value={t('veto10_description')} />
             </label>
             <label>
-                <input type="checkbox" checked={useVeto1} onChange={changeUseVeto1} />
+                <input type="checkbox" checked={criteria.useVeto1} onChange={changeUseVeto1} />
                 {t('form_veto1')} <InfoElement value={t('veto1_description')} />
             </label>
             <label>
-                <input type="checkbox" checked={playCombos} onChange={changePlayCombos} />
+                <input type="checkbox" checked={criteria.playCombos} onChange={changePlayCombos} />
                 {t('form_play_combos')} <InfoElement value={t('play_combos_description')} />
             </label>
             <label>
@@ -110,10 +105,10 @@ const FormCriteria = (
                     type="number"
                     min={1}
                     max={100}
-                    value={minimumGainToForceVeto}
+                    value={criteria.minimumGainToForceVeto}
                     onChange={changeMinimumGainToForceVeto}
-                    disabled={!useVeto1 && !useVeto10}
-                /> <InfoElement value={t('minimumGainToForceVeto_description', { gain: minimumGainToForceVeto })} />
+                    disabled={!criteria.useVeto1 && !criteria.useVeto10}
+                /> <InfoElement value={t('minimumGainToForceVeto_description', { gain: criteria.minimumGainToForceVeto })} />
             </label>
             <label>
                 {t('form_minimum_difference_to_force')}
@@ -121,10 +116,10 @@ const FormCriteria = (
                     type="number"
                     min={0}
                     max={100}
-                    value={minimumDifferenceToForceVeto}
+                    value={criteria.minimumDifferenceToForceVeto}
                     onChange={changeMinimumDifferenceToForceVeto}
-                    disabled={!useVeto1 && !useVeto10}
-                /> <InfoElement value={t('minimumDifferenceToForceVeto_description', { gain: minimumDifferenceToForceVeto })} />
+                    disabled={!criteria.useVeto1 && !criteria.useVeto10}
+                /> <InfoElement value={t('minimumDifferenceToForceVeto_description', { gain: criteria.minimumDifferenceToForceVeto })} />
             </label>
         </StyledDiv>)
 }

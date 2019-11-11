@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Link } from "react-router-dom";
 import { translate } from 'react-polyglot';
 import { computeStrategies, BEST, WORST } from '../model/strategy';
-import { getStrategy } from '../model/save';
+import { getStrategy, clearAllStats } from '../model/save';
 import { exportStats } from '../model/exporter';
 import {
     RowMiddleContainer,
@@ -32,6 +32,11 @@ const Strategies = ({ t }) => {
         setWorstStrategy5(getStrategy(5, WORST));
     }
 
+    const handleClearAllStats = (nbPlayers) => {
+        clearAllStats(nbPlayers);
+        reComputeStrategies();
+    }
+
     return (
         <Fragment>
             <FormContainer>
@@ -44,9 +49,21 @@ const Strategies = ({ t }) => {
                 </FormBottomContainer>
             </FormContainer>
             <RowMiddleContainer>
-                <Strategy nbPlayers={3} best={bestStrategy3} worst={worstStrategy3} />
-                <Strategy nbPlayers={4} best={bestStrategy4} worst={worstStrategy4} />
-                <Strategy nbPlayers={5} best={bestStrategy5} worst={worstStrategy5} />
+                <Strategy
+                    nbPlayers={3}
+                    best={bestStrategy3}
+                    worst={worstStrategy3}
+                    clearAllStats={handleClearAllStats} />
+                <Strategy
+                    nbPlayers={4}
+                    best={bestStrategy4}
+                    worst={worstStrategy4}
+                    clearAllStats={handleClearAllStats} />
+                <Strategy
+                    nbPlayers={5}
+                    best={bestStrategy5}
+                    worst={worstStrategy5}
+                    clearAllStats={handleClearAllStats} />
             </RowMiddleContainer>
         </Fragment>)
 }

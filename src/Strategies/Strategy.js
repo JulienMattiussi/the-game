@@ -6,12 +6,20 @@ import { BEST, WORST } from '../model/strategy';
 import { tactics } from '../model/player';
 import {
     Loader,
+    RowMiddleContainer,
     ColumnLeftContainer,
     TitleZone,
     Zone,
     TitleElement,
-    SimpleElement
+    SimpleElement,
+    Icon,
 } from '../Components';
+
+export const resetAllStat = (t, nbPlayers, clearAllStats) => {
+    if (window.confirm(t('confirm_delete'))) {
+        clearAllStats(nbPlayers);
+    }
+}
 
 const StrategyZone = ({ t, strat, choice }) => {
     if (!strat)
@@ -46,15 +54,26 @@ const StrategyZone = ({ t, strat, choice }) => {
     )
 }
 
-const Strategy = ({ t, nbPlayers, best, worst, loading }) => {
+const Strategy = ({ t, nbPlayers, best, worst, loading, clearAllStats }) => {
+
+    const title =
+        <RowMiddleContainer>
+            {t('strategy_title', { nbPlayers })} {loading
+                ? <Loader />
+                : <Icon
+                    handleClick={() => resetAllStat(t, nbPlayers, clearAllStats)}
+                    label={'🗑'}
+                    alert={true}
+                    tooltip={t('reinit_all_stat')} />}
+        </RowMiddleContainer>
+
+
     return (
-        loading
-            ? <Loader />
-            : <ColumnLeftContainer>
-                <TitleZone title={t('strategy_title', { nbPlayers })} />
-                <StrategyZone strat={best} choice={BEST} t={t} />
-                <StrategyZone strat={worst} choice={WORST} t={t} />
-            </ColumnLeftContainer>
+        <ColumnLeftContainer>
+            <TitleZone title={title} />
+            <StrategyZone strat={best} choice={BEST} t={t} />
+            <StrategyZone strat={worst} choice={WORST} t={t} />
+        </ColumnLeftContainer>
     )
 }
 

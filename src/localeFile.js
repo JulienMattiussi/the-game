@@ -32,6 +32,7 @@ const locale = {
 
     confirm_delete: "Confirmez la suppression",
     reinit_stat: 'Réinitialiser cette statistique',
+    reinit_all_stat: 'Réinitialiser toutes ces statistiques',
 
     play: 'joue',
     in: 'en',

@@ -193,10 +193,7 @@ export const changeTurn = (game, options = {}) => {
 export const playATurn = (
     game,
     tactic,
-    options = {
-        minimumGainToForceVeto: 100,
-        minimumDifferenceToForceVeto: 0,
-    }
+    options,
 ) => {
     const newGame = reload(tactic(game, options));
 
@@ -225,7 +222,7 @@ export const getRemainingCards = game =>
 export const playFullGame = (
     game,
     tactic,
-    options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0, notPlayer: -1 }
+    options,
 ) => {
     let newGame = cloneGame(game);
     let security = 0;
@@ -253,7 +250,7 @@ export const playFullGame = (
 
 export const playManyGames = (
     tactic,
-    options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 },
+    options,
     numberOfPlayers = 4,
     numberOfGames = 1000
 ) => {

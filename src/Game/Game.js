@@ -171,11 +171,7 @@ const Game = ({ t }) => {
             <FormContainer>
                 <FormCriteria
                     tactic={tactic}
-                    minimumGainToForceVeto={criteria.minimumGainToForceVeto}
-                    useBetterStarter={criteria.useBetterStarter}
-                    useVeto10={criteria.useVeto10}
-                    useVeto1={criteria.useVeto1}
-                    playCombos={criteria.playCombos}
+                    criteria={criteria}
                     setTactic={setTactic}
                     setCriteria={setCriteria} />
                 <FormBottomContainer>

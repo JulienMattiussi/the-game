@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { translate } from 'react-polyglot';
 import worker from '../workers/stat.worker';
 import { initGame } from '../model/game';
-import { tactics, setBetterStarter } from '../model/player';
+import { tactics, setBetterStarter, defaultOptions } from '../model/player';
 import { computeAverage } from '../model/statistic';
 import { saveStats, getStat, getKeyForStat, clearStat } from '../model/save';
 import {
@@ -17,15 +17,6 @@ import FormCriteria from '../Forms/FormCriteria';
 import Statistic, { playGame } from './Statistic';
 
 const emptyStat = { best: {}, worst: {}, total: {}, average: {}, tactic: '', options: {} };
-
-const defaultOptions = {
-    minimumGainToForceVeto: 100,
-    minimumDifferenceToForceVeto: 0,
-    useBetterStarter: true,
-    useVeto10: true,
-    useVeto1: false,
-    playCombos: false,
-};
 
 const rebuildStats = (nbPlayers, nbGames, tactic, criteria) =>
     Object.keys(nbPlayers).reduce((all, number) => ({
@@ -136,12 +127,7 @@ const Statistics = ({ t }) => {
             <FormContainer>
                 <FormCriteria
                     tactic={tactic}
-                    minimumGainToForceVeto={criteria.minimumGainToForceVeto}
-                    minimumDifferenceToForceVeto={criteria.minimumDifferenceToForceVeto}
-                    useBetterStarter={criteria.useBetterStarter}
-                    useVeto10={criteria.useVeto10}
-                    useVeto1={criteria.useVeto1}
-                    playCombos={criteria.playCombos}
+                    criteria={criteria}
                     setTactic={setTactic}
                     setCriteria={setCriteria}
                 />

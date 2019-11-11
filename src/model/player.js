@@ -14,6 +14,15 @@ import {
     HISTORY_COMBO,
 } from './game';
 
+export const defaultOptions = {
+    minimumGainToForceVeto: 100,
+    minimumDifferenceToForceVeto: 0,
+    useBetterStarter: true,
+    useVeto10: true,
+    useVeto1: false,
+    playCombos: false,
+};
+
 export const getReducingComboCards = (game, player) => {
     const cards = game.players[player];
     const reducingCards = cards.reduce((accA, cardA) =>
@@ -32,7 +41,7 @@ export const getBestCard = (game, validCards) => {
     return getValuedCards(game, validCards)[0];
 }
 
-const chooseCardWithoutCountingVeto = (game, options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }) => {
+const chooseCardWithoutCountingVeto = (game, options) => {
     const tenReducingCards = getTenReducingCards(game, game.turn);
     if (tenReducingCards.length) {
         return tenReducingCards[0];
@@ -71,7 +80,7 @@ const chooseCardWithoutCountingVeto = (game, options = { minimumGainToForceVeto:
     return {};
 }
 
-export const chooseCard = (game, options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }) => {
+export const chooseCard = (game, options) => {
     const choosenCard = chooseCardWithoutCountingVeto(game, options);
     const ignoredVeto = game.vetos.find(veto => veto.position === choosenCard.position);
     if (ignoredVeto) {
@@ -149,10 +158,7 @@ export const setVeto = (game, useVeto10, useVeto1) => {
     return newGame;
 }
 
-export const mininumCardsTactic = (
-    game,
-    options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }
-) => {
+export const mininumCardsTactic = (game, options) => {
     const minimalMoveNumber = getMinimalMoveNumber(game.cards);
     const card1 = chooseCard(game, options);
     if (!card1.card) {
@@ -170,10 +176,7 @@ export const mininumCardsTactic = (
     return turn1;
 }
 
-export const threeBestCardsTactic = (
-    game,
-    options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }
-) => {
+export const threeBestCardsTactic = (game, options) => {
     const minimalMoveNumber = getMinimalMoveNumber(game.cards);
     let nbPlayed = 0;
     let newGame = cloneGame(game);
@@ -193,10 +196,7 @@ export const threeBestCardsTactic = (
     return newGame;
 }
 
-export const allBestCardsTactic = (
-    game,
-    options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }
-) => {
+export const allBestCardsTactic = (game, options) => {
     const minimalMoveNumber = getMinimalMoveNumber(game.cards);
     let nbPlayed = 0;
     let newGame = cloneGame(game);
@@ -216,10 +216,7 @@ export const allBestCardsTactic = (
     return newGame;
 }
 
-export const allBestCardsUntilEmptyTactic = (
-    game,
-    options = { minimumGainToForceVeto: 100, minimumDifferenceToForceVeto: 0 }
-) => {
+export const allBestCardsUntilEmptyTactic = (game, options) => {
     const minimalMoveNumber = getMinimalMoveNumber(game.cards);
     if (minimalMoveNumber === 2) {
         return allBestCardsTactic(game, options);

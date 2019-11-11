@@ -1,3 +1,5 @@
+import { BEST, WORST } from './strategy';
+
 export const STAT_PREFIX = "stat-";
 const STRATEGY_PREFIX = "strategy-";
 
@@ -95,6 +97,11 @@ export const saveStrategy = (strategy, nbPlayers, choice) => {
     localStorage.setItem(`${STRATEGY_PREFIX}${nbPlayers}-${choice}`, JSON.stringify(strategy));
 }
 
+export const clearStrategy = (nbPlayers) => {
+    localStorage.removeItem(`${STRATEGY_PREFIX}${nbPlayers}-${BEST}`);
+    localStorage.removeItem(`${STRATEGY_PREFIX}${nbPlayers}-${WORST}`);
+}
+
 export const clearStat = stat => {
     clearStatByKey(getKeyForStat(stat));
 }
@@ -103,6 +110,19 @@ export const clearStatByKey = key => {
     localStorage.removeItem(key);
 }
 
-export const clearAllStats = () => {
-    localStorage.clear();
+export const clearAllStats = (nbPlayers) => {
+    if (!nbPlayers) {
+        localStorage.clear();
+        return;
+    }
+    const statKeys = getAllStatKeys();
+    statKeys.map(key => {
+        const statKey = key[0];
+        const stat = getStat(statKey);
+        if (stat && stat.numberOfPlayers === nbPlayers) {
+            localStorage.removeItem(statKey);
+        }
+        return true;
+    });
+    clearStrategy(nbPlayers);
 }
