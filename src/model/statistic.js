@@ -20,12 +20,6 @@ export const randomParams = () => {
                 return { ...options, [key]: defaultOptions[key] };
         }
     }, {});
-    /*minimumGainToForceVeto = getRandomInt(100);
-    minimumDifferenceToForceVeto = getRandomInt(100);
-    useBetterStarter = getRandomBoolean();
-    useVeto10 = getRandomBoolean();
-    useVeto1 = getRandomBoolean();
-    playCombos = getRandomBoolean();*/
 
     return {
         tactic,
@@ -81,7 +75,7 @@ export const computeAverage = (stat, numberOfGames) => {
     }
 
     const average = {
-        wonPercent: Math.round(stat.total.won / numberOfGames * 10000) / 100,
+        wonPercent: stat.total.won ? Math.round(stat.total.won / numberOfGames * 10000) / 100 : 0,
         remaining: Math.round(stat.total.remaining / numberOfGames * 100) / 100,
         timeWon: stat.total.won ? Math.round(stat.total.timeWon / stat.total.won * 100) / 100 : 0,
         timeLost: (numberOfGames - stat.total.won) ? Math.round(stat.total.timeLost / (numberOfGames - stat.total.won) * 100) / 100 : 0,
