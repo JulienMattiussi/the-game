@@ -6,7 +6,7 @@ import {
     clearAllStats,
     saveStrategy,
     getStrategy
-} from './localSave';
+} from './dbSave';
 import { STAT_PREFIX, STRATEGY_PREFIX, keyToOption, getKeyForStat } from './saveTools';
 
 
