@@ -1,7 +1,7 @@
-import { BEST, WORST } from './strategy';
+import { getStat } from './localSave';
 
 export const STAT_PREFIX = "stat-";
-const STRATEGY_PREFIX = "strategy-";
+export const STRATEGY_PREFIX = "strategy-";
 
 const OPTION_KEYS = {
     minimumGainToForceVeto: 'mGTFV',
@@ -32,11 +32,7 @@ export const getKeyForStat = ({ numberOfPlayers, tactic, options }) => {
     return `${STAT_PREFIX}${numberOfPlayers}-${tactic}-${caracString}`;
 }
 
-export const saveStats = (stats, reset = false) => {
-    Object.keys(stats).map(key => saveStat(stats[key], reset));
-}
-
-const appendStatToSave = (key, stat) => {
+export const appendStatToSave = (key, stat) => {
     const previousStat = getStat(key);
     let { average, best, worst, ...newStat } = stat;
     if (!previousStat) {
@@ -72,57 +68,4 @@ const appendStatToSave = (key, stat) => {
         newWorst = worst;
     }
     return { ...newStat, best: newBest, worst: newWorst, date: new Date() };
-}
-
-const saveStat = (stat, reset = false) => {
-    const key = getKeyForStat(stat);
-    const statToSave = reset ? stat : appendStatToSave(key, stat);
-    localStorage.setItem(key, JSON.stringify(statToSave));
-}
-
-export const getStat = key => {
-    const stat = localStorage.getItem(key);
-    return stat && stat !== 'undefined' ? JSON.parse(stat) : null;
-}
-
-export const getAllStatKeys = () =>
-    Object.entries(localStorage).filter(key => key[0].startsWith(STAT_PREFIX));
-
-export const getStrategy = (nbPlayers, choice) => {
-    const strat = localStorage.getItem(`${STRATEGY_PREFIX}${nbPlayers}-${choice}`);
-    return strat && strat !== 'undefined' ? JSON.parse(strat) : null;
-}
-
-export const saveStrategy = (strategy, nbPlayers, choice) => {
-    localStorage.setItem(`${STRATEGY_PREFIX}${nbPlayers}-${choice}`, JSON.stringify(strategy));
-}
-
-export const clearStrategy = (nbPlayers) => {
-    localStorage.removeItem(`${STRATEGY_PREFIX}${nbPlayers}-${BEST}`);
-    localStorage.removeItem(`${STRATEGY_PREFIX}${nbPlayers}-${WORST}`);
-}
-
-export const clearStat = stat => {
-    clearStatByKey(getKeyForStat(stat));
-}
-
-export const clearStatByKey = key => {
-    localStorage.removeItem(key);
-}
-
-export const clearAllStats = (nbPlayers) => {
-    if (!nbPlayers) {
-        localStorage.clear();
-        return;
-    }
-    const statKeys = getAllStatKeys();
-    statKeys.map(key => {
-        const statKey = key[0];
-        const stat = getStat(statKey);
-        if (stat && stat.numberOfPlayers === nbPlayers) {
-            localStorage.removeItem(statKey);
-        }
-        return true;
-    });
-    clearStrategy(nbPlayers);
 }

@@ -1,6 +1,6 @@
 import xlsx from 'node-xlsx';
 import fileDownload from 'js-file-download';
-import { getStat, getAllStatKeys } from './save';
+import { getStat, getAllStatKeys } from '../save';
 import { computeAverage } from './statistic';
 
 

@@ -11,7 +11,7 @@ import {
     defaultPlayers
 } from '../model/player';
 import { computeAverage } from '../model/statistic';
-import { saveStats, getStat, getKeyForStat, clearStat } from '../model/save';
+import { saveStats, getStat, getKeyForStat, clearStat } from '../save';
 import {
     ColumnLeftContainer,
     RowLeftContainer,

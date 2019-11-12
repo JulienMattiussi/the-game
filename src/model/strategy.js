@@ -1,4 +1,4 @@
-import { STAT_PREFIX, getAllStatKeys, getStat, getStrategy, saveStrategy } from './save';
+import { STAT_PREFIX, getAllStatKeys, getStat, getStrategy, saveStrategy } from '../save';
 
 const VALIDITY_LIMIT = 1000;
 export const BEST = 'best';

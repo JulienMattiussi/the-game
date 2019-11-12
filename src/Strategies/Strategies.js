@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Link } from "react-router-dom";
 import { translate } from 'react-polyglot';
 import { computeStrategies, BEST, WORST } from '../model/strategy';
-import { getStrategy, clearAllStats } from '../model/save';
+import { getStrategy, clearAllStats } from '../save';
 import { exportStats } from '../model/exporter';
 import {
     RowMiddleContainer,
