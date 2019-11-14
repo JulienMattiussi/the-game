@@ -5,8 +5,10 @@ import {
     clearStat,
     clearAllStats,
     saveStrategy,
-    getStrategy
-} from './dbSave';
+    getStrategy,
+    savePermanentWorker,
+    getPermanentWorker,
+} from './localSave';
 import { STAT_PREFIX, STRATEGY_PREFIX, keyToOption, getKeyForStat } from './saveTools';
 
 
@@ -26,4 +28,6 @@ export {
     getAllStatKeys,
     saveStrategy,
     getStrategy,
+    savePermanentWorker,
+    getPermanentWorker,
 }

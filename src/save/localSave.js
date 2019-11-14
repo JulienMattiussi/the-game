@@ -5,6 +5,15 @@ import {
 
 const storage = localStorage;
 
+export const savePermanentWorker = (permanent) => {
+    storage.setItem('permanent', JSON.stringify(permanent));
+}
+
+export const getPermanentWorker = () => {
+    const permanent = storage.getItem('permanent');
+    return permanent ? JSON.stringify(permanent) : false;
+}
+
 export const saveStat = (stat, reset = false) => {
     const key = getKeyForStat(stat);
     const statToSave = reset ? stat : appendStatToSave(key, stat);

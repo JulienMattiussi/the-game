@@ -13,7 +13,7 @@ export const randomParams = () => {
         const option = defaultOptions[key];
         switch (typeof option) {
             case "number":
-                return { ...options, [key]: getRandomInt(100) };
+                return { ...options, [key]: 100 };
             case "boolean":
                 return { ...options, [key]: getRandomBoolean() };
             default:

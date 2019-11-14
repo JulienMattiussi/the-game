@@ -2,7 +2,9 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { translate } from 'react-polyglot';
 import worker from '../workers/stat.worker';
-import randomWorker from '../workers/randomStat.worker';
+import randomWorker from '../workers/randomStat.sharedworker';
+// eslint-disable-next-line
+//import randomWorker from 'shared-worker!../workers/randomStat.worker.js';
 import { initGame } from '../model/game';
 import {
     setBetterStarter,
@@ -11,9 +13,8 @@ import {
     defaultPlayers
 } from '../model/player';
 import { computeAverage } from '../model/statistic';
-import { saveStats, getStat, getKeyForStat, clearStat } from '../save';
+import { saveStats, getStat, getKeyForStat, clearStat, savePermanentWorker } from '../save';
 import {
-    ColumnLeftContainer,
     RowLeftContainer,
     RowMiddleContainer,
     ActionsContainer,
@@ -113,32 +114,40 @@ const Statistics = ({ t }) => {
         setRefresh(!refresh);
     }
 
-    const numberToCompute = 100;
+    const numberToCompute = 10;
 
     const randomStatWorker = new randomWorker();
-    randomStatWorker.addEventListener('message', ({ data: computedStats }) => {
+    randomStatWorker.port.onmessage = ({ data: computedStats }) => {
         setNbWorkers(previousState => previousState - 1);
-        saveStats(computedStats);
+        //console.log(computedStats);
+        /*if (computedStats.ready) {
+            return;
+        };*/
+        //saveStats(computedStats);
         setTotalComputed(previousState => previousState + numberToCompute);
+        //randomStatWorker.postMessage({ numberOfGames: numberToCompute });
+        //console.log(nbWorkers);
         setPermanentWorker(previousState => {
             if (previousState) {
-                randomStatWorker.postMessage({ numberOfGames: numberToCompute });
+                randomStatWorker.port.postMessage({ numberOfGames: numberToCompute });
                 setNbWorkers(previousState => previousState + 1);
             }
             return previousState;
         });
 
-    });
+    };
     const handlePermanentCompute = (active) => {
         if (active) {
+            //savePermanentWorker(true);
             setPermanentWorker(true);
             setTotalComputed(0);
-            randomStatWorker.postMessage({ numberOfGames: numberToCompute });
+            randomStatWorker.port.postMessage({ numberOfGames: numberToCompute });
             setNbWorkers(previousState => previousState + 1);
         }
         else {
-            randomStatWorker.postMessage({ terminate: true });
+            //randomStatWorker.port.postMessage({ terminate: true });
             setPermanentWorker(false);
+            //savePermanentWorker(false);
         }
     }
 
