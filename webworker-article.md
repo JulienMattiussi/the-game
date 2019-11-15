@@ -102,14 +102,17 @@ On peut les utiliser, par exemple, lorsque le worker doit conserver des données
 > TIPS:  
 Il est conseillé de contrôler que le navigateur est compatible avec l'API des webWorkers en testant la présence de `window.Worker` ou `window.SharedWorker`
 
-## Mais comment faire avec Webpack
+## Mais comment faire avec Webpack ?
 
-Maintenant, le problème avec la magie, c'est que, comme avec n'importe quelle discipline, il y a tout un monde entre la théorie et la pratique.
+Maintenant, le problème avec la magie, c'est que, comme avec n'importe quelle discipline, il y a toujours un gouffre entre la théorie et la pratique.
+
+Ici, le gouffre se nomme [WebPack](https://webpack.js.org/).
+
+La plupart des projets web modernes utilisent WebPack et [Babel](https://babeljs.io/) pour transpiler et bundeliser le code avant de l'envoyer au navigateur.
 
 
-Le premier 
 
-### Solution rapide et sale
+### Une première solution rapide et sale
 
 new Blog
 URl_from_Object()
@@ -117,7 +120,7 @@ URl_from_Object()
 mais pas possiblité de déconstruct  [...]
 et build du code à la volée
 
-### Solution pérenne
+### Une solution pérenne
 
 La solution précédente fonctionne un peu, mais pas complètement.
 En plus, elle a l'inconvénient de builder le code du worker à la volée au moment de son appel ce qui est inutilement couteux pour le navigateur.
@@ -160,7 +163,7 @@ const wizard = new WizardWorker();
 
 De cette façon, le worker est transpilé par WebPack et servi correctement au navigateur
 
-### Attention avec Create React App (CRA)
+### Attention avec Create React App ([CRA](https://github.com/facebook/create-react-app))
 
 Les développeurs React, dont je suis, connaissent bien cet outil qui permet de monter un site en React pret à l'emploi en une seule commande.
 
@@ -278,7 +281,14 @@ monWorker.terminate();
 ## Risques et solutions (si possible)
 
 
-### Attention au hot reload
+### Attention au hot-reload
+
+Un truc important à savoir pendant la phase de développement, c'est que comme les workers sont chargés et exécutés dans le navigateur, ils sont insensible au hot-reload.
+
+Donc, malheureusement, à chaque fois que l'ont change le code d'un fichier `.worker.js` ou `.sharedworker.js`, il faut faire un reset des données du cache du navigateur pour voir les changements tourner.
+
+- Soit en vidant le cache par la commande du navigateur
+- Soit en 
 
 ### Attention au states non persistants
 
