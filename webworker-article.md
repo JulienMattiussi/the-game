@@ -100,7 +100,7 @@ self.onconnect = event => {
 On peut les utiliser, par exemple, lorsque le worker doit conserver des données d'un appel à l'autre.
 
 > TIPS:  
-Il est conseillé de contrôler que le navigateur est compatible avec l'API des webWorkers en testant la présence de `window.Worker` ou `window.SharedWorker`
+Il est conseillé de contrôler que le navigateur est compatible avec l'API des webWorkers en testant la présence de `window.Worker` ou `window.SharedWorker`.
 
 ## Mais comment faire avec Webpack ?
 
@@ -110,22 +110,73 @@ Ici, le gouffre se nomme [WebPack](https://webpack.js.org/).
 
 La plupart des projets web modernes utilisent WebPack et [Babel](https://babeljs.io/) pour transpiler et bundeliser le code avant de l'envoyer au navigateur.
 
+Mais pour les workers, on doit donner le chemin du code à utiliser au moment de sa construction  
+`const wizard = new Worker('./my-worker-file.js');`
 
+Ici, `'./my-worker-file.js'` doit être l'URL du code du worker accessible depuis le navigateur.  
+Et lorsqu'on utilise webpack, le fichier`'my-worker-file.js'` n'étant importé dans aucun des script transpilés, cette URL n'existe pas.
 
-### Une première solution rapide et sale
+Et la magie s'éffondre.
 
-new Blog
-URl_from_Object()
+### Une première solution rapide et incomplète
 
-mais pas possiblité de déconstruct  [...]
-et build du code à la volée
+Il faudrait donc importer notre worker dans la page qui l'exécute.
 
-### Une solution pérenne
+``` js
+import Wizard from './my-worker-file'
+```
 
-La solution précédente fonctionne un peu, mais pas complètement.
-En plus, elle a l'inconvénient de builder le code du worker à la volée au moment de son appel ce qui est inutilement couteux pour le navigateur.
+Bien sur, ça ne suffit pas. Là le code est importé et sera directement exécuté. Et après le build de webpack, tout sera mis en bundle `./static/js/main.578e6292.chunk.js`
+et l'URL de `'my-worker-file.js'` n'existera toujours pas.
 
-### Utiliser Worker Loader
+On peut alors utiliser un `WorkerBuilder`
+
+Le code du worker doit être encapsulé dans une fonction
+
+``` js
+// my-worker-file.js
+export default () => {
+    self.onmessage = ({data}) => {
+        switch(data.wizardHouse) {
+            case 'grifondor':
+                postMessage('Expeliarmus');
+                return;
+            case 'serpentar':
+                postMessage('Avada Kedavra');
+                return;
+            default :
+                postMessage('Patronus');
+        }
+    }
+}
+```
+
+puis on créé un WorkerBuilder chargé de générer notre worker
+
+``` js
+//worker-builder.js
+import Wizard from './my-worker-file'
+var blob = new Blob(Wizard);
+
+var blobURL = window.URL.createObjectURL(blob);
+
+export default worker = new Worker(blobURL);
+```
+
+Le problème avec cette méthode, c'est qu'on limite énormément la comptatibilité du code du worker.
+
+Comme le code est lu à la volée sans passer par le transpileur, il est aujourd'hui impossible d'y utiliser des syntaxes modernes comme le spread opérator ou la déconstruction.
+``` js
+const { serpentarWizards, ...goodWizards } = allWizards;
+```
+Le code ci dessus va juste générer une erreur à l'exécution dans la majorité des navigateurs.
+
+### Une vraie solution pérenne
+
+La solution précédente fonctionne donc un peu, mais pas complètement.
+En plus, comme le code du worker est buildé à la volée au moment de son appel c'est inutilement couteux pour le navigateur.
+
+#### Utiliser Worker Loader
 
 Heureusement, une meilleure solution existe, afin que WebPack sache déployer les workers correctement, comme le reste du code.
 
@@ -208,7 +259,7 @@ Et ne pas oublier de modifier les scripts dans le fichier `package.json` pour ut
     },
 ```
 
-## Utiliser Shared Worker Loader
+#### Utiliser Shared Worker Loader
 
 Tout celà fonctionne très bien pour les **Worker**, mais quid des **SharedWorker** ?
 
@@ -269,10 +320,39 @@ const wizard = new WizardWorker();
 
 ## Limitations
 
-import ok mais
+Attention, les workers permettent de fair beaucoup de chose mais ont certaines limitations.
 
-Pas de window
-Pas d'accès aux données, ni de DOM
+Ils sont totalement détaché de la fenêtre du navigateur
+Il est donc impossible dans un worker d'accéder :
+
+- à l'object `window`
+- au `DOM`
+- aux API de stockage comme `localstorage`
+
+Pour effectuer une tâche liée à l'un de ces éléments, il faut que le worker retourne seulement le résultat à afficher
+
+``` js
+//in wizard.worker.js
+postMessage({ listOfForbiddenSpell });
+```
+
+Et c'est la page qui se chargera de l'affichage et de la sauvegarde en réceptionnant les messages du worker.
+
+``` js
+//in mainFile.js
+wizard.onmessage = ({ listOfForbiddenSpell }) => {
+    localstorage.setItem('doNotOpen', listOfForbiddenSpell);
+};
+```
+
+Il est parfaitement possible d'appeler la console depuis un Worker
+
+``` js
+//in wizard.worker.js
+console.warn('You should\'nd ask for the list of forbidden spells');
+```
+
+Mais attention, pas depuis un SharedWorked.
 
 
 Il faut attendre que le worker rende la main
@@ -283,12 +363,15 @@ monWorker.terminate();
 
 ### Attention au hot-reload
 
-Un truc important à savoir pendant la phase de développement, c'est que comme les workers sont chargés et exécutés dans le navigateur, ils sont insensible au hot-reload.
+Une chose importante à savoir pendant la phase de développement, c'est que comme les workers sont chargés et exécutés dans le navigateur, ils sont insensible au hot-reload.
 
 Donc, malheureusement, à chaque fois que l'ont change le code d'un fichier `.worker.js` ou `.sharedworker.js`, il faut faire un reset des données du cache du navigateur pour voir les changements tourner.
 
-- Soit en vidant le cache par la commande du navigateur
-- Soit en 
+- Soit en vidant le cache par la commande du navigateur.
+- Soit en rebootant le server à chaque test.
+
+> TIPS:  
+Les workers contruit avec la méthode `URL.createObjectURL(blob)` étant générés à la volée, ils ne posent aussi soucis de cache
 
 ### Attention au states non persistants
 
