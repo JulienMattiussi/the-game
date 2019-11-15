@@ -1,5 +1,9 @@
 
-Les WebWorkers sont un outil magique
+Les WebWorkers sont un outil magique qui permet de faire exécuter du code par un navigateur, en arrière plan, sans figer ou ralentir l'exécution de la page.
+
+Ils existent parmi nous depuis la nuit des temps - La première spécification ne date déjà de 2009 et la dernière a été publiée en septembre 2015 - Mais ils se cachent à nos yeux. Ce pouvoir fait peur. Et mal utilisé ou entre de mauvaises mains, il peut (probablement) mener le web à sa perte. (Ou pire, mener le développeur à la dépression)
+
+Nous allons donc apprendre à les connaitre, et surtout, à s'en servir correctement avec le web moderne.
 
 ## La base pour utiliser un worker
 
@@ -95,7 +99,15 @@ self.onconnect = event => {
 
 On peut les utiliser, par exemple, lorsque le worker doit conserver des données d'un appel à l'autre.
 
-## Comment faire avec webpack et/ou CRA
+> TIPS:  
+Il est conseillé de contrôler que le navigateur est compatible avec l'API des webWorkers en testant la présence de `window.Worker` ou `window.SharedWorker`
+
+## Mais comment faire avec webpack et/ou CRA
+
+Maintenant, le problème avec la magie, c'est que, comme avec n'importe quelle discipline, il y a un monde entre la théorie et la pratique.
+
+
+Le premier 
 
 ### Solution rapide et sale
 
@@ -151,6 +163,7 @@ Pas d'accès aux données, ni de DOM
 
 
 Il faut attendre que le worker rende la main
+monWorker.terminate();
 
 ## Risques et solutions (si possible)
 
@@ -163,3 +176,8 @@ setState (previous => new+Previous;)
 
 
 ### Saturation du browser
+
+## Références
+
+https://www.w3.org/TR/workers/
+https://en.wikipedia.org/wiki/Web_worker
