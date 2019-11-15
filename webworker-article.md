@@ -91,7 +91,7 @@ self.onconnect = event => {
                 port.postMessage('Avada Kedavra');
                 return;
             default :
-                port.postMessage('Crac badaboum');
+                port.postMessage('Mutismus');
         }
     }
 }
@@ -102,9 +102,9 @@ On peut les utiliser, par exemple, lorsque le worker doit conserver des données
 > TIPS:  
 Il est conseillé de contrôler que le navigateur est compatible avec l'API des webWorkers en testant la présence de `window.Worker` ou `window.SharedWorker`
 
-## Mais comment faire avec webpack et/ou CRA
+## Mais comment faire avec Webpack
 
-Maintenant, le problème avec la magie, c'est que, comme avec n'importe quelle discipline, il y a un monde entre la théorie et la pratique.
+Maintenant, le problème avec la magie, c'est que, comme avec n'importe quelle discipline, il y a tout un monde entre la théorie et la pratique.
 
 
 Le premier 
@@ -119,7 +119,67 @@ et build du code à la volée
 
 ### Solution pérenne
 
-## worker-loader
+La solution précédente fonctionne un peu, mais pas complètement.
+En plus, elle a l'inconvénient de builder le code du worker à la volée au moment de son appel ce qui est inutilement couteux pour le navigateur.
+
+### Utiliser Worker Loader
+
+Heureusement, une meilleure solution existe, afin que WebPack sache déployer les workers correctement, comme le reste du code.
+
+Il faut juste installer un petit utilitaire qui vient compléter Webpack :
+[ worker-loader](https://github.com/webpack-contrib/worker-loader)
+
+Avec un minimum de configuration :
+
+``` js
+// webpack.config.js
+{
+  module: {
+    rules: [
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' }
+      }
+    ]
+  }
+}
+```
+
+Il faut ensuite bien nommer tous les fichier de worker en `myfile.worker.js`. Puis il y a juste à remplacer l'appel au constructeur standard :
+
+``` js
+const wizard = Worker('./wizard.worker.js')
+```
+ par ceci :
+
+``` js
+import WizardWorker from './wizard.worker.js';
+
+const wizard = new WizardWorker();
+```
+
+De cette façon, le worker est transpilé par WebPack et servi correctement au navigateur
+
+### Attention avec Create React App (CRA)
+
+Les développeurs React, dont je suis, connaissent bien cet outil qui permet de monter un site en React pret à l'emploi en une seule commande.
+
+Mais dans ce cas, tout est packagé, et il est impossible de modifier le fichier `webpack.config.js`.
+
+Pour utiliser `worker-loader`, il faut alors 
+- Soit éjecter `create-react-app`
+
+``` bash
+npm run eject
+```
+
+Ce que [déconseille grandement la communauté](https://medium.com/curated-by-versett/dont-eject-your-create-react-app-b123c5247741), et les concepteurs même de CRA
+
+- Soit installer [`react-app-rewired`](https://github.com/timarney/react-app-rewired)
+
+Cet outil (magique également) sert à surcharger la configuration de base imposée dans `CRA`.
+
+Il faut créer un fichier `config-overrides.js` à la racine du projet, qui va contenir notre configuration pour WebPack :
 
 ``` js
 // config-overrides.js
@@ -133,8 +193,47 @@ module.exports = function override(config, env) {
 }
 ```
 
+Et ne pas oublier de modifier les scripts dans le fichier `package.json` pour utiliser `react-app-rewired`.
 
-## shared-worker-loader
+``` json
+//package.json
+"scripts": {
+        "start": "react-app-rewired start",
+        "build": "react-app-rewired build",
+        "test": "react-app-rewired test",
+        "eject": "react-scripts eject"
+    },
+```
+
+## Utiliser Shared Worker Loader
+
+Tout celà fonctionne très bien pour les **Worker**, mais quid des **SharedWorker** ?
+
+Là encore, un utilitaire existe : [shared-worker-loader](https://github.com/mrtnbroder/shared-worker-loader#readme)
+
+Il est basé sur `worker-loader` est s'installe, se configure et s'utilise de la même façon. On peut donc l'ajouter à notre projet.
+
+**Pour WebPack standard**
+
+``` js
+// webpack.config.js
+{
+  module: {
+    rules: [
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' }
+      },
+      {
+        test: /\.sharedworker\.js$/,
+        use: { loader: 'shared-worker-loader' }
+      }
+    ]
+  }
+}
+```
+
+**Pour Create React App (avec `react-rewired`)**
 
 ``` js
 // config-overrides.js
@@ -152,7 +251,18 @@ module.exports = function override(config, env) {
 }
 ```
 
-react-reweind
+Il faudra nommer tous les fichier de worker partagés en `myfile.sharedworker.js`. Puis remplacer l'appel au constructeur standard :
+
+``` js
+const wizard = SharedWorker('./wizard.sharedworker.js')
+```
+ par ceci :
+
+``` js
+import WizardWorker from './wizard.sharedworker.js';
+
+const wizard = new WizardWorker();
+```
 
 ## Limitations
 
@@ -181,3 +291,4 @@ setState (previous => new+Previous;)
 
 https://www.w3.org/TR/workers/
 https://en.wikipedia.org/wiki/Web_worker
+https://developer.mozilla.org/fr/docs/Web/API/Web_Workers_API
