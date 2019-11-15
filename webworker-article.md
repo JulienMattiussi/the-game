@@ -155,15 +155,32 @@ puis on créé un WorkerBuilder chargé de générer notre worker
 
 ``` js
 //worker-builder.js
-import Wizard from './my-worker-file'
-var blob = new Blob(Wizard);
-
-var blobURL = window.URL.createObjectURL(blob);
-
-export default worker = new Worker(blobURL);
+export default class WebWorker {
+	constructor(worker) {
+		const code = worker.toString();
+		const blob = new Blob(['('+code+')()']);
+		return new Worker(URL.createObjectURL(blob));
+	}
+}
 ```
 
-Le problème avec cette méthode, c'est qu'on limite énormément la comptatibilité du code du worker.
+Et enfin, on utilise ce `WorkerBuilder` dans la page web pour lancer le worker :
+
+``` js
+// mainFile.js
+import workerCode from './my-worker-file';
+import WebWorker from './worker-builder';
+
+const wizard = new WebWorker(workerCode);
+
+wizard.onmessage = data => {
+    console.log('Choix d\'une baguette magique', data);
+}
+```
+
+Cette méthode est bien décrite dans cet [article de fullstackreact](https://www.fullstackreact.com/articles/introduction-to-web-workers-with-react/) avec une [démo complète](https://codesandbox.io/s/w2v7zzn63w).
+
+Pourtant, le gros problème avec cette méthode, c'est qu'on limite énormément la comptatibilité du code du worker.
 
 Comme le code est lu à la volée sans passer par le transpileur, il est aujourd'hui impossible d'y utiliser des syntaxes modernes comme le spread opérator ou la déconstruction.
 ``` js
