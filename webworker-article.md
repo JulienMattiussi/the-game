@@ -29,9 +29,10 @@ wizard.postMessage({ wizardHouse });
 ```
 
 Le fichier `my-worker-file.js` va contenir le code du worker. Et il doit simplement faire de même, soit écouter et renvoyer des messages.
-
+Une fonction `onerror` peut aussi être utilisée, par exemple, pour renvoyer un message spécifique en cas d'erreur d'exécution du worker.
 ``` js
 // my-worker-file.js
+/* eslint-disable no-restricted-globals */
 self.onmessage = ({data}) => {
     switch(data.wizardHouse) {
         case 'grifondor':
@@ -44,7 +45,13 @@ self.onmessage = ({data}) => {
             postMessage('Patronus');
     }
 }
+self.onerror = (error) => {
+    port.postMessage('Pffuuuit');
+}
 ```
+
+> TIPS:  
+La référence à `self` n'est pas indispensable, mais l'instruction `no-restricted-globals`, elle, est nécessaire pour autorisé la compilation du script contenant des variables globales.
 
 Avec cette simple mécanique, on peut faire communiquer un worker avec son script appelant. Envoyer des commandes, et obtenir des résultats.
 
@@ -52,7 +59,7 @@ Les messages transmis peuvent être ce que l'on souhaite, des objets, des types 
 
 > TIPS:  
 Les fonctions `onmessage` ne font que gérer des évènements.
- On pourrait très bien les remplacer par  
+ On pourrait très bien les remplacer, du coté page, par  
  `addEventListener('message', ({ data }) => { //mon code });`
 
 ### Les workers partagés
@@ -75,6 +82,7 @@ Cette fois-ci, le worker va accepter une connexion, et communiquer à travers un
 
 ``` js
 // my-worker-file.js
+/* eslint-disable no-restricted-globals */
 let currentHouse = 'poufsouffle';
 
 self.onconnect = event => {
@@ -93,6 +101,9 @@ self.onconnect = event => {
             default :
                 port.postMessage('Mutismus');
         }
+    }
+    onerror = (error) => {
+        port.postMessage('Pffuuuit');
     }
 }
 ```
@@ -177,8 +188,6 @@ wizard.onmessage = data => {
     console.log('Choix d\'une baguette magique', data);
 }
 ```
-
-Cette méthode est bien décrite dans cet [article de fullstackreact](https://www.fullstackreact.com/articles/introduction-to-web-workers-with-react/) avec une [démo complète](https://codesandbox.io/s/w2v7zzn63w).
 
 Pourtant, le gros problème avec cette méthode, c'est qu'on limite énormément la comptatibilité du code du worker.
 
@@ -339,37 +348,39 @@ const wizard = new WizardWorker();
 
 Attention, les workers permettent de fair beaucoup de chose mais ont certaines limitations.
 
-Ils sont totalement détaché de la fenêtre du navigateur
+Ils sont totalement détachés de la fenêtre du navigateur.
 Il est donc impossible dans un worker d'accéder :
 
 - à l'object `window`
 - au `DOM`
-- aux API de stockage comme `localstorage`
+- aux API de stockage comme `localstorage`ou `IndexedDb`
 
 Pour effectuer une tâche liée à l'un de ces éléments, il faut que le worker retourne seulement le résultat à afficher
 
 ``` js
 //in wizard.worker.js
-postMessage({ listOfForbiddenSpell });
+postMessage({ listOfForbiddenSpells });
 ```
 
 Et c'est la page qui se chargera de l'affichage et de la sauvegarde en réceptionnant les messages du worker.
 
 ``` js
 //in mainFile.js
-wizard.onmessage = ({ listOfForbiddenSpell }) => {
-    localstorage.setItem('doNotOpen', listOfForbiddenSpell);
+wizard.onmessage = ({ listOfForbiddenSpells }) => {
+    localstorage.setItem('doNotOpen', listOfForbiddenSpells);
 };
 ```
 
-Il est parfaitement possible d'appeler la console depuis un Worker
+Il est parfaitement possible d'appeler la console depuis un **Worker**
 
 ``` js
 //in wizard.worker.js
 console.warn('You should\'nd ask for the list of forbidden spells');
 ```
 
-Mais attention, pas depuis un SharedWorked.
+Mais attention, **la console ne fonctionnera pas depuis un SharedWorked**.
+Dans ce cas, un appel à `console.log()` ne va pas générer d'erreur mais il ne sera jamais acheminé jusqu'a la console du navigateur.
+`port.console.log()` n'existe pas non plus, et génère cette fois une erreur d'exécution du worker.
 
 
 Il faut attendre que le worker rende la main
@@ -382,10 +393,10 @@ monWorker.terminate();
 
 Une chose importante à savoir pendant la phase de développement, c'est que comme les workers sont chargés et exécutés dans le navigateur, ils sont insensible au hot-reload.
 
-Donc, malheureusement, à chaque fois que l'ont change le code d'un fichier `.worker.js` ou `.sharedworker.js`, il faut faire un reset des données du cache du navigateur pour voir les changements tourner.
+Donc, malheureusement, à chaque fois que l'ont change le code d'un fichier `.worker.js` ou `.sharedworker.js`, il faut faire un reset des données du cache du navigateur pour voir les changements appliqués.
 
 - Soit en vidant le cache par la commande du navigateur.
-- Soit en rebootant le server à chaque test.
+- Soit en rebootant le server à chaque fois.
 
 > TIPS:  
 Les workers contruit avec la méthode `URL.createObjectURL(blob)` étant générés à la volée, ils ne posent aussi soucis de cache
@@ -399,6 +410,12 @@ setState (previous => new+Previous;)
 
 ## Références
 
-https://www.w3.org/TR/workers/
-https://en.wikipedia.org/wiki/Web_worker
-https://developer.mozilla.org/fr/docs/Web/API/Web_Workers_API
+- Les spécifications officielles des web workers sont sur [le site du W3C](https://www.w3.org/TR/workers/).
+
+
+- Wikipédia donne un bon [descriptif des webworkers](https://en.wikipedia.org/wiki/Web_worker) sans rentrer dans les détails techniques.
+
+
+- L'utilisation basique des web workers est très bien expliquée sur [developer.mozilla.org](https://developer.mozilla.org/fr/docs/Web/API/Web_Workers_API) qui décrit l'API dans ses moindre détails.
+
+- La méthode d'utilisation des workers à la volée en React est bien décrite dans [cet article de fullstackreact](https://www.fullstackreact.com/articles/introduction-to-web-workers-with-react/) avec une [démo complète](https://codesandbox.io/s/w2v7zzn63w).

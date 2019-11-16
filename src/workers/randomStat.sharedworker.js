@@ -7,9 +7,18 @@ import { tactics, defaultPlayers } from '../model/player';
 
 let run = false;
 
+/*self.onerror = ({ data }) => {
+    postMessage('error10');
+}*/
+
 self.onconnect = e => {
     let port = e.ports[0];
-    //console.log('port', port);
+    //port.console.log('port1', port);
+    console.log('port2', port);
+    onerror = (event) => {
+        port.postMessage({ error: event });
+    }
+
     port.onmessage = ({ data }) => {
         //port.postMessage({ state: 'start1' });
         const { numberOfGames, terminate } = data;
@@ -24,11 +33,11 @@ self.onconnect = e => {
         }*/
         //port.postMessage({ end: true });
         //while (run) {
-        //console.log('run');
+        port.console.log('run2');
         //port.postMessage({ state: 'run' });
         /*if (!run || data.terminate) {
-
-
+    
+    
             port.postMessage({ state: 'stop2' });
             run = false;
             return;

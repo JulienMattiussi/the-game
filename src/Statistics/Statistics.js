@@ -62,7 +62,7 @@ const Statistics = ({ t }) => {
     }, [stats]);
 
     const statWorker = new worker();
-    statWorker.addEventListener('message', ({ data: computedStats }) => {
+    statWorker.onmessage = ({ data: computedStats }) => {
         saveStats(computedStats);
         setNbWorkers(previousState => previousState - 1);
         setStats(previousState => {
@@ -76,7 +76,7 @@ const Statistics = ({ t }) => {
             }, false);
             return redraw ? computedStats : previousState;
         });
-    });
+    };
 
     const computeStat = (tactic, numberOfGames) => {
         setLoading(true);
@@ -117,9 +117,15 @@ const Statistics = ({ t }) => {
     const numberToCompute = 10;
 
     const randomStatWorker = new randomWorker();
+
     randomStatWorker.port.onmessage = ({ data: computedStats }) => {
+        console.log(computedStats);
         setNbWorkers(previousState => previousState - 1);
-        //console.log(computedStats);
+        if (computedStats.error) {
+            console.log('error', computedStats.error);
+            return;
+        }
+        console.log('coucou1');
         /*if (computedStats.ready) {
             return;
         };*/

@@ -4,7 +4,7 @@ import {
 } from '../model/game';
 import { tactics } from '../model/player';
 
-self.onmessage = ({ data }) => {
+onmessage = ({ data }) => {
     const start = new Date();
     const { nbPlayers, tactic, criteria, numberOfGames } = data;
     const stats = {};
