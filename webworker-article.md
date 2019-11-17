@@ -346,9 +346,13 @@ const wizard = new WizardWorker();
 
 ## Limitations
 
-Attention, les workers permettent de fair beaucoup de chose mais ont certaines limitations.
+Attention, les workers permettent de faire beaucoup de chose mais ont certaines limitations.
 
-Ils sont totalement détachés de la fenêtre du navigateur.
+### Est-ce qu'on peut tout faire avec un worker ?
+
+On a tendance à penser que la magie permet de tout faire, mais ce n'est pas le cas en réalité.
+
+Les workers sont totalement détachés de la fenêtre du navigateur.
 Il est donc impossible dans un worker d'accéder :
 
 - à l'object `window`
@@ -370,6 +374,7 @@ wizard.onmessage = ({ listOfForbiddenSpells }) => {
     localstorage.setItem('doNotOpen', listOfForbiddenSpells);
 };
 ```
+### Peut-on surveiller l'activité d'un worker ?
 
 Il est parfaitement possible d'appeler la console depuis un **Worker**
 
@@ -382,16 +387,60 @@ Mais attention, **la console ne fonctionnera pas depuis un SharedWorked**.
 Dans ce cas, un appel à `console.log()` ne va pas générer d'erreur mais il ne sera jamais acheminé jusqu'a la console du navigateur.
 `port.console.log()` n'existe pas non plus, et génère cette fois une erreur d'exécution du worker.
 
+### Peut-on interrompre l'activité d'un worker ?
 
-Il faut attendre que le worker rende la main
-monWorker.terminate();
+Lorsqu'un sort est lancé, il est très difficile de l'arreter. Mais la possibilité existe néanmoins.
+
+``` js
+//in mainFile.js
+wizard.terminate();
+```
+
+Cette instruction a pour but d'interrompre immédiatement toutes les tâches existantes du worker. **Aucun message d'erreur ne sera envoyé**, le thread sera totu bonnement coupé.
+
+Mais dans la pratique, il ne faut pas s'attendre à ce que le worker s'interrompe sagement à l'instant ou l'instruction `terminate()` est appelée.
+
+Le principe de mise en oeuvre des Workers fait qu'il va falloir attendre que le thread du worker accepte le message et le traite, avant d'être interrompu.
+
+Ce temps dépends du code du worker et de l'architecture qui l'exécute. Mais pour avoir un petit ordre de valeur, mes tests ne m'ont pas permis d'interrompre le traitement d'un worker si ce traitement durait **moins de 2 secondes**.
+
+L'expérience est facile à reproduire. En lançant et interrompant immediatement un Worker, on constate que même lorsque la communication avec la page est interrompue, il continue pourtant son travail quelques secondes.
+
+``` js
+//in mainFile.js
+import WizardWorker from './wizard.worker.js';
+const wizard = new WizardWorker();
+const startTime = new Date();
+wizard.onmessage = ({ data }) => {
+    console.log(`Still runing (${data}`);
+};
+wizard.postMessage(`Start some dark wizard stuff`);
+wizard.terminate();
+```
+
+``` js
+//wizard.worker.js
+/* eslint-disable no-restricted-globals */
+self.onmessage = ({data}) => {
+    const start = new Date();
+    while (true) {
+        const result = Math.random();
+        console.log("No one can stop Volde..rt /", new Date() - start);
+        port.postMessage(result);
+    }
+}
+```
+
+Pour finir, la fonction `terminate()` n'existe toujours pas sur un **SharedWorker**
+
+En conclusion, si l'interruption d'un worker est nécessaire, il faut surtout s'assurer d'ignorer proprement son résultat dans `mainFile.js` car le traitement propre du worker a toutes les chances de continuer encore quelques secondes après réception du signal `terminate()`.
 
 ## Risques et solutions (si possible)
 
 
 ### Attention au hot-reload
 
-Une chose importante à savoir pendant la phase de développement, c'est que comme les workers sont chargés et exécutés dans le navigateur, ils sont insensible au hot-reload.
+Une chose importante à savoir pendant la phase de développement, c'est que comme les workers sont chargés et exécutés dans le navigateur, ils sont insensibles au hot-reload.
 
 Donc, malheureusement, à chaque fois que l'ont change le code d'un fichier `.worker.js` ou `.sharedworker.js`, il faut faire un reset des données du cache du navigateur pour voir les changements appliqués.
 
@@ -399,7 +448,7 @@ Donc, malheureusement, à chaque fois que l'ont change le code d'un fichier `.wo
 - Soit en rebootant le server à chaque fois.
 
 > TIPS:  
-Les workers contruit avec la méthode `URL.createObjectURL(blob)` étant générés à la volée, ils ne posent aussi soucis de cache
+Les workers contruits avec la méthode `URL.createObjectURL(blob)` étant générés à la volée, ils ne posent aussi soucis de cache
 
 ### Attention au states non persistants
 

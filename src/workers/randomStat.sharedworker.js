@@ -14,7 +14,7 @@ let run = false;
 self.onconnect = e => {
     let port = e.ports[0];
     //port.console.log('port1', port);
-    console.log('port2', port);
+    //console.log('connect', port);
     onerror = (event) => {
         port.postMessage({ error: event });
     }
@@ -33,7 +33,7 @@ self.onconnect = e => {
         }*/
         //port.postMessage({ end: true });
         //while (run) {
-        port.console.log('run2');
+        //port.console.log('run2');
         //port.postMessage({ state: 'run' });
         /*if (!run || data.terminate) {
     
