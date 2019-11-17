@@ -145,6 +145,7 @@ Le code du worker doit être encapsulé dans une fonction
 
 ``` js
 // my-worker-file.js
+/* eslint-disable no-restricted-globals */
 export default () => {
     self.onmessage = ({data}) => {
         switch(data.wizardHouse) {
@@ -165,7 +166,7 @@ puis on créé un WorkerBuilder chargé de générer notre worker
 
 ``` js
 // worker-builder.js
-export default class WebWorker {
+export default class WorkerBuilder {
 	constructor(worker) {
 		const code = worker.toString();
 		const blob = new Blob([`(${code})()`]);
@@ -179,9 +180,9 @@ Et enfin, on utilise ce `WorkerBuilder` dans la page web pour lancer le worker :
 ``` js
 // mainFile.js
 import workerCode from './my-worker-file';
-import WebWorker from './worker-builder';
+import WorkerBuilder from './worker-builder';
 
-const wizard = new WebWorker(workerCode);
+const wizard = new WorkerBuilder(workerCode);
 
 wizard.onmessage = data => {
     console.log('Choix d\'une baguette magique', data);
@@ -449,8 +450,8 @@ L'exemple si dessous montre que les deux compteurs de sorts commencent à affich
 
 ``` js
 // in mainFile.js
-import React, { useState } from 'React';
-import WizardWorker from './wizard.worker.js';
+import React, { useState } from 'react';
+import WizardWorker from './c';
 const ShowTotalSpellCast = props => {
     const [counterA, setCounterA] = useState(0);
     const [counterB, setCounterB] = useState(0);
@@ -563,17 +564,13 @@ Maintenant la magie n'a plus de secrets pour vous (ou nettement moins j'espère)
 
 On aura retenu essentiellement que les workers sont un outil bien pratique quand on sait les mettre en oeuvre correctement. Ils ne sont pas pour autant la solution miracle à toutes les problématiques car ils ont leurs failles et leurs limites.
 
-Voilà, comme souvent, la magie n'est ni bonne bonne, ni mauvaise. C'est juste un outil de plus a comprendre.
-
-N'hésitez pas a creuser le sujet sur les sites plus détaillés si vous voulez devenir un magicien hors pair.
+Voilà, comme souvent, la magie n'est ni bonne bonne, ni mauvaise. C'est juste un outil de plus a comprendre. N'hésitez pas a creuser le sujet sur les sites plus détaillés si vous voulez devenir un magicien hors pair.
 
 ## Références
 
 - Les spécifications officielles des web workers sont sur [le site du W3C](https://www.w3.org/TR/workers/).
 
-
 - Wikipédia donne un bon [descriptif des webworkers](https://en.wikipedia.org/wiki/Web_worker) sans rentrer dans les détails techniques.
-
 
 - L'utilisation basique des web workers est très bien expliquée sur [developer.mozilla.org](https://developer.mozilla.org/fr/docs/Web/API/Web_Workers_API) qui décrit l'API dans ses moindre détails.
 

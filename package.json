@@ -14,8 +14,7 @@
         "react-dom": "^16.11.0",
         "react-polyglot": "^0.6.1",
         "react-router-dom": "^5.1.2",
-        "react-scripts": "3.2.0",
-        "shared-worker-loader": "^0.2.0"
+        "react-scripts": "3.2.0"
     },
     "scripts": {
         "start": "react-app-rewired start",
@@ -40,6 +39,7 @@
     },
     "devDependencies": {
         "react-app-rewired": "^2.1.5",
-        "worker-loader": "^2.0.0"
+        "worker-loader": "^2.0.0",
+        "shared-worker-loader": "^0.2.0"
     }
 }
