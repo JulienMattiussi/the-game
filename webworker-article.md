@@ -376,7 +376,7 @@ wizard.onmessage = ({ listOfForbiddenSpells }) => {
 Il est parfaitement possible d'appeler la console depuis un **Worker**
 
 ``` js
-//in wizard.worker.js
+// in wizard.worker.js
 console.warn('Vous ne devriez pas demander la liste des sorts interdits');
 ```
 
@@ -389,7 +389,7 @@ Dans ce cas, un appel à `console.log()` ne va pas générer d'erreur mais il ne
 Lorsqu'un sort est lancé, il est très difficile de l'arreter. Mais la possibilité existe néanmoins.
 
 ``` js
-//in mainFile.js
+// in mainFile.js
 wizard.terminate();
 ```
 
@@ -402,7 +402,7 @@ Ce temps dépends du code du worker et de l'architecture qui l'exécute. Mais po
 L'expérience est facile à reproduire. En lançant et interrompant immediatement un Worker, on constate que même lorsque la communication avec la page est interrompue, il continue pourtant son travail quelques secondes.
 
 ``` js
-//in mainFile.js
+// in mainFile.js
 import WizardWorker from './wizard.worker.js';
 const wizard = new WizardWorker();
 wizard.onmessage = ({ data }) => {
@@ -413,14 +413,14 @@ wizard.terminate();
 ```
 
 ``` js
-//wizard.worker.js
+// wizard.worker.js
 /* eslint-disable no-restricted-globals */
 self.onmessage = ({data}) => {
     const start = new Date();
     while (true) {
         const result = Math.random();
         console.log("Personne ne peut arreter Volde..rt /", new Date() - start);
-        port.postMessage(result);
+        postMessage(result);
     }
 }
 ```
@@ -444,19 +444,118 @@ Les workers contruits avec la méthode `URL.createObjectURL(blob)` étant géné
 
 ### Attention au states non persistants
 
+En React, la gestion des `states` à travers des évènements `onmessage` peut provoquer des surprises.
+L'exemple si dessous montre que les deux compteurs de sorts commencent à afficher des résultats différents lorsqu'on lance trop de workers de sorts simultanéments.
 
+``` js
+// in mainFile.js
+import React, { useState } from 'React';
+import WizardWorker from './wizard.worker.js';
+const ShowTotalSpellCast = props => {
+    const [counterA, setCounterA] = useState(0);
+    const [counterB, setCounterB] = useState(0);
 
-En React, 
+    const wizard = new WizardWorker();
+    wizard.onmessage = ({ data }) => {
+        setCounterA(previous => previous + 1);
+        setCounterB(counterB + 1);
+    };
 
-setState (previous => new+Previous;)
+    const runSpell = () => {
+        wizard.postMessage('serdaigle');
+    };
+
+    return (
+        <div>
+            <div>
+                <button onClick={runSpell}>Lancer un sortilèges</button>
+            </div>
+            <div>
+                <span>Nombre de sortilèges lancés A :</span>
+                <span>{counterA}</span>
+            </div>
+            <div>
+                <span>Nombre de sortilèges lancés B :</span>
+                <span>{counterB}</span>
+            </div>
+        </div>
+    );
+}
+```
+Le compteur A est toujours juste. Et le compteur B est vite à la traine.
+
+``` js
+setCounterB(counterB + 1);
+```
+
+La valeur de `counterB` est incrémentée à partir de sa dernière valeur lue dans la portée de la fonction `onmessage`.
+Et cette valeur est toujours celle que la variable `counterB` avait au moment ou le thread du worker à été démarré.
+Deux workers qui travaillent en même temps vont alors avoir la même valeur initiale, donc la même valeur finale. Et la composant va ignorer le travail du premier qui a fini en l'écrasant par le résultat du second.
+
+Pour garantir qu'une variable est bien toujours incrémentée en partant de sa dernière valeur, il faut utiliser le `previousState` intégré dans le hook de `React.useState()` et jamais la valeur lue dans la portée de l'évenement `onmessage`
+
+``` js
+setCounterA(previous => previous + 1);
+```
 
 
 ### Attention aux workers démoniaques
 
+Serait-il possible de créer un worker qui effectuerai ses calculs sans jamais s'arreter de l'ouverture d'un site jusqu'a la fermeture du navigateur. Un sorcier discret qui utiliserai la puissance de calcul de son visiteur, caché dans l'ombre, pour effectuer des tâches répréhensibles.
 
-Saturation du browser
+Deux méthodes peuvent être envisagées : 
 
-Un worker peut-il 
+- Une seule instance en boucle infinie
+
+``` js
+// dark-wizard-loop.worker.js
+/* eslint-disable no-restricted-globals */
+self.onmessage = ({data}) => {
+    while (true) {
+        // compute something
+        port.postMessage(result);
+    }
+}
+```
+
+``` js
+// in mainFile.js
+import DarkWizardWorker from './dark-wizard-loop.worker.js';
+
+const wizard = new DarkWizardWorker();
+wizard.onmessage = ({ data }) => {
+    // use data
+};
+postMessage.('Démarre une tâche et ne t\'arrete jamais');
+```
+
+- Des instances multiples qui se relancent constamment
+
+``` js
+// dark-wizard-repeat.worker.js
+/* eslint-disable no-restricted-globals */
+self.onmessage = ({data}) => {
+    // compute something
+    postMessage(result);
+}
+```
+
+``` js
+// in mainFile.js
+import DarkWizardWorker from './dark-wizard-repeat.worker.worker.js';
+
+const wizard = new DarkWizardWorker();
+wizard.onmessage = ({ data }) => {
+    // use data
+    postMessage.('Recommence jusqu\'a la fin des temps');
+};
+postMessage.('Fais une premiere tâche');
+```
+
+On peut avec ce genre de méthodes planter relativement rapidement la navigateur.
+Ce plantage correspond, visiblement, à la limite atteinte du cache mémoire qui sert à l'exécution des thread des workers. Pas de message explicite à espérer, juste quelque chose du type "Chrome à rencontré une erreur".
+
+D'une certaine façon, c'est donc rassurant. Oui un worker mal codé ou mal intentionné peut essayer de faire travailler votre ordinateur à votre insu, et sans rien y installer, mais il sera automatiquement arreté dans ses agissement assez vite.
 
 ## Conclusion
 

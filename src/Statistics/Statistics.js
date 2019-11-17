@@ -40,6 +40,38 @@ const rebuildStats = (nbPlayers, nbGames, tactic, criteria) =>
         }
     }), {});
 
+const ShowTotalSpellCast = props => {
+    const [counterA, setCounterA] = useState(0);
+    const [counterB, setCounterB] = useState(0);
+
+    const wizard = new worker();
+    wizard.onmessage = ({ data }) => {
+        console.log(data);
+        setCounterA(previous => previous + 1);
+        setCounterB(counterB + 1);
+    };
+
+    const runSpell = () => {
+        wizard.postMessage({ nbPlayers: { '3': true }, tactic: 'allBestCardsUntilEmpty', criteria: {}, numberOfGames: 50 });
+    };
+
+    return (
+        <div>
+            <div>
+                <button onClick={runSpell}>Lancer un sort</button>
+            </div>
+            <div>
+                <span>Nombre de sort lancés A</span>
+                <span>{counterA}</span>
+            </div>
+            <div>
+                <span>Nombre de sort lancés B</span>
+                <span>{counterB}</span>
+            </div>
+        </div>
+    );
+}
+
 const Statistics = ({ t }) => {
     const [criteria, setCriteria] = useState(defaultOptions);
     const [tactic, setTactic] = useState(defaultTactic);
@@ -160,6 +192,7 @@ const Statistics = ({ t }) => {
     return (
         <Fragment>
             <FormContainer>
+                <ShowTotalSpellCast />
                 <FormCriteria
                     tactic={tactic}
                     criteria={criteria}
