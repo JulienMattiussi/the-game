@@ -21,6 +21,7 @@ self.onconnect = e => {
 
     port.onmessage = ({ data }) => {
         //port.postMessage({ state: 'start1' });
+        port.postMessage({ error: "did it changed ?" });
         const { numberOfGames, terminate } = data;
         /*if (numberOfGames) {
             port.postMessage({ state: 'start2' });

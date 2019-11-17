@@ -1,9 +1,9 @@
 
 Les WebWorkers sont un outil magique qui permet de faire exécuter du code par un navigateur, en arrière plan, sans figer ou ralentir l'exécution de la page.
 
-Ils existent parmi nous depuis la nuit des temps - La première spécification ne date déjà de 2009 et la dernière a été publiée en septembre 2015 - Mais ils se cachent à nos yeux. Ce pouvoir fait peur. Et mal utilisé ou entre de mauvaises mains, il peut (probablement) mener le web à sa perte. (Ou pire, mener le développeur à la dépression)
+Ils existent parmi nous depuis la nuit des temps - La première spécification date déjà de 2009 et la dernière a été publiée en septembre 2015 - Mais ils se cachent à nos yeux. Ce pouvoir fait peur. Et mal utilisé ou entre de mauvaises mains, il peut (probablement) mener le web à sa perte. (Ou pire, mener le développeur à la dépression).
 
-Nous allons donc apprendre à les connaitre, et surtout, à s'en servir correctement avec le web moderne.
+Nous allons donc apprendre à les connaitre, et surtout, à s'en servir correctement avec le web moderne et un peu plus spécifiquement avec **React.js.**
 
 ## La base pour utiliser un worker
 
@@ -24,21 +24,20 @@ Pour déclencher le worker, on lui envoie ensuite un message :
 
 ``` js
 // mainFile.js
-const wizardHouse = 'grifondor';
+const wizardHouse = 'gryffondor';
 wizard.postMessage({ wizardHouse });
 ```
 
-Le fichier `my-worker-file.js` va contenir le code du worker. Et il doit simplement faire de même, soit écouter et renvoyer des messages.
-Une fonction `onerror` peut aussi être utilisée, par exemple, pour renvoyer un message spécifique en cas d'erreur d'exécution du worker.
+Le fichier `my-worker-file.js` va contenir le code du worker. Et il doit simplement faire de même, à savoir écouter et renvoyer des messages. Une fonction `onerror` peut aussi être utilisée, par exemple, pour renvoyer un message spécifique en cas d'erreur d'exécution du worker.
 ``` js
 // my-worker-file.js
 /* eslint-disable no-restricted-globals */
 self.onmessage = ({data}) => {
     switch(data.wizardHouse) {
-        case 'grifondor':
+        case 'gryffondor':
             postMessage('Expeliarmus');
             return;
-        case 'serpentar':
+        case 'serpentard':
             postMessage('Avada Kedavra');
             return;
         default :
@@ -51,7 +50,7 @@ self.onerror = (error) => {
 ```
 
 > TIPS:  
-La référence à `self` n'est pas indispensable, mais l'instruction `no-restricted-globals`, elle, est nécessaire pour autorisé la compilation du script contenant des variables globales.
+La référence à `self` n'est pas indispensable, mais l'instruction `no-restricted-globals`, elle, est nécessaire pour autoriser la compilation du script contenant des variables globales.
 
 Avec cette simple mécanique, on peut faire communiquer un worker avec son script appelant. Envoyer des commandes, et obtenir des résultats.
 
@@ -59,12 +58,12 @@ Les messages transmis peuvent être ce que l'on souhaite, des objets, des types 
 
 > TIPS:  
 Les fonctions `onmessage` ne font que gérer des évènements.
- On pourrait très bien les remplacer, du coté page, par  
+ On pourrait très bien les remplacer par  
  `addEventListener('message', ({ data }) => { //mon code });`
 
 ### Les workers partagés
 
-Pour qu'un worker puisse communiquer des résultats avec plusieurs pages / éléments, il faut juste utiliser un type particulier, le `SharedWorker`.
+Pour qu'un worker puisse communiquer des résultats avec plusieurs pages ou composants, il faut juste utiliser un type particulier, le `SharedWorker`.
 
 ``` js
 // mainFile.js
@@ -74,7 +73,7 @@ wizard.port.onmessage = data => {
     console.log('Envoi du sortilège', data);
 }
 
-const wizardHouse = 'grifondor';
+const wizardHouse = 'gryffondor';
 wizard.port.postMessage({ wizardHouse });
 ```
 
@@ -92,10 +91,10 @@ self.onconnect = event => {
             currentHouse = data.wizardHouse;
         }
         switch(currentHouse) {
-            case 'grifondor':
+            case 'gryffondor':
                 port.postMessage('Expeliarmus');
                 return;
-            case 'serpentar':
+            case 'serpentard':
                 port.postMessage('Avada Kedavra');
                 return;
             default :
@@ -119,9 +118,9 @@ Maintenant, le problème avec la magie, c'est que, comme avec n'importe quelle d
 
 Ici, le gouffre se nomme [WebPack](https://webpack.js.org/).
 
-La plupart des projets web modernes utilisent WebPack et [Babel](https://babeljs.io/) pour transpiler et bundeliser le code avant de l'envoyer au navigateur.
+La plupart des projets web modernes utilisent `WebPack` et [Babel](https://babeljs.io/) pour transpiler et bundeliser le code avant de l'envoyer au navigateur.
 
-Mais pour les workers, on doit donner le chemin du code à utiliser au moment de sa construction  
+Mais pour les workers, on doit donner l'URL du code à utiliser au moment de sa construction  
 `const wizard = new Worker('./my-worker-file.js');`
 
 Ici, `'./my-worker-file.js'` doit être l'URL du code du worker accessible depuis le navigateur.  
@@ -129,7 +128,7 @@ Et lorsqu'on utilise webpack, le fichier`'my-worker-file.js'` n'étant importé 
 
 Et la magie s'éffondre.
 
-### Une première solution rapide et incomplète
+### Une première solution rapide mais incomplète
 
 Il faudrait donc importer notre worker dans la page qui l'exécute.
 
@@ -137,10 +136,10 @@ Il faudrait donc importer notre worker dans la page qui l'exécute.
 import Wizard from './my-worker-file'
 ```
 
-Bien sur, ça ne suffit pas. Là le code est importé et sera directement exécuté. Et après le build de webpack, tout sera mis en bundle `./static/js/main.578e6292.chunk.js`
+Bien sur, ça ne suffit pas. Là le code est importé et sera directement exécuté. Et de tout façon, après le build de WebPack, tout sera mis en bundle `./static/js/main.578e6292.chunk.js`
 et l'URL de `'my-worker-file.js'` n'existera toujours pas.
 
-On peut alors utiliser un `WorkerBuilder`
+On peut alors coder un `WorkerBuilder`
 
 Le code du worker doit être encapsulé dans une fonction
 
@@ -149,10 +148,10 @@ Le code du worker doit être encapsulé dans une fonction
 export default () => {
     self.onmessage = ({data}) => {
         switch(data.wizardHouse) {
-            case 'grifondor':
+            case 'gryffondor':
                 postMessage('Expeliarmus');
                 return;
-            case 'serpentar':
+            case 'serpentard':
                 postMessage('Avada Kedavra');
                 return;
             default :
@@ -165,11 +164,11 @@ export default () => {
 puis on créé un WorkerBuilder chargé de générer notre worker
 
 ``` js
-//worker-builder.js
+// worker-builder.js
 export default class WebWorker {
 	constructor(worker) {
 		const code = worker.toString();
-		const blob = new Blob(['('+code+')()']);
+		const blob = new Blob([`(${code})()`]);
 		return new Worker(URL.createObjectURL(blob));
 	}
 }
@@ -191,20 +190,20 @@ wizard.onmessage = data => {
 
 Pourtant, le gros problème avec cette méthode, c'est qu'on limite énormément la comptatibilité du code du worker.
 
-Comme le code est lu à la volée sans passer par le transpileur, il est aujourd'hui impossible d'y utiliser des syntaxes modernes comme le spread opérator ou la déconstruction.
+Comme ce code est lu à la volée sans passer par le transpileur, il est aujourd'hui impossible d'y utiliser des syntaxes modernes comme le [spread opérator](https://putaindecode.io/articles/es6-es2015-parametres-rest-et-operateur-spread/) ou le [destructuring](https://putaindecode.io/articles/es6-es2015-le-destructuring/).
 ``` js
-const { serpentarWizards, ...goodWizards } = allWizards;
+const { serpentardWizards, ...goodWizards } = allWizards;
 ```
 Le code ci dessus va juste générer une erreur à l'exécution dans la majorité des navigateurs.
 
 ### Une vraie solution pérenne
 
-La solution précédente fonctionne donc un peu, mais pas complètement.
-En plus, comme le code du worker est buildé à la volée au moment de son appel c'est inutilement couteux pour le navigateur.
+La solution précédente fonctionne donc un petit peu, mais pas complètement.
+En plus, comme le code du worker est empaqueté à la volée au moment de son appel c'est inutilement couteux pour le navigateur.
 
 #### Utiliser Worker Loader
 
-Heureusement, une meilleure solution existe, afin que WebPack sache déployer les workers correctement, comme le reste du code.
+Heureusement, une meilleure solution existe afin que WebPack sache déployer les workers correctement, comme le reste du code.
 
 Il faut juste installer un petit utilitaire qui vient compléter Webpack :
 [ worker-loader](https://github.com/webpack-contrib/worker-loader)
@@ -238,11 +237,11 @@ import WizardWorker from './wizard.worker.js';
 const wizard = new WizardWorker();
 ```
 
-De cette façon, le worker est transpilé par WebPack et servi correctement au navigateur
+De cette façon, le worker est transpilé par WebPack et servi correctement au navigateur.
 
 ### Attention avec Create React App ([CRA](https://github.com/facebook/create-react-app))
 
-Les développeurs React, dont je suis, connaissent bien cet outil qui permet de monter un site en React pret à l'emploi en une seule commande.
+Les développeurs React, connaissent bien cet outil qui permet de monter un site en React pret à l'emploi en une seule commande.
 
 Mais dans ce cas, tout est packagé, et il est impossible de modifier le fichier `webpack.config.js`.
 
@@ -268,7 +267,6 @@ module.exports = function override(config, env) {
         test: /\.worker\.js$/,
         use: { loader: 'worker-loader' }
     });
-    //config.output['globalObject'] = 'this';
     return config;
 }
 ```
@@ -276,7 +274,7 @@ module.exports = function override(config, env) {
 Et ne pas oublier de modifier les scripts dans le fichier `package.json` pour utiliser `react-app-rewired`.
 
 ``` json
-//package.json
+// package.json
 "scripts": {
         "start": "react-app-rewired start",
         "build": "react-app-rewired build",
@@ -313,7 +311,7 @@ Il est basé sur `worker-loader` est s'installe, se configure et s'utilise de la
 }
 ```
 
-**Pour Create React App (avec `react-rewired`)**
+**Pour Create React App (avec `react-app-rewired`)**
 
 ``` js
 // config-overrides.js
@@ -326,7 +324,6 @@ module.exports = function override(config, env) {
         test: /\.sharedworker\.js$/,
         use: { loader: 'shared-worker-loader' }
     });
-    //config.output['globalObject'] = 'this';
     return config;
 }
 ```
@@ -350,7 +347,7 @@ Attention, les workers permettent de faire beaucoup de chose mais ont certaines 
 
 ### Est-ce qu'on peut tout faire avec un worker ?
 
-On a tendance à penser que la magie permet de tout faire, mais ce n'est pas le cas en réalité.
+On a tendance à penser que la magie permet de tout réaliser, mais ce n'est pas le cas en réalité.
 
 Les workers sont totalement détachés de la fenêtre du navigateur.
 Il est donc impossible dans un worker d'accéder :
@@ -362,14 +359,14 @@ Il est donc impossible dans un worker d'accéder :
 Pour effectuer une tâche liée à l'un de ces éléments, il faut que le worker retourne seulement le résultat à afficher
 
 ``` js
-//in wizard.worker.js
+// in wizard.worker.js
 postMessage({ listOfForbiddenSpells });
 ```
 
 Et c'est la page qui se chargera de l'affichage et de la sauvegarde en réceptionnant les messages du worker.
 
 ``` js
-//in mainFile.js
+// in mainFile.js
 wizard.onmessage = ({ listOfForbiddenSpells }) => {
     localstorage.setItem('doNotOpen', listOfForbiddenSpells);
 };
@@ -380,11 +377,11 @@ Il est parfaitement possible d'appeler la console depuis un **Worker**
 
 ``` js
 //in wizard.worker.js
-console.warn('You should\'nd ask for the list of forbidden spells');
+console.warn('Vous ne devriez pas demander la liste des sorts interdits');
 ```
 
 Mais attention, **la console ne fonctionnera pas depuis un SharedWorked**.
-Dans ce cas, un appel à `console.log()` ne va pas générer d'erreur mais il ne sera jamais acheminé jusqu'a la console du navigateur.
+Dans ce cas, un appel à `console.log()` ne va pas générer d'erreur mais il ne sera jamais acheminé jusqu'a la console du navigateur.  
 `port.console.log()` n'existe pas non plus, et génère cette fois une erreur d'exécution du worker.
 
 ### Peut-on interrompre l'activité d'un worker ?
@@ -396,11 +393,9 @@ Lorsqu'un sort est lancé, il est très difficile de l'arreter. Mais la possibil
 wizard.terminate();
 ```
 
-Cette instruction a pour but d'interrompre immédiatement toutes les tâches existantes du worker. **Aucun message d'erreur ne sera envoyé**, le thread sera totu bonnement coupé.
+Cette instruction a pour but d'interrompre immédiatement toutes les tâches existantes du worker. **Aucun message d'erreur ne sera envoyé**, le thread sera tout bonnement coupé.
 
-Mais dans la pratique, il ne faut pas s'attendre à ce que le worker s'interrompe sagement à l'instant ou l'instruction `terminate()` est appelée.
-
-Le principe de mise en oeuvre des Workers fait qu'il va falloir attendre que le thread du worker accepte le message et le traite, avant d'être interrompu.
+Mais dans la pratique, il ne faut pas s'attendre à ce que le worker s'interrompe sagement à l'instant ou l'instruction `terminate()` est appelée. Le principe de mise en oeuvre des Workers fait qu'il va falloir attendre que le thread du worker accepte le message et le traite, avant d'être interrompu.
 
 Ce temps dépends du code du worker et de l'architecture qui l'exécute. Mais pour avoir un petit ordre de valeur, mes tests ne m'ont pas permis d'interrompre le traitement d'un worker si ce traitement durait **moins de 2 secondes**.
 
@@ -410,11 +405,10 @@ L'expérience est facile à reproduire. En lançant et interrompant immediatemen
 //in mainFile.js
 import WizardWorker from './wizard.worker.js';
 const wizard = new WizardWorker();
-const startTime = new Date();
 wizard.onmessage = ({ data }) => {
-    console.log(`Still runing (${data}`);
+    console.log(`Toujours en marche (${data}`);
 };
-wizard.postMessage(`Start some dark wizard stuff`);
+wizard.postMessage(`Lance un sort sombre de mangemort`);
 wizard.terminate();
 ```
 
@@ -425,7 +419,7 @@ self.onmessage = ({data}) => {
     const start = new Date();
     while (true) {
         const result = Math.random();
-        console.log("No one can stop Volde..rt /", new Date() - start);
+        console.log("Personne ne peut arreter Volde..rt /", new Date() - start);
         port.postMessage(result);
     }
 }
@@ -433,29 +427,46 @@ self.onmessage = ({data}) => {
 
 Pour finir, la fonction `terminate()` n'existe toujours pas sur un **SharedWorker**
 
-En conclusion, si l'interruption d'un worker est nécessaire, il faut surtout s'assurer d'ignorer proprement son résultat dans `mainFile.js` car le traitement propre du worker a toutes les chances de continuer encore quelques secondes après réception du signal `terminate()`.
+En conclusion, si jamais l'interruption d'un worker est nécessaire, il faut surtout s'assurer d'ignorer proprement son résultat dans `mainFile.js` car le traitement propre du worker a toutes les chances de continuer encore quelques secondes après envoi du signal `terminate()`.
 
 ## Risques et solutions (si possible)
 
-
 ### Attention au hot-reload
 
-Une chose importante à savoir pendant la phase de développement, c'est que comme les workers sont chargés et exécutés dans le navigateur, ils sont insensibles au hot-reload.
+Une chose importante à savoir pendant la phase de développement, c'est que comme les sources des workers sont compilés, chargés et exécutés séparément des sources des pages, ils sont insensibles au [hot-reload](https://stackoverflow.com/questions/41428954/what-is-the-difference-between-hot-reloading-and-live-reloading-in-react-native).
 
-Donc, malheureusement, à chaque fois que l'ont change le code d'un fichier `.worker.js` ou `.sharedworker.js`, il faut faire un reset des données du cache du navigateur pour voir les changements appliqués.
+Donc, malheureusement, à chaque fois que l'on change le code d'un fichier `.worker.js` ou `.sharedworker.js`, il faut rebooter le server de développement pour voir l'impact à l'exécution. Un reset des données du cache du navigateur seul n'a aucun impact. 
 
-- Soit en vidant le cache par la commande du navigateur.
-- Soit en rebootant le server à chaque fois.
+Note qu'il est possible qu'une stack différente de celle proposée ici (`create-react-app`, `react-app-rewired`, `worker-loader`) fournisse une solution efficace à ce problème. Mais la magie reste encore entière pour moi pour l'instant.
 
 > TIPS:  
 Les workers contruits avec la méthode `URL.createObjectURL(blob)` étant générés à la volée, ils ne posent aussi soucis de cache
 
 ### Attention au states non persistants
 
+
+
+En React, 
+
 setState (previous => new+Previous;)
 
 
-### Saturation du browser
+### Attention aux workers démoniaques
+
+
+Saturation du browser
+
+Un worker peut-il 
+
+## Conclusion
+
+Maintenant la magie n'a plus de secrets pour vous (ou nettement moins j'espère).
+
+On aura retenu essentiellement que les workers sont un outil bien pratique quand on sait les mettre en oeuvre correctement. Ils ne sont pas pour autant la solution miracle à toutes les problématiques car ils ont leurs failles et leurs limites.
+
+Voilà, comme souvent, la magie n'est ni bonne bonne, ni mauvaise. C'est juste un outil de plus a comprendre.
+
+N'hésitez pas a creuser le sujet sur les sites plus détaillés si vous voulez devenir un magicien hors pair.
 
 ## Références
 
